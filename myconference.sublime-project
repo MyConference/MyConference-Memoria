@@ -1,0 +1,15 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": ".",
+      "file_exclude_patterns": [
+        "*.aux", "*.bak", "*.backup", "*.bbl", "*.blg", "*.cdx", "*.clg",
+        "*.cnd", "*.dvi", "*.exa", "*.glx", "*.gxg", "*.gxs", "*.idx", "*.ilg",
+        "*.ind", "*.log", "*.lof", "*.lot", "*.out", "*.ps", "*.toc",
+        "Memoria.pdf"
+      ]
+		}
+	]
+}

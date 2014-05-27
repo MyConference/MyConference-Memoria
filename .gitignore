@@ -1,0 +1,27 @@
+# LaTeX files
+**/*.aux
+**/*.bak
+**/*.backup
+**/*.bbl
+**/*.blg
+**/*.cdx
+**/*.clg
+**/*.cnd
+**/*.dvi
+**/*.exa
+**/*.glx
+**/*.gxg
+**/*.gxs
+**/*.idx
+**/*.ilg
+**/*.ind
+**/*.log
+**/*.lof
+**/*.lot
+**/*.out
+**/*.ps
+**/*.toc
+
+# Project files
+*.sublime-workspace
+Memoria.pdf
