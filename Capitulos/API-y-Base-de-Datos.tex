@@ -1,0 +1,93 @@
+\chapter{API y Base de Datos}
+
+\section{API Web}
+
+La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
+
+El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API.
+
+\subsection{Acceso}
+
+El acceso a los datos, así como su modificación, se realiza mediante peticiones HTTP.
+
+Todos los datos se envían y reciben en formato JSON. Cualquier otro formato pedido (mediante la cabecera \texttt{Accept}) o enviado (mediante \texttt{Content-Type}) será rechazado por el servidor.
+
+Para acceder a los datos es necesario disponer de un testigo de acceso, cuya obtención veremos más adelante. Para enviar este testigo usaremos la cabecera HTTP \texttt{Authorization}, con el valor \texttt{Token~\textit{token-string}} (donde \textit{token-string} es el valor del token del que disponemos).
+
+Los datos de la aplicación están divididos en \textit{entidades}, que representan colecciones de datos similares. Para cada entidad disponemos, en general, de las siguientes acciones:
+
+\begin{itemize}
+  \item Ver en detalle un elemento, mediante una petición \texttt{GET /entidad/id}. Se obtiene una lista con los atributos del elemento.
+  \item Crear un nuevo elemento de un tipo, mediante una petición \texttt{POST /entidad}. Se debe enviar los atributos iniciales del elemento.
+  \item Modificar un elemento existente, mediante una petición \texttt{PUT /entidad/id}. Se deben enviar los nuevos atributos del objeto.
+  \item Eliminar un elemento existente, mediante una petición \texttt{DELETE /entidad/id}. Se obtiene una confirmación.
+\end{itemize}
+
+Las entidades pueden proporcionar otras acciones en determinadas circunstancias, como se describe en el apartado10\nameref{sect:api-docs}.
+
+De la misma manera, todas las peticiones utilizan los códigos HTTP estándar, entre ellos:
+
+\begin{itemize}
+  \item \texttt{401~Unauthorized} para errores de autenticación.
+  \item \texttt{403~Forbidden} para operaciones para las que el usuario no tiene permiso.
+  \item \texttt{404~Not~Found} para elementos no existentes.
+  \item \texttt{500~Internal~Server~Error} para problemas internos de la API.
+\end{itemize}
+
+
+
+\subsubsection{Autenticación}
+
+El sistema de autenticación funciona siguiendo un esquema similar al de los estándares OAuth y OpenID.
+
+Todos los servicios que ofrece la API de MyConference están protegidos. Para acceder a ellos es necesario obtener un \textit{testigo de acceso}, que irá unido a un usuario y se enviará en cada petición en una cabecera HTTP.
+
+Para obtener un testigo de acceso se debe realizar una petición a una ruta específica (\texttt{/auth}) de la API, indicando lo siguiente:
+
+\begin{itemize}
+  \item Qué aplicación se está usando para realizar la petición (Identificada mediante un UUID).
+  \item Qué dispositivo está realizando la petición (Cadena de texto arbitraria, permite diferenciar diferentes sesiones del mismo usuario mediante la misma aplicación).
+  \item Las credenciales de acceso a la aplicación.
+\end{itemize}
+
+Existen múltiples tipos de credenciales de acceso, detallados más adelante. Si todos los datos son correctos, ocurrirá lo siguiente:
+
+\begin{itemize}
+  \item Se crea un nuevo testigo de acceso asociado al usuario cuyas credenciales coinciden.
+  \item Se crea un nuevo testigo de actualización asociado al nuevo testigo de acceso.
+  \item Se invalidan todos los testigos de acceso y de actualización anteriores que fueran generados usando la misma aplicación y el mismo dispositivo.
+  \item Se devuelven ambos testigos, sus fechas de caducidad y el identificador del usuario identificado.
+\end{itemize}
+
+El \textit{testigo de actualización} devuelto tiene como función generar un nuevo testigo de acceso en caso de que este caduque. Los testigos de acceso tienen un tiempo de uso de caducidad de unos pocos días, mientras que los testigos de actualización duran semanad. Esto minimiza la posibilidad de uso de untestigo de acceso interceptado por una tercera parte.
+
+Para que un intento de autenticación tenga éxito, las credenciales usadas deben coincidir con algunas credenciales almacenadas en la base de datos. Los siguientes son los tipos de credenciales que se definen:
+
+\begin{itemize}
+  \item \textbf{Usuario y contraseña}: Utilizamos un nombre de usuario (correo electrónico) y contraseña registrados previamente para realizar la autenticación.
+  \item \textbf{Testigo de Actualización}: Se utiliza un testigo de actualización para realizar la autenticación. La aplicación y el dispositivo con los que se generó el testigo usado deben coincidir con los datos de la petición.
+  \item \textbf{Testigo de Autorización}: Se utiliza un testigo de autorización obtenido mediante otros medios para realizar la autenticación. La aplicación y el dispositivo con los que se generó el testigo usado deben coincidir con los datos de la petición.
+\end{itemize}
+
+Los testigos de autorización existen para realizar accesos mediante servicios externos (no implementados en la aplicación). 
+
+\subsection{Base de Datos}
+
+La base de datos (MongoDB) está estructurada en torno a la entidad \textit{Congreso} (\texttt{Conference}). Esta es la entidad fundamental del sistema, y la única junto con los usuarios y exceptuando otras entidades auxiliares que no depende de ninguna otra entidad, es decir, que puede existir por su propio pie.
+
+\subsubsection{Entidades Fundamentales}
+
+\textit{Futuro gráfico entidad-relación con toda la "jerarquía" de entidades}
+
+\subsubsection{Entidades de Apoyo}
+
+\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
+
+Existen otras entidades en la base de datos que aportan funcionalidad pero no representan datos de negocio.
+
+La entidad \texttt{LoginMethod} representa un método de acceso a la aplicación. Actualmente sólo contiene métodos de tipo \texttt{password}, utilizados para el acceso mediante e-mail y contraseña. Los accesos mediante servicios externos (Google, Facebook, Twitter) se incluirían en esta colección, utilizando distintos tipos 
+
+
+\subsection{Documentación Técnica}
+\label{sect:api-docs}
+
