@@ -71,7 +71,16 @@ En la \textit{Action Bar} incluímos el título de la sección actual por la que se
 
 \paragraph{Uso}
 
-Para poder utilizar \texttt{ActionBarSherlock} dentro de nuestra app tuvimos que 
+Para poder utilizar \texttt{ActionBarSherlock} dentro de nuestra app tuvimos que hacer dos cosas:
+
+\begin{itemize}
+	\item Crear una clase abstracta \texttt{MyConferenceActivity} que extendía a \texttt{SherlockFragmentActivity}.
+	\item Crear una clase \texttt{MyConferenceFragment} que extendía a \texttt{SherlockFragment}.
+\end{itemize}
+
+A partir de ese momento, cualquier actividad que se creara extendía de \texttt{MyConferenceActivity} y cualquier fragmento de \texttt{MyConferenceFragment}. Esto hacía que automáticamente se introdujese la \textit{Action Bar} en la interfaz gráfica.
+
+Para acceder a la \textit{Action Bar} solo era necesario llamar al método \texttt{getSupportActionBar()}, como si se utilizara la que viene con la librería de soporte, ya que \texttt{ActionBarSherlock} sobreescribe ese método y nos devuelve la suya. El resto de código utilizado ha sido habilitar el botón de "home", situado en la esquina izquierda de la barra, utilizando la función \texttt{setHomeButtonEnabled(true)}; y llamar a la función \texttt{setDisplayHomeAsUpEnabled(true)} para poder mostrar el icono de abertura y cierre del menú lateral. También hemos utilizado la función \texttt{setTitle(String title)} para poder cambiar el título al de la sección actual en la que nos encontráramos.
 
 
 (CAPTURA)
@@ -82,6 +91,16 @@ La forma más clara de mostrar el programa de un congreso es hacerlo con una list
 
 Con \texttt{AmazingListView} hemos sido capaces de poner la fecha como título para cada una de las conferencias que se desarrollen ese día, y que este título sea visible hasta que aparezca en pantalla el siguiente día. Es una buena forma de no perder de vista la fecha en una lista larga de eventos.
 
+\paragraph{Uso}
+
+A la hora de incluir esta librería en nuestro proyecto se han tenido que crear varios archivos que, aunque no ha sido difícil, si ha sido un proceso laborioso, porque hay que ir con cuidado y paso a paso para no equivocarse. Por suerte para nosotros, era una librería que habíamos utilizado en un proyecto anterior como prueba a esta app de \texttt{MyConference}, y teníamos una buena base.
+
+\begin{itemize}
+	\item Se crearon 3 archivos XML para la interfaz gráfica. El principal contenía simplemente la definición de un widget de \texttt{AmazingListView} con una lista como elemento. Los otros 2 eran el aspecto visual que tendrían las cabeceras de cada sección de la lista y los elementos de la lista en si. En nuestro caso existe una cabecera por cada día de duración del congreso, y cada elemento de la lista contiene una hora de comienzo, un título y una descripción.
+	\item Se creó un fragmento denominado \texttt{ProgramFragment} que albergaba la lógica básica de unir cada archivo XML y la consecución de los datos a mostrar.
+	\item Se creó un \texttt{AmazingSimpleCursorAdapter} que gestionaba el orden de los elementos, cuáles iban con qué cabeceras y las transiciones entre cabeceras. Esta es la clase más "liosa" porque es la que hay que retocar si algo no se muestra como se esperaba.
+\end{itemize}
+
 
 (CAPTURA)
 
@@ -91,8 +110,16 @@ Para mostrar la localización de los lugares dentro del congreso hemos utilizado 
 
 Al principio solo añadimos una lista de lugares y un enlace que abría la propia aplicación de Google Maps instalada en el dispositivo para mostrar su ubicación, pero decidimos aprovechar que se podía incluir en la propia app para que de manera clara y de un vistazo se pudiesen ver todos los lugares. Aún así, también existe ese listado para que el usuario pueda utilizar las funciones más avanzadas de los mapas, como el creado de una ruta desde su posición hasta la ubicación del congreso.
 
+\paragraph{Uso}
+
 Para poder utilizar los mapas es necesario incluir la librería \textit{Google Play Services} así como disponer de una API Key única para la app. Es una tarea un poco compleja, pero existe un buen tutorial en la página de desarrolladores de Android.
 % (CITA: https://developers.google.com/maps/documentation/android/start#installing_the_google_maps_android_v2_api )
+
+En la clase creada para añadir el mapa hace falta un objeto del tipo \texttt{GoogleMap} al que se le asigna un mapa llamando a la función \texttt{getMap()}. A partir de aquí queda únicamente la configuración del mapa.
+
+Lo primero fue añadir un marcador por cada lugar existente en la base de datos. Cuando un usuario pincha sobre el marcador, aparece una ventana de información con el nombre del lugar y si se pincha en esa ventana, lanzamos un \texttt{Intent} para abrir la aplicación de Google Maps instalada en el dispositivo con ese lugar pinchado como origen. Si el usuario no tuviese instalada la aplicación simplemente se muestra un mensaje de error en forma de \texttt{Toast} comentando que no ha sido posible abrir el mapa.
+
+Y el siguiente paso era centrar el mapa en la ciudad donde se vaya a celebrar el congreso, para así ver todos los marcadores juntos. La API de Google Maps es bastante completa y está bien documentada, así que se pueden conseguir buenos efectos de transición llamando a dos o tres funciones. En nuestro caso creamos un objeto de tipo \texttt{CameraPosition} para fijar el lugar donde se tenía que situar la cámara y el zoom que se tenía que aplicar sobre la región, y llamar a la función \texttt{animateCamera()} que se encarga de una transición suave y agradable a la vista.
 
 (CAPTURA)
 
@@ -166,12 +193,14 @@ En la etapa de planificación de la app para Android sabíamos que tenía que haber
 
 La forma lógica de atacar el problema era crear una base de datos local y que el usuario decidiera cuándo quería actualizar la información de la que disponía si hubiesen nuevos datos, excepto la primera vez que se abre la app que se tiene que descargar todo. Así, aunque el usuario no disponga conexión a internet, ya tiene en su dispositivo toda la información almacenada para su consulta.
 
-Para la creación y gestión de bases de datos Android incorpora una librería denominada SQLite que utiliza el lenguaje SQL de una forma sencilla y utilizando muy pocos recursos del sistema. La base de datos se organiza en tablas, y éstas contienen los diferentes registros, que son los datos que se almacenan.
+Para la creación y gestión de bases de datos Android incorpora una librería denominada SQLite que utiliza el lenguaje SQL de una forma sencilla y utilizando muy pocos recursos del sistema. 
+
+La base de datos se organiza en tablas. Cada tabla se compone de filas y columnas. Las filas se corresponden con los registros y las columnas son los campos.
 
 Siguiendo el ejemplo disponible en la página de desarrolladores de Android creamos una base de datos con varias tablas:
 %(CITA: http://developer.android.com/guide/topics/providers/content-provider-creating.html ) 
 \begin{itemize}
-	\item Conferencias
+	\item Congresos
 	\item Documentos
 	\item Lugares
 	\item Anuncios
@@ -179,9 +208,37 @@ Siguiendo el ejemplo disponible en la página de desarrolladores de Android cream
 	\item Comité organizador
 \end{itemize}
 
-Como nuestra app sirve para gestionar congresos, es necesario mantener guardado un registro por cada congreso al que el usuario esté registrado, con un nombre, una descripción y un identificador.
+\subsection{Campos comunes de las tablas}
 
-Este identificador también se almacena en el resto de tablas, para saber siempre qué registro pertenece a qué congreso. Aparte del identificador se almacena en la tabla toda la información que devuelve la API. Se puede ver la estructura de cada tabla en los siguientes diagramas. 
+Todas las tablas tienen una primera columna \texttt{ID} de tipo entero y autoincremental. Esto quiere decir que cada vez que se inserta un registro se le asigna un id diferente.
+
+Las tablas también comparten una segunda columna denominada \texttt{conf\_uuid}, que es el identificador propio de cada congreso, ya que dentro de la app puede haber varios congresos a los que el usuario vaya a asistir y, por ejemplo, todos los anuncios se guardan en la misma tabla, y tiene que poderse diferenciar a qué congreso pertenece cada anuncio. Este identificador se consigue a partir de la tabla de \textit{Congresos}, cuyos campos se explican en la siguiente sección.
+
+\subsection{Campos propios de cada tabla}
+
+\paragraph{Congresos}
+
+Se compone de 3 campos: el nombre del congreso, una descripción que luego se mostrará en la sección \textit{About} de la app, y el campo uuid mencionado anteriormente. Los 3 campos son de tipo \texttt{TEXT}.
+
+\paragraph{Documentos}
+
+Esta tabla está pensada para posibles \texttt{.pdf} o \texttt{.doc} que se suban de manera informativa. Contiene los campos título, descripción, el tipo que tiene el archivo y datos, que es el archivo en si. Todos los campos son de tipo \texttt{TEXT}.
+
+\paragraph{Lugares}
+
+Se guarda el nombre y una breve descripción de tipo \texttt{TEXT}. La descripción suele ser la dirección completa de la ubicación. También se almacena como dato de tipo \texttt{REAL} la latitud y la longitud, que nos sirven para posicionar los marcadores en el mapa de Google Maps.
+
+\paragraph{Anuncios}
+
+Los anuncios son pequeños textos dónde se resume algún evento o novedad importante. Para ello se almacena un título, un cuerpo del anuncio y la fecha en que se publica el anuncio. A la hora de mostrarlos se ordenan por fecha del más reciente al más antiguo. Todos los campos son de tipo \texttt{TEXT}.
+
+\paragraph{Ponentes principales}
+
+Como requieren más información que otros ponentes o que los organizadores, se almacenan en una tabla aparte. Sus campos son: el nombre, el cargo que desempeña en su vida profesional, el lugar del que proviene, una descripción de su actividad, una foto y, opcionalmente, uno o varios links a páginas personales. Todos los campos son de tipo \texttt{TEXT}.
+
+\paragraph{Comité organizador}
+
+Esta tabla es la más poblada ya que hay mucha gente detrás de la organización de un congreso. Se almacena su nombre, la ciudad o país de donde proviene, una breve descripción si la hay y el grupo al que pertenece dentro del comité, que se utiliza como cabecera a la hora de mostrarlos dentro de la app.
 
 (DIAGRAMAS)
 
