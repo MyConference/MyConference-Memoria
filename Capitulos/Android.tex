@@ -1,0 +1,248 @@
+\chapter{Android}
+
+\section{Introducción}
+
+Android es la plataforma móvil más popular del mundo.
+% (CITA: http://developer.android.com/about/index.html )
+
+Android se encuentra en cientos de millones de dispositivos en más de 190 países alrededor del mundo. Es la plataforma móvil base más extendida y crece muy rápido -- cada día otro millón de usuarios enciende por primera vez su nuevo dispositivo Android y se inicia en el mundo de las apps, los juegos y demás contenido digital.
+
+Android ofrece la capacidad de crear apps y juegos para gente de todas partes del mundo y distribuirlas instantáneamente a través de su tienda abierta a todo el mundo.
+
+\subsection{Alizanza mundial y una gran base}
+
+Construído gracias al aporte de la comunidad de código abierto de Linux y con más de 300 asociados hardware, software y móviles, Android se ha convertido en el sistema operativo con un crecimiento mayor.
+
+Que sea de código abierto lo ha convertido en el favorito tanto para usuarios como para desarrolladores, creciendo rápidamente el consumo de apps. Los usuarios de Android se descargan más de 1.5 billones de apps y juegos de la Google Play cada mes.
+
+Con la ayuda de sus aliados, Android intenta superar los límites hardware y software para llevar al usuario final y a los desarrolladores una experiencia única llena de posibilidades. Y para los desarrolladores en concreto, la innovación de Android hace que puedan diseñar apps que se diferencien del resto, usando para ello las tecnologías más avanzadas.
+
+\subsection{Framework de desarrollo potente}
+
+Android ofrece todas las herramientas para crear las mejores apps. A partir de un modelo simple permite desplegar las apps a lo largo y ancho del mundo y para una gran cantidad de dispositivos -- desde móviles hasta tablets, y más.
+
+Android también permite diseñar apps agradables a la vista y que aprovechen todas las capacidades hardware de las que dispone cada dispositivo. Se adapta automáticamente a la interfaz gráfica para que se vea lo mejor posible en cada dispositivo y te da tanto control como sea necesario para configurar cada tipo de dispositivo.
+
+Por ejemplo, se puede crear una app que esté optimizada tanto para móviles como para tablets. La interfaz gráfica se crea a partir de simples y ligeros archivos XML, unos para las partes comunes de todos los dispositivos y otros para las partes específicas de móviles o tablets. Y en tiempo de ejecución es Android el encargado de seleccionar los archivos necesarios basándose en el tamaño de la pantalla, la densidad, la localización y más parámetros.
+
+Para ayudarte, Android ofrece el paquete llamado \textit{Android Developer Tools}, que es un entorno de desarrollo integrado Java con todo tipo de funcionalidades para crear, debuggear y terminar todo el proceso antes de publicar una app. Usándo este IDE se puede desarrollar para cualquier dispositivo Android existente y utilizar máquinas virtuales para recrear cualquier funcionalidad hardware presente en estos dispositivos.
+
+\subsection{Un mercado libre para distribuir tus apps}
+
+Google Play es el mercado principal para vender y distribuir apps de Android. Cuando publicas una app, llegas a todos los rincones de Android.
+
+Como mercado abierto, tu tienes el control de cómo quieres vender tu producto. Se puede publicar cuando se quiera, tantas veces como se quiera, y llegar al público que se quiera. Se puede publicar para todo el mundo o enfocarse en un sector más pequeño, en una serie de dispositivos o solo interesarse por dispostivos con ciertas capacidades harware.
+
+Se pueden monetizar las apps de la forma que se crea mejor -- apps de pago o gratis, con publicidad dentro de la app o con contenido descargable. También se tiene el control del precio que se pone a una app o a los contenidos descargables desde la misma, y se pueden cambiar esos precios siempre que se quiera.
+
+Google Play también te ayuda a tener mayor visibilidad dentro del mercado. A medida que una app gana popularidad, se le reservan sitios estratégicos dentro del mercado y se coloca en el \textit{top ventas} para que sea más accesible al público.
+
+\section{Desarrollo}
+
+Para el apartado del diseño decidimos basarnos en la app de conferencias de TED. %(CITA: https://play.google.com/store/apps/details?id=com.ted.android&hl=es ).
+La organización y la presentación de los contenidos era una buena base para desarrollar nuestra app. 
+%(ESTO IRÍA EN ESTADO DEL ARTE, CREO)
+
+\subsection{Requisitos}
+
+La app está diseñada para dispositivos con versiones Android 2.3 (Gingerbread) y superiores, hasta la versión actual 4.4 (KitKat). Esto es debido a que, aunque la versión 2.3 salió en el año 2010, todavía a día de hoy representa un 16.2\% de los dispositivos Android totales.
+% (CITA: https://developer.android.com/about/dashboards/index.html?utm_source=ausdroid.net )
+ No darles soporte para que puedan utilizar la app hubiese sido un error. Esto ha tenido diversas consecuencias que se especificarán durante el desarrollo de los siguientes apartados.
+
+\subsection{Librerías externas}
+
+Aparte de las librerías propias de Android, hemos utilizado las siguientes librerías externas:
+
+\begin{itemize}
+	\item \textit{ActionBarSherlock} para poder conseguir el aspecto de una app actual en versiones anteriores a la 3.0 (Honeycomb).
+    %(CITA: http://actionbarsherlock.com/ )
+    \item \textit{Amazing List View} para conseguir un aspecto bonito y sencillo para el programa de las conferencias.
+    %(CITA: https://code.google.com/p/android-amazing-listview/ )
+    \item También se ha utilizado \textit{Google Play Services} para poder usar la aplicación de Google Maps dentro de nuestra app.
+\end{itemize}
+
+\subsubsection{ActionBarSherlock}
+
+Con la llegada de la versión de Android 3.0 (Honeycomb) se introdujo un nuevo elemento a la interfaz de usuario de las apps: la \textit{Action Bar}. Como nuestra app debía ser compatible con dispositivos con versiones anteriores era necesaria una librería para implementarla.
+
+Escogimos \texttt{ActionBarSherlock} por ser una de las más extendidas y, por tanto, mayor documentación y resolución de problemas por parte de la comunidad de desarrolladores. Otra opción hubiese sido desarrollar nuestra app sin este elemento, pero queríamos que se pareciese lo máximo posible al diseño de una app para las últimas versiones, que es lo que el usuario quiere. No una interfaz anticuada y obsoleta.
+
+En la \textit{Action Bar} incluímos el título de la sección actual por la que se navega y un menú para desconectarse de la app. Presionando en el logo de la app se abre el menú lateral con una lista de todas las secciones disponibles. Además, si el menú lateral está abierto, se muestra el botón de actualizar para cargar nuevos datos a la base de datos interna.
+
+\paragraph{Uso}
+
+Para poder utilizar \texttt{ActionBarSherlock} dentro de nuestra app tuvimos que 
+
+
+(CAPTURA)
+
+\subsubsection{AmazingListView}
+
+La forma más clara de mostrar el programa de un congreso es hacerlo con una lista ordenada por días y, dentro de cada día, el horario programado para cada conferencia. Las listas por defecto de Android son bastante simples a la hora de mostrar los datos de manera elegante, así que buscamos una librería externa para darle un aspecto más profesional.
+
+Con \texttt{AmazingListView} hemos sido capaces de poner la fecha como título para cada una de las conferencias que se desarrollen ese día, y que este título sea visible hasta que aparezca en pantalla el siguiente día. Es una buena forma de no perder de vista la fecha en una lista larga de eventos.
+
+
+(CAPTURA)
+
+\subsubsection{Google Maps APIv2}
+
+Para mostrar la localización de los lugares dentro del congreso hemos utilizado Google Maps, incluyendo un pequeño mapa dentro de nuestra app con un marcador en cada sitio. 
+
+Al principio solo añadimos una lista de lugares y un enlace que abría la propia aplicación de Google Maps instalada en el dispositivo para mostrar su ubicación, pero decidimos aprovechar que se podía incluir en la propia app para que de manera clara y de un vistazo se pudiesen ver todos los lugares. Aún así, también existe ese listado para que el usuario pueda utilizar las funciones más avanzadas de los mapas, como el creado de una ruta desde su posición hasta la ubicación del congreso.
+
+Para poder utilizar los mapas es necesario incluir la librería \textit{Google Play Services} así como disponer de una API Key única para la app. Es una tarea un poco compleja, pero existe un buen tutorial en la página de desarrolladores de Android.
+% (CITA: https://developers.google.com/maps/documentation/android/start#installing_the_google_maps_android_v2_api )
+
+(CAPTURA)
+
+
+\subsection{Estructura}
+
+La app está dividida en 3 paquetes: uno principal con las clases de cada una de las secciones, otro para gestionar lo referente a la cuenta de usuario y otro misceláneo.
+
+\subsubsection{Principal: es.ucm.myconference}
+
+La que se podría considerar la clase principal - \texttt{NavigationDrawerActivity} - se encuentra en este paquete, y es la que se encarga de crear el menú lateral desde el que se accede a cada sección de la app y la que gestiona el cambio entre dichas secciones, pasándoles la información necesaria para su uso. Además gestiona el guardado del estado de la app por posibles eventos externos que pudiesen ocurrir, como un giro en la pantalla, una llamada o el apagado del dispositivo. Estado que se recupera al volver a mostrarse la app. También contiene observadores para que cuando se produzca algún cambio en la base de datos referente al ingreso o borrado de un congreso, se actualice el menú.
+
+También contiene una clase (Fragmento) para cada apartado dentro de la app:
+
+\begin{itemize}
+	\item What's new -  Muestra las últimas noticias relacionadas con el congreso en formato de lista, con la fecha de publicación, un título y una breve descripción.
+	\item Call for papers - Es un enlace a un archivo pdf con los temas sobre los que deben ir las presentaciones de los conferenciantes.
+    \item Organising Committee - Dividido en una lista por categorías, es un listado de todos los conferenciantes que van a participar, listando su nombre y procedencia.
+    \item Keynote Speakers - Son los ponentes principales y, por tanto, se les lista en un apartado diferente al resto. Incluímos una foto, una descripción y su procedencia y área de estudio.
+    \item Conference Venue - Un listado de las direcciones de los lugares donde se van a celebrar las diferentes presentaciones y un mapa con la ubicación exacta. Si se desea, se puede seleccionar un lugar y buscar en Google Maps el trayecto hasta él.
+    \item Travel Information - Una pequeña introducción a la ciudad y/o el país donde se celebra el congreso.
+    \item Conference Program - El programa del congreso, con una lista con los horarios de cada presentación y el lugar donde se celebra.
+    \item About - Una descripción del congreso en sí y sobre su propósito. 
+\end{itemize}
+
+Estos fragmentos se encargan de realizar consultas a la base de datos y mostrar los resultados de una manera ordenada. Para ello utilizan algunas clases que se encuentran en el paquete misceláneo, que se detalla más adelante.
+
+Asimismo, contiene clases para el registro y el logueo del usuario a través de la API. En la respuesta a la llamada se encuentran todos los tokens necesarios para mantener logueado al usuario o de volver a loguearlo si la sesión ha caducado. Estos tokens junto con información del email y un ID se guardan globalmente para su uso desde otras clases.
+
+Además, contiene la actividad con la que empieza la aplicación, que es la pantalla de inicio con el nombre del congreso y su logotipo.
+
+\subsubsection{Cuenta del usuario: es.ucm.myconference.accountmanager}
+
+El paquete con la lógica más compleja de la aplicación. 
+
+Para la gestión de la cuenta del usuario hemos utilizado unas clases que nos da Android para su gestión y almacenamiento. Cuando un usuario se registra, no solo lo hace a través de nuestra API y queda almacenado en nuestro servidor y base de datos, sino que también queda sincronizada esa cuenta con el teléfono. Desde la pantalla de Ajustes de su dispositivo, el usuario puede ver su cuenta de \textit{MyConference} y activar/desactivar la sincronización para recibir nuevos datos.
+
+Para poder realizar esto hay que implementar varias clases que se encuentran en este paquete:
+% (CITA: http://udinic.wordpress.com/2013/04/24/write-your-own-android-authenticator/ )
+
+\begin{itemize}
+	\item \texttt{AccountAuthenticator} - El encargado de añadir una nueva cuenta al sistema y guardar el token de autorización (Auth token).
+    \item \texttt{AccountAuthenticatorActivity} - La única interacción con el usuario. Presenta una pantalla donde el usuario introduce su email y una contraseña, y se comprueba que efectivamente lo que ha escrito es una dirección de email correcta y que la contraseña tiene mínimo 8 caracteres. Si todo va bien y el usuario se registra correctamente se guarda la cuenta con su token de autorización y se entra en la aplicación.
+    \item \texttt{AuthenticatorService} - Servicio a través del cual nos comunicamos con el autenticador.
+\end{itemize}
+
+Aparte de estas clases, en este paquete también se encuentran las encargadas de crear y  gestionar la base de datos interna del dispositivo, que no tiene nada que ver con la base de datos global de MyConference, a la cual se accede a través de la API. Estas clases se explicarán más adelante.
+
+Y por último, se incluye una clase - \texttt{SyncAdapter} - que se encarga de guardar todos los datos que se reciben a través de la API en las distintas tablas de la base de datos interna. De esta forma la app tiene siempre una "copia"  de los datos y no tiene que estar accediendo a la base de datos global cada vez que se quiere mostrar algo. Esto consumiría mucha batería y, lo que es peor, la tarifa de datos del usuario. Solo se sincronizará con la API cuando el usuario pulse el botón de Actualizar.
+
+\subsubsection{Miscelánea: es.ucm.myconference.util}
+
+A la hora de mostrar los datos, las clases predefinidas de Android pueden llegar a ser limitadas en cuanto a la relación de qué datos le envío y cómo queremos que los muestre. A veces es necesario heredar de una clase base e implementar sus métodos a nuestro gusto. En este paquete se encuentran esas clases para varias de las secciones, que se denominan \textit{adapters}.
+
+
+Además, hay 2 clases para la gestión de las descripciones de los ponentes principales, para que el \textit{look\&feel} sea mejor. Se encargan de colocar el texto alrededor de una imagen y que no quede todo descentrado.
+
+(CAPTURA)
+
+Asimismo, hay una clase para almacenar constantes y así tenerlas en un sitio común, y otra clase para datos estáticos, como son los iconos del menú lateral.
+
+\section{Base de datos}
+
+En la etapa de planificación de la app para Android sabíamos que tenía que haber una base de datos en el dispositivo para almacenar todos los datos que recibiríamos a través de la API. De no ser así, cada vez que el usuario abriese la app tendrían que descargarse todos los datos de nuevo para poder mostrarlos, y este comportamiento tiene varias desventajas:
+
+\begin{enumerate}
+	\item \textbf{Rendimiento}. Descargar todos los datos y mostrarlos puede ser un proceso lento, pues depende ya no solo de la cantidad de datos a descargar, sino de la velocidad de conexión a internet del usuario y de la velocidad de su dispositivo.
+    \item \textbf{Batería}. Descargar datos de internet durante un tiempo prolongado o muchas veces en cortos períodos de tiempo suele agotar la batería del dispositivo más rápido, y no es de agrado para un usuario ver cómo se gasta su batería por usar nuestra app. La desinstalaría.
+    \item \textbf{Consumo de datos}. Si no se está conectado por WIFI se utiliza la tarifa de datos que tenga contratada el usuario. Y eso es dinero que no se puede malgastar cada vez que se abre una app.
+\end{enumerate}
+
+La forma lógica de atacar el problema era crear una base de datos local y que el usuario decidiera cuándo quería actualizar la información de la que disponía si hubiesen nuevos datos, excepto la primera vez que se abre la app que se tiene que descargar todo. Así, aunque el usuario no disponga conexión a internet, ya tiene en su dispositivo toda la información almacenada para su consulta.
+
+Para la creación y gestión de bases de datos Android incorpora una librería denominada SQLite que utiliza el lenguaje SQL de una forma sencilla y utilizando muy pocos recursos del sistema. La base de datos se organiza en tablas, y éstas contienen los diferentes registros, que son los datos que se almacenan.
+
+Siguiendo el ejemplo disponible en la página de desarrolladores de Android creamos una base de datos con varias tablas:
+%(CITA: http://developer.android.com/guide/topics/providers/content-provider-creating.html ) 
+\begin{itemize}
+	\item Conferencias
+	\item Documentos
+	\item Lugares
+	\item Anuncios
+	\item Ponentes principales
+	\item Comité organizador
+\end{itemize}
+
+Como nuestra app sirve para gestionar congresos, es necesario mantener guardado un registro por cada congreso al que el usuario esté registrado, con un nombre, una descripción y un identificador.
+
+Este identificador también se almacena en el resto de tablas, para saber siempre qué registro pertenece a qué congreso. Aparte del identificador se almacena en la tabla toda la información que devuelve la API. Se puede ver la estructura de cada tabla en los siguientes diagramas. 
+
+(DIAGRAMAS)
+
+\newpage
+
+Para gestionar la base de datos existen 2 clases en el paquete \texttt{es.ucm.myconference.accountmanager}:
+
+\begin{itemize}
+	\item \texttt{SqlHelper}, que extiende a SQLiteOpenHelper.
+    \item \texttt{ConfsProvider}, que extiende a ContentProvider.
+\end{itemize}
+
+\subsection{SqlHelper}
+
+Es la clase que se encarga de crear las tablas de la base de datos cuando se instala la app en el dispositivo. Al crear la base de datos se le da un nombre y una versión, que se va incrementando a medida que se van añadiendo nuevas tablas.
+
+A través de comandos SQL se crean los diferentes campos de las tablas y dándoles un tipo: \texttt{TEXT} para texto y \texttt{REAL} o \texttt{INT} para números. No nos ha hecho falta ningún tipo más pues la inmensa mayoría es texto. Esto hace que la base de datos no sea demasiado pesada.
+
+Asimismo, se encarga de actualizar la base de datos cuando una nueva versión está disponible.
+
+\subsection{ConfsProvider}
+
+Cuando se accede a la base de datos para una búsqueda o una inserción nueva, ésta es la clase que lo gestiona. \texttt{ContentProvider} se traduce como Proveedor de Contenidos.
+
+Para poder acceder al contenido de la base de datos es necesario que esté identificado, y eso se hace a través de las URIs. Una URI 
+%(CITA: http://developer.android.com/reference/android/net/Uri.html )
+es una cadena de texto que permite identificar un recurso de información. Lo primero que se hace es asignar dos URIs a cada una de las tablas de la base de datos: una para realizar consultas de un solo registro y otra para varios. También se asigna un tipo para cada URI, dependiendo si es individual o colectiva. Y a continuación están los métodos que se encargan de las consultas, inserciones, borrados y actualizaciones de registros.
+
+Los \texttt{ContentProvider} utilizan una clase denominada \texttt{Cursor} para devolver los resultados de las consultas. Son colecciones que se recorren de la misma manera que el patrón \textit{iterator}, y que utilizan los adapters para mostrar los datos.
+Las inserciones devuelven la URI del nuevo registro almacenado, y los borrados y actualizaciones devuelven el número de registros afectados.
+
+\section{SharedPreferences}
+
+Android ofrece otra forma de guardar datos de manera persistente cuando instalamos una app, y son las SharedPreferences.
+
+Esta información se almacena de manera privada, de modo que solo nuestra app puede acceder a ella. Son pares clave-valor cuyos tipos sólo pueden ser booleans, floats, ints, longs, y strings. 
+
+En nuestro caso utilizamos este tipo de almacenamiento para guardar el nombre del usuario, el email, su identificador, y los tokens de acceso y refresco que nos proporciona la API al registrarse o hacer login en la app. También se utiliza durante la aplicación para almacenar si el usuario se desloguea de la app antes de salir o para saber si es la primera vez que accede a la app.
+
+Si el usuario sale de la app sin desloguearse, al volver a entrar aparecerá en la pantalla inicial. Si por el contrario pulsa en Logout para salir, al entrar se le solicitarán los credenciales.
+
+Almacenar un booleano indicando si es la primera vez que entra en la app lo utilizamos para mostrar el menú lateral durante un período de tiempo, según la guía de diseño de Android. %(CITA: https://developer.android.com/design/patterns/navigation-drawer.html )
+
+\subsection{Permisos}
+
+Al instalar una app Android en un dispositivo se muestran los distintos permisos que necesita el usuario aceptar para que la aplicación pueda funcionar. 
+
+Para nuestra app hacen falta los siguientes permisos:
+
+\begin{itemize}
+	\item INTERNET. Es necesario poder conectarse a internet para la descarga de los datos desde nuestra base de datos al dispositivo y para descargar los mapas de Google Maps.
+	\item READ\textbackslash WRITE\_SYNC\_SETTINGS. Permite leer y controlar las opciones de sincronización. Se utiliza, por ejemplo, para sincronizaciones periódicas o para ver si en un momento determinado se puede sincronizar con el servidor.
+	\item AUTHENTICATE\_ACCOUNTS. Se utiliza para poder autenticar la cuenta de usuario que creamos en el dispositivo.
+	\item GET\_ACCOUNTS. Al iniciar una sincronización es necesario localizar la cuenta de usuario desde la que se manda la petición.
+	\item ACCESS\_NETWORK\_STATE. Permite a la API de Google Maps saber el estado de la conexión para ver si es posible descargar la información.
+	\item READ\_GSERVICES. Da acceso a los servicios web de Google.
+	\item ACCESS\_COARSE\_LOCATION. Se utiliza para permitir que se localice la posición del dispositivo, ya sea por WIFI o por la red de datos.
+	\item ACCESS\_FINE\_LOCATION. Para espacios más reducidos, poder utilizar el GPS para posicionar el dispositivo.
+	\item WRITE\_EXTERNAL\_STORAGE. Utilizado por los mapas de Google Maps para cachear los mapas en la memoria externa del dispositivo.
+\end{itemize}
+
+También es necesario incluir que se utiliza OpenGL para los mapas en su versión 2. Sin esto en el dispositivo no se visualizarán los mapas.
+
+Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obligatorio en toda app de Android  que contiene información de la misma necesaria para el sistema.
