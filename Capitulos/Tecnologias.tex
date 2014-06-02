@@ -1,0 +1,123 @@
+\chapter{Tecnologías}
+
+\section{Heroku}
+
+
+https://www.heroku.com/
+
+Heroku es una plataforma como servicio que soporta distintos lenguajes de programación.
+
+Plataforma como servicio (PaaS - Platform as a Service) permite al desarrollador desplegar aplicaciones en la nube (Cloud Computing) de manera sencilla y rápida sin tener que administrar el hardware, es decir, sin tener que instalar software adicional en la máquina. Suele identificarse como una evolución del Software como servicio (SaaS - Software as a Service), aunque la diferencia está en que SaaS es un modelo que permite la distribución del software mientras que PaaS distribuye el software y todo lo necesario para su ejecución. Una de las ventajas del PaaS es el mejor aprovechamiento de las máquinas al estar centradas en un servicio en concreto. La desventaja está en que los servicios que proporcionan pueden quedarse escasos en algunas ocasiones. Otro ejemplo es Google App Engine.
+
+Heroku inicialmente solo soportaba la ejecución de aplicaciones web desarrolladas en Ruby, pero posteriormente se extendió el soporte a Java, Node.js, Scala, Clojure, Python y PHP.
+
+Una de las grandes ventajas de Heroku es poder obtener un Dyno (unidad de computación que ejecuta una aplicación) de manera gratuita. De esta manera se puede correr una aplicación web que consuma pocos recursos sin ningún tipo de gasto. Este sistema de Dynos es totalmente escalable, de tal manera que si la aplicación crece y necesita más recursos es tan sencillo como ampliar la capacidad de los Dynos que necesita la aplicación.
+
+Heroku dispone de una gran cantidad de extensiones (add-ons) que añaden funcionalidad extra a las aplicaciones. Por ejemplo, la extensión MongoLab permite el uso de bases de datos hechas con MongoDB.
+
+Para el desarrollo de MyConference hemos usado dos Dynos gratuitos de Heroku, uno para la ejecución de la API y otro para la Web. De esta manera hemos obtenido de manera gratuita un servicio en el que poder desarrollar la aplicación y poder testearla de manera sencilla y rápida.
+
+
+\section{Node.js}
+
+http://nodejs.org/
+
+Node.js es un entorno de programación basado en JavaScript. Es la tecnología que hemos usado para el desarrollo tanto de la API como de la Web.
+
+Dispone de una gran cantidad de módulos que añaden funcionalidad al entorno. Algunos ejemplos de estos módulos son: 
+Express: framework para el desarrollo de aplicaciones web.
+Winston: permite el guardado de todos los logs de una aplicación.
+Path: para el manejo de rutas dentro de los directorios de la aplicación.
+Mongoose: permite el manejo de manera sencilla de bases de datos hechas con MongoDB.
+
+Estos módulos se pueden instalar de manera rápida con npm, gestor oficial de paquetes de Node.js. A partir de la versión 0.6.3 de Node.js, npm se instala automáticamente junto con el entorno. Su uso es muy simple, tan solo hay que usar el siguiente comando:
+npm install package-name
+
+\section{Jade}
+
+
+http://jade-lang.com/
+
+Jade es un motor de plantillas de alto rendimiento implementado en JavaScript para Node.js. Tiene una sintaxis limpia, sensible a los espacios en blanco para escribir código HTML.
+
+La instalación de Jade se hace mediante npm, el gestor de paquetes de Node.js:
+npm install jade
+
+
+HTML
+Jade
+
+\begin{lstlisting}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Jade</title>
+    <script type="text/javascript">
+      if (foo) {
+        bar(1 + 5)
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Jade - node template engine</h1>
+    <div id="container" class="col">
+      <p>You are amazing</p>
+      <p>Jade is a terse and simple
+         templating language with a
+         strong focus on performance
+         and powerful features.</p>
+    </div>
+  </body>
+</html>
+\end{lstlisting}
+
+\begin{lstlisting}
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    script(type='text/javascript').
+      if (foo) {
+         bar(1 + 5)
+      }
+  body
+    h1 Jade - node template engine
+    #container.col
+      if youAreUsingJade
+        p You are amazing
+      else
+        p Get on it!
+      p.
+        Jade is a terse and simple
+        templating language with a
+        strong focus on performance
+        and powerful features.
+\end{lstlisting}
+
+
+\section{SASS/SCSS}
+
+
+http://sass-lang.com/
+
+Sass (Syntactically Awesome Stylesheets) es un lenguaje de hojas de estilos, una extensión de CSS al que añade mucha funcionalidad, como por ejemplo el uso de variables, reglas anidadas, mixins e imports inline.
+
+Los archivos Sass suelen llevar la extensión .scss, pero también se puede utilizar la extensión .sass, aunque es menos común.
+
+Para la utilización de estos ficheros, primero hay que compilarlos a archivos de CSS, no se pueden usar directamente los archivos .scss.
+
+
+
+
+Algunas alternativas conocidas a Sass son less y scss.
+
+\section{Bootstrap}
+
+
+http://getbootstrap.com/
+
+Bootstrap es uno de los front-end framework más populares para el desarrollo de aplicaciones web adaptables.
+
+El diseño web adaptable (Responsive Web Design) consigue adaptar cualquier aplicación web a cualquier tipo de pantalla.
+
+
