@@ -541,7 +541,7 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
         La lista de ponentes principales.
     \item \textbf{Secuencia normal}
 
-         \begin{enumerate}
+        \begin{enumerate}
             \item Se hace una llamada a la base de datos. Si error, S-1.
             \item Se muestra la lista.
             \item Si no se ha incluído foto, no se muestra.
@@ -557,14 +557,37 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Mostrar un marcador en la ubicación donde se celebrarán ponencias.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
     \item \textbf{Postcondición si éxito}
+
+        Se muestra un mapa de \textit{Google Maps} con un marcador por cada ubicación, y también una lista con dichas ubicaciones, que se puede seleccionar y abrir una aplicación externa.
     \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje informando de que no existen ubicaciones para mostrar y el mapa vacío.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        El mapa con las ubicaciones y una lista.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Si no se muestra el mapa, S-2.
+            \item Se muestra la lista.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+        S-2. Ha ocurrido un problema externo a nuestra app (falta de OpenGL en el dispositivo, no dispone de conexión a internet...). No se muestra ningún mensaje de error y aparece el mapa gris.
 \end{enumerate}
 
 \newpage
@@ -573,14 +596,35 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Mostrar un texto y/o imágenes sobre la ciudad donde se celebra el congreso.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
     \item \textbf{Postcondición si éxito}
+
+        Se muestra el texto con o sin imágenes sobre la ciudad, explicando brevemente sus detalles o costumbres de interés general.
     \item \textbf{Postcondición si fallo}
+
+        No se muestra nada.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        El texto informativo.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra el texto.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra nada.
 \end{enumerate}
 
 \newpage
@@ -589,30 +633,72 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Mostrar una lista con los horarios de las diferentes conferencias.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
     \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista de las conferencias, incluyendo el horario, el nombre de la conferencia y una descripción si se incluye. La lista está ordenada con cabeceras de cada día y por hora.
     \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de que no se ha introducido ningún programa.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        La lista con los horarios de las ponencias.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
 \end{enumerate}
 
 \newpage
 
-\subsection{Caso de uso: mostrar una lista de enlaces de interés}
+\subsection{Caso de uso: mostrar una lista de enlaces}
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Mostrar una lista con enlaces a páginas web referentes al congreso.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
     \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con los diferentes enlaces y un icono que los identifica.
     \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de que no hay enlaces disponibles.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        La lista de enlaces.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
 \end{enumerate}
 
 \newpage
@@ -621,14 +707,35 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Mostrar el título del congreso y una breve descripción sobre el mismo.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
     \item \textbf{Postcondición si éxito}
+
+        Se muestra el título del congreso y un texto con información sobre el evento y los temas que se tratarán en él.
     \item \textbf{Postcondición si fallo}
+
+        Ninguna.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        El texto informativo.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos.
+            \item Se muestra el texto.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        Ninguna.
 \end{enumerate}
 
 \newpage
@@ -637,14 +744,36 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Hacer una llamada a la API para obtener todos los datos de la base de datos global.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        Existe conexión a internet.
     \item \textbf{Postcondición si éxito}
+
+        Se descargan todos los datos de la base de datos y se guardan en la base de datos interna del dispositivo.
     \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de información de que ha ocurrido un error y que vuelva a intentar actualizar pasado un momento.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        Información nueva en la app.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario pincha sobre el botón de actualizar que se muestra en la \texttt{ActionBar}.
+            \item Se descargan los datos a partir de una llamada a la API. Si error, S-1.
+            \item Se guardan los datos en la base de datos interna. Si error, S-2.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        S-1, S-2. Se muestra un mensaje de que ha ocurrido un error.
 \end{enumerate}
 
 \newpage
@@ -653,12 +782,33 @@ Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obliga
 
 \begin{enumerate}
     \item \textbf{Objetivo}
+
+        Desconectar la cuenta del usuario de la app y salir.
     \item \textbf{Actores}
+
+        Usuario registrado.
     \item \textbf{Precondición}
+
+        El usuario está logueado en la app.
     \item \textbf{Postcondición si éxito}
+
+        Se desconecta del servicio al usuario y se finaliza la app. Al volver a abrir la app deberá introducir sus credenciales.
     \item \textbf{Postcondición si fallo}
+
+        Ninguna.
     \item \textbf{Entradas}
+
+        Ninguna.
     \item \textbf{Salidas}
+
+        Salida de la app.
     \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario picha sobre el menú de la \texttt{ActionBar} y después en "Logout".
+            \item Se finaliza la ejecución de la app.
+        \end{enumerate}
     \item \textbf{Secuencia alternativa}
+
+        Ninguna.
 \end{enumerate}
