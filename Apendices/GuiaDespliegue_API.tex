@@ -1,0 +1,66 @@
+\section{API}
+
+La API, descrita en el capítulo \ref{chap:api}, es la columna vertebral de MyConference, y por tanto será la primera parte del proyecto que se instalará y configurará.
+
+En primer lugar es necesario tener instalado \nameref{tech:nodejs}, versión \texttt{0.12} o superior.
+A continuación debemos, usando un terminal y desde la carpeta raíz del proyecto, ejecutar:
+
+\begin{lstlisting}[language=bash]
+  $ npm install
+\end{lstlisting}
+
+Esto descargará e instalará las dependencias necesarias para ejecutar la API en sutotalidad.
+Para hacerlo, ejecutaremos:
+
+\begin{lstlisting}[language=bash]
+  $ npm start
+\end{lstlisting}
+
+Sin embargo, en este punto probablemente veamos algún error en la consola, debido a que la aplicación no ha sido configurada en absoluto. Para su configuración se utilizará \nameref{tech:foreman} (Véase \ref{tech:foreman}.
+
+\subsection{Configuración con Foreman}
+
+En primer lugar deberemos descargar e instalar \texttt{foreman} (\url{https://github.com/ddollar/foreman}). Dependiendo de la plataforma el proceso puede variar, por lo que no entraremos en detalles.
+
+Tras la instalación, se necesitan dos ficheros: \texttt{Procfile} y \texttt{.env}. El fichero \texttt{Procfile} define los prcesos que se ejecutarán con la aplicación, y ya está creado. El fichero \texttt{.env} contiene las variables de configuración en forma de variables de entorno cn la siguiente sintaxis:
+
+\begin{lstlisting}[language=bash]
+  VAR1=valor 1
+  VAR2=valor 2
+\end{lstlisting}
+
+Este fichero \textbf{nunca} debe añadirse a ningún sistema de control de versiones, y será diferente en cada máquina (desarrollo, pruebas, producción).
+
+Una vez definidos estosdos ficheros, lanzaremos la aplicación usando el comando
+
+\begin{lstlisting}[language=bash]
+  $ foreman start
+\end{lstlisting}
+
+Por defecto, Foreman establece la variable de etorno \texttt{PORT} a 5000, e iráincrementando este valor si lanzamosvariosprocesos. Para cambiar el valor inicial de esta variable, podemos utilizar la opción \texttt{-p}. Si queremos que se utilice el puerto 80 para obtener conectividad HTTP directa, deberemos lanzar el servidor con privilegios de superusuario:
+
+\begin{lstlisting}[language=bash]
+  # foreman start -p 80
+\end{lstlisting}
+
+\subsection{Configuración de MongoDB}
+
+Para que la API funcione, necesita conectividad con una base de datos MongoDB.
+
+Para configurar qué base de datos utilizar, debemos establecer la variable \texttt{MONGO_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \textt{mongodb://root:root@example.org/myconference}. También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB_URI}, comose explicará en el punto \ref{sec:deploy-api-heroku}.
+
+\subsection{Configuración de Mandrill}
+
+\subsection{Configuración General}
+
+Tras realizar toda la configuración, debemos realizar un paso más: Crear las entradas de las aplicaciones por defecto. Los siguientes comandos, ejecutados en orden, nos mostrarán los IDs de dichas aplicaciones, que se habrán creado si noexistían:
+
+\begin{lstlisting}[language=bash]
+  $ cat .env | eval
+  $ export MONGO_URI MONGOLAB_URI
+  $ node scripts/get_or_create_apps.js
+  $ unset MONGO_URI MONGOLAB_URI
+\end{lstlisting}
+
+\subsection{Heroku}
+\label{sec:deploy-api-heroku}

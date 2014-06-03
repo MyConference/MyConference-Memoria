@@ -1,0 +1,7 @@
+\chapter{Guía de Despliegue}
+
+Para poder continuar con el desarrllo o desplegar el proyecto en su forma actual, hace falta realizar una serie de pasos en cada una de las piezas que forman MyConference.
+
+Tanto para la API como para la Web es necesario disponer de un servidor web capaz de ejecutar aplicaciones escritas para \nameref{tech:nodejs} (Véase \ref{tech:nodejs}), e idealmente ambas usarán diferentes servidores. Una de las opciones más sencillas es utilizar alguna \textit{Plataforma como Servicio}, como por ejemplo \nameref{tech:heroku} (Véase \ref{tech:heroku}), pero tabién es posible configurarlo para funcionar en un servidor privado. Para ambas aplicaciones es necesario disponer de una base de datos \nameref{tech:mongodb} (Véase \ref{tech:mongodb}). Aunque las colecciones usadas son disjutas y por tanto técnicamente es posible usar una única base de datos, es conveniente por motivos de seguridas utilizar dos bases de datos independientes, una para la Web y otra para la API.
+
+% TODO: Sam, consideraciones generales para montar la app android (hacefalta X,hace falta Y, blah, sin detalles)
