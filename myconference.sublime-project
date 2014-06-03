@@ -17,6 +17,11 @@
       "name": "Make & Open (Linux)",
       "shell_cmd": "make && evince Memoria.pdf &",
       "working_dir": "$project_path"
+    },
+    {
+      "name": "Make & Open (Mac)",
+      "shell_cmd": "make && open -a preview Memoria.pdf",
+      "working_dir": "$project_path"
     }
   ]
 
