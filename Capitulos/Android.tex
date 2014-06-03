@@ -83,7 +83,8 @@ A partir de ese momento, cualquier actividad que se creara extendía de \texttt{M
 Para acceder a la \textit{Action Bar} solo era necesario llamar al método \texttt{getSupportActionBar()}, como si se utilizara la que viene con la librería de soporte, ya que \texttt{ActionBarSherlock} sobreescribe ese método y nos devuelve la suya. El resto de código utilizado ha sido habilitar el botón de "home", situado en la esquina izquierda de la barra, utilizando la función \texttt{setHomeButtonEnabled(true)}; y llamar a la función \texttt{setDisplayHomeAsUpEnabled(true)} para poder mostrar el icono de abertura y cierre del menú lateral. También hemos utilizado la función \texttt{setTitle(String title)} para poder cambiar el título al de la sección actual en la que nos encontráramos.
 
 
-(CAPTURA)
+\figura{Vectorial/Android/actionBarSherlock}{width=0.8\textwidth}{fig:actionBarSherlock}%
+    {\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}.}
 
 \subsubsection{AmazingListView}
 
@@ -102,7 +103,8 @@ A la hora de incluir esta librería en nuestro proyecto se han tenido que crear v
 \end{itemize}
 
 
-(CAPTURA)
+\figura{Vectorial/Android/amazingListView}{width=0.5\textwidth,height=11cm}{fig:amazingListView}%
+    {Captura del programa de un congreso utilizando \texttt{AmazingListView}.}
 
 \subsubsection{Google Maps APIv2}
 
@@ -121,8 +123,8 @@ Lo primero fue añadir un marcador por cada lugar existente en la base de datos. 
 
 Y el siguiente paso era centrar el mapa en la ciudad donde se vaya a celebrar el congreso, para así ver todos los marcadores juntos. La API de Google Maps es bastante completa y está bien documentada, así que se pueden conseguir buenos efectos de transición llamando a dos o tres funciones. En nuestro caso creamos un objeto de tipo \texttt{CameraPosition} para fijar el lugar donde se tenía que situar la cámara y el zoom que se tenía que aplicar sobre la región, y llamar a la función \texttt{animateCamera()} que se encarga de una transición suave y agradable a la vista.
 
-(CAPTURA)
-
+\figura{Vectorial/Android/googleMaps}{width=0.5\textwidth,height=11cm}{fig:googleMaps}%
+    {Captura de la sección de lugares utilizando \textit{Google Maps}.}
 
 \subsection{Estructura}
 
@@ -130,7 +132,9 @@ La app está dividida en 3 paquetes: uno principal con las clases de cada una de 
 
 \subsubsection{Principal: es.ucm.myconference}
 
-La que se podría considerar la clase principal - \texttt{NavigationDrawerActivity} - se encuentra en este paquete, y es la que se encarga de crear el menú lateral desde el que se accede a cada sección de la app y la que gestiona el cambio entre dichas secciones, pasándoles la información necesaria para su uso. Además gestiona el guardado del estado de la app por posibles eventos externos que pudiesen ocurrir, como un giro en la pantalla, una llamada o el apagado del dispositivo. Estado que se recupera al volver a mostrarse la app. También contiene observadores para que cuando se produzca algún cambio en la base de datos referente al ingreso o borrado de un congreso, se actualice el menú.
+La que se podría considerar la clase principal - \texttt{NavigationDrawerActivity} - se encuentra en este paquete, y es la que se encarga de crear el menú lateral desde el que se accede a cada sección de la app y la que gestiona el cambio entre dichas secciones, pasándoles la información necesaria para su uso. Además gestiona el guardado del estado de la app por posibles eventos externos que pudiesen ocurrir, como un giro en la pantalla, una llamada o el apagado del dispositivo. Estado que se recupera al volver a mostrarse la app. El diagrama UML con los atributos y métodos de esta clase junto con la relación con otras clases se muestra en la figura ~\ref{fig:importantClass}
+
+También contiene observadores para que cuando se produzca algún cambio en la base de datos referente al ingreso o borrado de un congreso, se actualice el menú.
 
 También contiene una clase (Fragmento) para cada apartado dentro de la app:
 
@@ -152,6 +156,11 @@ Asimismo, contiene clases para el registro y el logueo del usuario a través de l
 
 Además, contiene la actividad con la que empieza la aplicación, que es la pantalla de inicio con el nombre del congreso y su logotipo.
 
+Un diagrama de cómo están relacionadas estas clases se puede ver en la figura ~\ref{fig:relationsPrincipal}. 
+
+\figura{Vectorial/Android/importantClass}{width=\textwidth}{fig:importantClass}%
+    {Diagrama UML de la clase \texttt{NavigationDrawerActivity}.}
+
 \subsubsection{Cuenta del usuario: es.ucm.myconference.accountmanager}
 
 El paquete con la lógica más compleja de la aplicación. 
@@ -171,6 +180,11 @@ Aparte de estas clases, en este paquete también se encuentran las encargadas de 
 
 Y por último, se incluye una clase - \texttt{SyncAdapter} - que se encarga de guardar todos los datos que se reciben a través de la API en las distintas tablas de la base de datos interna. De esta forma la app tiene siempre una "copia"  de los datos y no tiene que estar accediendo a la base de datos global cada vez que se quiere mostrar algo. Esto consumiría mucha batería y, lo que es peor, la tarifa de datos del usuario. Solo se sincronizará con la API cuando el usuario pulse el botón de Actualizar.
 
+En la figura ~\ref{fig:accountManager} se puede ver un diagrama UML de este paquete.
+
+\figura{Vectorial/Android/relationsPrincipal}{width=\textwidth}{fig:relationsPrincipal}%
+    {Relación entre las clases del paquete es.ucm.myconference.}
+
 \subsubsection{Miscelánea: es.ucm.myconference.util}
 
 A la hora de mostrar los datos, las clases predefinidas de Android pueden llegar a ser limitadas en cuanto a la relación de qué datos le envío y cómo queremos que los muestre. A veces es necesario heredar de una clase base e implementar sus métodos a nuestro gusto. En este paquete se encuentran esas clases para varias de las secciones, que se denominan \textit{adapters}.
@@ -181,6 +195,9 @@ Además, hay 2 clases para la gestión de las descripciones de los ponentes princi
 (CAPTURA)
 
 Asimismo, hay una clase para almacenar constantes y así tenerlas en un sitio común, y otra clase para datos estáticos, como son los iconos del menú lateral.
+
+\figura{Vectorial/Android/accountManager}{width=\textwidth}{fig:accountManager}%
+    {Diagrama UML de las clases del paquete es.ucm.myconference.accountmanager.}
 
 \section{Base de datos}
 
