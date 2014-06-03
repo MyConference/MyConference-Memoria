@@ -25,3 +25,6 @@
 # Project files
 *.sublime-workspace
 Memoria.pdf
+
+# Mac files
+**/.DS_Store
