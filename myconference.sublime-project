@@ -11,5 +11,13 @@
         "Memoria.pdf"
       ]
 		}
-	]
+	],
+  "build_systems": [
+    {
+      "name": "Make & Open (Linux)",
+      "shell_cmd": "make && evince Memoria.pdf &",
+      "working_dir": "$project_path"
+    }
+  ]
+
 }
