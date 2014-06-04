@@ -57,11 +57,11 @@ En esta página principal se muestra la siguiente información:
 \begin{itemize}
 	\item Nombre del congreso.
 	\item Breve descripción.
-	\item Papel que tiene el usuario en el congreso (propietario, colaborador o asistente).
+	\item Papel que tiene el usuario en el congreso (propietario o asistente).
 	\item Botón para poder borrar un congreso creado en caso de que el usuario sea su propietario.
 \end{itemize}
 
-Pulsando en el nombre de un congreso de la lista se accede a su información detallada. La información está separada en distintas secciones a las que se puede acceder desde la barra de navegación.
+Pulsando en el nombre de un congreso de la lista se accede a su información detallada. Una vez se ha accedido al congreso, en la barra de navegación aparece el nombre del congreso actual, las diferentes secciones en las que se divide la información que tiene el congreso y el botón \textbf{Log out} para poder cerrar la sesión actual. Pulsando sobre el nombre del congreso en la barra de navegación se vuelve a la lista de congresos.
 
 \begin{figure}[h]
 \begin{center}
@@ -73,76 +73,176 @@ Pulsando en el nombre de un congreso de la lista se accede a su información deta
 
 \subsubsection{Usuarios}
 
-En esta sección se pueden ver los usuarios que han sido invitados al congreso y han aceptado la invitación. El propietario del congreso es el único que puede mandar invitaciones a otros usuarios. Estos usuarios tendrán acceso a todos los datos del congreso, aunque no podrán ni editar ni borrar ningún tipo de información.
+En esta sección se pueden ver los usuarios que han sido invitados al congreso y han aceptado la invitación. El propietario del congreso es el único que puede mandar invitaciones a otros usuarios. Estos usuarios tendrán acceso a todos los datos del congreso con el papel de asistentes, por lo que no podrán ni añadir ni borrar ningún tipo de información.
+
+Los campos que se pueden ver en esta sección son:
+\begin{itemize}
+    \item ID: el ID asignado al usuario. Actualmente los usuarios no poseen un nombre de usuario en sus cuentas, por lo que la única manera de identificar a un usuario es por su ID.
+    \item Role: el papel que ejerce el usuario.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/users}
-\caption{Sección de usuarios.}
+\caption{Sección de \textit{usuarios}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Anuncios}
 
-Esta sección muestra las últimas novedades del congreso para mantener informados a los usuarios. 
+Esta sección muestra los anuncios que se publican para mantener a los usuarios al día con las novedades del congreso.
+
+Los anuncios llevan la siguiente información:
+\begin{itemize}
+    \item Title: título descriptivo del anuncio.
+    \item Body: contenido completo del anuncio.
+    \item Date: fecha en la que ha sido publicado el anuncio.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/annoucements}
-\caption{Sección de anuncios.}
+\caption{Sección de \textit{anuncios}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Documentos}
 
-Muestra los documentos importantes para el congreso.
+Muestra los documentos importantes del congreso. Los documentos se muestran como enlaces.
+
+Los documentos tienen los siguientes campos:
+\begin{itemize}
+    \item Title: título del documento.
+    \item Description: descripción del contenido del documento.
+    \item Data: enlace al documento.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/documents}
-\caption{Sección de documentos.}
+\caption{Sección de \textit{documentos}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Lugares}
 
-Muestra los lugares de interés de cara al congreso, como los sitios donde hablarán los ponentes, hoteles donde alojarse, etc.
+Muestra los lugares de interés de cara al congreso, como por ejemplo, los sitios donde se realizarán las ponencias, los hoteles donde se pueden alojar los asistentes, etc.
+
+Un lugar viene indicado por:
+\begin{itemize}
+    \item Name: nombre del lugar.
+    \item Location: localización del lugar dada por sus coordenadas geográficas y su dirección.
+    \item Details: detalles de interés del lugar.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/venues}
-\caption{Sección de lugares.}
+\caption{Sección de \textit{lugares}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Organizadores}
 
-Esta sección muestra las personas encargadas de organizar el congreso.
+Esta sección muestra las personas encargadas de la organización del congreso.
+
+Cada organizador tiene la siguiente información:
+\begin{itemize}
+    \item Name: nombre del organizador.
+    \item Origin: procedencia del organizador.
+    \item Details: detalles de interés del organizador.
+    \item Group: grupo al que pertenece el organizador.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/organizers}
-\caption{Sección de organizadores.}
+\caption{Sección de \textit{organizadores}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Ponentes}
 
-Muestra los encargados de dar las ponencias en el congreso, mostrando de cada uno su nombre, su universidad de origen, su cargo dentro de la universidad y una breve biografía.
+Muestra los encargados de dar las ponencias en el congreso.
+
+Cada ponente tiene la siguiente información:
+\begin{itemize}
+    \item Name: nombre del ponente.
+    \item Origin: procedencia del ponente.
+    \item Charge: cargo del ponente.
+    \item Description: una breve biografía del ponente.
+\end{itemize}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=1\textwidth]%
                 {Imagenes/Bitmap/GuiaUso/speakers}
-\caption{Sección de ponentes.}
+\caption{Sección de \textit{ponentes}.}
 \end{center}
 \end{figure}
 
 \subsubsection{Agenda}
 
+Esta sección muestra la agenda del congreso, es decir, los eventos que se realizarán durante el congreso.
+
+Cada evento se detalla por:
+\begin{itemize}
+    \item Title: título del evento.
+    \item Descripción: breve descripción del evento.
+    \item Date \& Time: fecha en la que se realizará el evento.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/agenda}
+\caption{Sección de la \textit{agenda}.}
+\end{center}
+\end{figure}
+
 \subsection{Creación de congresos}
+
+Desde la página principal con la lista de congresos se pueden crear nuevos congresos pulsando sobre el botón \textbf{+ New Conference} e introduciendo los siguientes campos:
+\begin{itemize}
+    \item Name: nombre del congreso.
+    \item Descripción: breve descripción del congreso.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/new-conference}
+\caption{Formulario de \textit{creación de nuevos congresos}.}
+\end{center}
+\end{figure}
+
+Inicialmente, el congreso sólo tendrá esta información. Posteriormente se irá añadiendo nueva información desde cada una de las secciones vistas anteriormente.
+
+\subsubsection{Usuarios}
+
+El propietario del congreso es el único que puede invitar a otros usuarios al congreso, introduciendo su nombre y su email en un formulario.
+
+
+
+Una vez se ha mandado la invitación al usuario, a este le llegará un correo con un código de activación y un enlace a la página para que pueda añadir el congreso a su cuenta.
+
+
+
+Cuando el usuario introduzca el código en el enlace, aparecerá automáticamente en la lista de asistentes del congreso.
+
+\subsubsection{Anuncios}
+
+\subsubsection{Documentos}
+
+\subsubsection{Lugares}
+
+\subsubsection{Organizadores}
+
+\subsubsection{Ponentes}
+
+\subsubsection{Agenda}
