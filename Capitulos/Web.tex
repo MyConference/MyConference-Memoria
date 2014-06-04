@@ -56,12 +56,12 @@ Una vez se ha iniciado sesión en la aplicación, ya se puede acceder a toda la in
 En esta página principal se muestra la siguiente información:
 \begin{itemize}
 	\item Nombre del congreso.
-	\item Breve descripción.
+	\item Breve descripción del congreso.
 	\item Papel que tiene el usuario en el congreso (propietario o asistente).
 	\item Botón para poder borrar un congreso creado en caso de que el usuario sea su propietario.
 \end{itemize}
 
-Pulsando en el nombre de un congreso de la lista se accede a su información detallada. Una vez se ha accedido al congreso, en la barra de navegación aparece el nombre del congreso actual, las diferentes secciones en las que se divide la información que tiene el congreso y el botón \textbf{Log out} para poder cerrar la sesión actual. Pulsando sobre el nombre del congreso en la barra de navegación se vuelve a la lista de congresos.
+Pulsando en el nombre de un congreso de la lista se accede a su información detallada. Una vez se ha accedido al congreso, en la barra de navegación aparece el nombre del congreso, las diferentes secciones en las que se divide la información y el botón \textbf{Log out} para poder cerrar la sesión actual. Pulsando en el nombre del congreso en la barra de navegación se vuelve a la lista de congresos.
 
 \begin{figure}[h]
 \begin{center}
@@ -213,36 +213,144 @@ Desde la página principal con la lista de congresos se pueden crear nuevos congr
     \item Descripción: breve descripción del congreso.
 \end{itemize}
 
-%\begin{figure}[h]
-%\begin{center}
-%\includegraphics[width=1\textwidth]%
-%                {Imagenes/Bitmap/GuiaUso/new-conference}
-%\caption{Formulario de \textit{creación de nuevos congresos}.}
-%\end{center}
-%\end{figure}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/new-conference}
+\caption{Formulario de \textit{creación de nuevos congresos}.}
+\end{center}
+\end{figure}
 
 Inicialmente, el congreso sólo tendrá esta información. Posteriormente se irá añadiendo nueva información desde cada una de las secciones vistas anteriormente.
 
 \subsubsection{Usuarios}
 
-El propietario del congreso es el único que puede invitar a otros usuarios al congreso, introduciendo su nombre y su email en un formulario.
+El propietario del congreso es el único que puede invitar a otros usuarios al congreso. Los usuarios invitados tendrán el papel de asistentes y podrán acceder a toda la información del congreso desde sus propias cuentas, pero no podrán añadir ni borrar ningún tipo de información.
 
+Se pueden enviar invitaciones desde la sección de usuarios pulsando el botón \textbf{+ Invite User} e introduciendo el nombre y el e-mail del usuario al que se quiere invitar.
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/invite-user}
+\caption{Formulario de \textit{invitación de usuarios}.}
+\end{center}
+\end{figure}
 
-Una vez se ha mandado la invitación al usuario, a este le llegará un correo con un código de activación y un enlace a la página para que pueda añadir el congreso a su cuenta.
+Una vez se ha mandado la invitación, al usuario le llegará un correo con un código de activación que permite vincular el congreso a su cuenta de usuario. En cuanto el usuario introduce el código de activación, éste podrá acceder de manera inmediata a la toda la información y aparecerá automáticamente en la lista de usuarios asistentes al congreso.
 
-
-
-Cuando el usuario introduzca el código en el enlace, aparecerá automáticamente en la lista de asistentes del congreso.
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/invitation-email}
+\caption{Correo con el \textit{código de activación}.}
+\end{center}
+\end{figure}
 
 \subsubsection{Anuncios}
 
+Se pueden añadir nuevos anuncios pulsando sobre el botón \textbf{+ Add Annoucement} en la sección de anuncios y rellenando el siguiente formulario:
+\begin{itemize}
+    \item Title: título del anuncio.
+    \item Body: contenido completo del anuncio.
+\end{itemize}
+
+La fecha del anuncio se añade automáticamente y será la fecha actual en la que se ha publicado el anuncio.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-annoucement}
+\caption{Formulario para añadir nuevos \textit{anuncios}.}
+\end{center}
+\end{figure}
+
 \subsubsection{Documentos}
+
+Para añadir nuevos documentos al congreso hay que pulsar el botón \textbf{+ Add Document} en la sección de documentos e introduciendo los siguientes campos:
+\begin{itemize}
+    \item Title: título del documento.
+    \item Description: descripción del documento.
+    \item Data: enlace al documento.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-document}
+\caption{Formulario para añadir nuevos \textit{documentos}.}
+\end{center}
+\end{figure}
 
 \subsubsection{Lugares}
 
+Los lugares de interés para el congreso se añaden pulsando el botón \textbf{+ Add Venue} en la sección de lugares e rellenando el siguiente formulario:
+\begin{itemize}
+    \item Name: nombre del lugar.
+    \item Details: detalles de interés del lugar.
+    \item Location: localización del lugar. Este campo se puede rellenar de dos maneras, introduciendo las coordenadas geográficas (latitud y longitud) o introduciendo la dirección del lugar. Cuando se introducen las coordenadas o la dirección, se muestra en un mapa un marcador con la localización para poder comprobar que esta es correcta.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-venue}
+\caption{Formulario para añadir nuevos \textit{lugares}.}
+\end{center}
+\end{figure}
+
 \subsubsection{Organizadores}
+
+Para añadir a los organizadores del congreso hay que pulsar sobre el botón \textbf{+ Add Organizer} en la sección de organizadores y completar la siguiente información:
+\begin{itemize}
+    \item Name: nombre del organizador.
+    \item Origin: procedencia del organizador.
+    \item Details: detalles relevantes del organizador.
+    \item Group: grupo al que pertenece el organizador.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-organizer}
+\caption{Formulario para añadir nuevos \textit{organizadores}.}
+\end{center}
+\end{figure}
 
 \subsubsection{Ponentes}
 
+Los ponentes que van a hablar en el congreso se añaden en la sección de pontentes, pulsando el botón \textbf{+ Add Speaker} y rellenando el siguiente formulario:
+\begin{itemize}
+    \item Name: nombre del ponente.
+    \item Origin: procedencia del ponente.
+    \item Charge: cargo del ponente.
+    \item Description: breve biografía del ponente.
+    \item Picture: foto del pontente. La foto tiene que tener un tamaño de 160x200 píxeles.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-speaker}
+\caption{Formulario para añadir nuevos \textit{ponentes}.}
+\end{center}
+\end{figure}
+
 \subsubsection{Agenda}
+
+Para añadir nuevos eventos en la agenda del congreso hay que pulsar el botón \textbf{+ Add Event} en la sección de la agenda e introduciendo los siguientes campos en el formulario:
+
+\begin{itemize}
+    \item Title: título del evento.
+    \item Description: breve descripción del evento.
+    \item Day, month, year: día, mes y año para generar la fecha del evento.
+    \item Hour, minutes: hora y minutos para generar la hora a la que se realizará el evento.
+\end{itemize}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1\textwidth]%
+                {Imagenes/Bitmap/GuiaUso/add-event}
+\caption{Formulario para añadir nuevos \textit{eventos} en la agenda.}
+\end{center}
+\end{figure}
