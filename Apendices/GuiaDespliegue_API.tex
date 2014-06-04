@@ -16,7 +16,7 @@ Para hacerlo, ejecutaremos:
   $ npm start
 \end{lstlisting}
 
-Sin embargo, en este punto probablemente veamos algún error en la consola, debido a que la aplicación no ha sido configurada en absoluto. Para su configuración se utilizará \nameref{tech:foreman} (Véase \ref{tech:foreman}.
+Sin embargo, en este punto probablemente veamos algún error en la consola, debido a que la aplicación no ha sido configurada en absoluto. Para su configuración se utilizará \nameref{tech:foreman} (Véase \ref{tech:foreman}).
 
 \subsection{Configuración con Foreman}
 
@@ -45,16 +45,52 @@ Por defecto, Foreman establece la variable de etorno \texttt{PORT} a 5000, e irá
 
 \subsection{Configuración de MongoDB}
 
-Para que la API funcione, necesita conectividad con una base de datos MongoDB.
+Para que la API funcione correctamente, necesita conectividad con una base de datos MongoDB.
 
-%Para configurar qué base de datos utilizar, debemos establecer la variable \texttt{MONGO_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \textt{mongodb://root:root@example.org/myconference}.
-%También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB_URI}, comose explicará en el punto \ref{sec:deploy-api-heroku}.
+Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \texttt{mongodb://root:root@example.org/myconference}.
+También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB\_URI}, como se explicará en el punto \ref{sec:deploy-api-heroku}.
+
+La base de datos en sí no necesita más configuración. Una vez la API sepa qué host, usuario y contraseña debe utilizar, la base de datos está completamente configurada.
 
 \subsection{Configuración de Mandrill}
 
+Para permitir el envío de correos electrónicos, MyConference utiliza Mandrill (Véase \ref{tech:mandrill}), un servicio de envío de correo electrónico en la nube.
+
+Para configurar la cuenta de usuario de Mandrill que se utilizará, se deben establecer las variables \texttt{MANDRILL\_USERNAME} y \texttt{MANDRILL\_APIKEY} con el nobre de usuario y la API-key de Mandrill respectivamente.
+
+Una vez la API tiene acceso a la cuenta de Mandrill, es necesario crear una plantilla en el panel de control de Mandrill llamada \texttt{invitation-code}, que contendrá el correo enviado a los usuarios cuando se les invite a un congreso de MyConference. Esta plantilla utiliza las siguientes \textit{merge variables}:
+
+\begin{itemize}
+  \item \texttt{CONFNAME}: El nombre completo del congreso.
+  \item \texttt{JOINURL}: La URL de la página en la que el usuario puede unirse a un congreso
+  \item \texttt{JOINCODE}: El código que el usuario debe introducir en dicha URL
+\end{itemize}
+
+Nótese que mediante \texttt{*|JOINURL|*?code=*|JOINCODE|*} podemos obtener la URL completa de la página en la que el usuario se unirá a la conferencia, con el código ya introducido para que el usuario simplemente acepte.
+
+A continuación se muestra un código básico que se puede usar en esta plantilla.
+
+\begin{lstlisting}[language=html,frame=single]
+<h1>You have been invited to join *|CONFNAME|* on MyConference</h1>
+<p>
+  <a href="*|JOINURL|*?code=*|JOINCODE|*">Click Here</a>
+  to join or enter the code *|JOINCODE|* in the
+  <a href="*|JOINURL|*">Join Conference</a>
+  view on the MyConference Web or Mobile App.
+</p>
+\end{lstlisting}
+
 \subsection{Configuración General}
 
-Tras realizar toda la configuración, debemos realizar un paso más: Crear las entradas de las aplicaciones por defecto. Los siguientes comandos, ejecutados en orden, nos mostrarán los IDs de dichas aplicaciones, que se habrán creado si noexistían:
+Además de la configuración anterior, existen otras variables que debemos configurar correctamente para que la API funcione correctamente:
+
+\begin{itemize}
+  \item \texttt{HOST}: El nombre de dominio (host) completo de la API, por ejemplo \texttt{api.myconference.com}. Nótese que no deben aparecer separadores de ruta (\texttt{/}) ni prefijos de esquema (\texttt{http://}).
+  \item \texttt{NODE\_ENV}: Debe contener \texttt{production} en entornos de producción y \texttt{development} en desarrollo.
+  \item \texttt{WEB\_URL}: Debe contener la URL completa a la aplicación web de MyConference, por ejemplo \texttt{http://myconference.com}. Nótese que no debe aparecer el separador final de ruta (\texttt{/}) pero sí el prefijo de esquema (\texttt{http://}).
+\end{itemize}
+
+Tras realizar toda la configuración, hay que realizar un paso más: Crear las entradas de las aplicaciones por defecto. Los siguientes comandos, ejecutados en orden, nos mostrarán los IDs de dichas aplicaciones, que se habrán creado si no existían:
 
 \begin{lstlisting}[language=bash]
   $ cat .env | eval
@@ -63,5 +99,8 @@ Tras realizar toda la configuración, debemos realizar un paso más: Crear las ent
   $ unset MONGO_URI MONGOLAB_URI
 \end{lstlisting}
 
+Con esto, la API está lista para funcionar.
+
 \subsection{Heroku}
 \label{sec:deploy-api-heroku}
+
