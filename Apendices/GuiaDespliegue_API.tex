@@ -1,4 +1,5 @@
 \section{API}
+\label{sec:deploy-api}
 
 La API, descrita en el capítulo \ref{chap:api}, es la columna vertebral de MyConference, y por tanto será la primera parte del proyecto que se instalará y configurará.
 
@@ -16,9 +17,11 @@ Para hacerlo, ejecutaremos:
   $ npm start
 \end{lstlisting}
 
-Sin embargo, en este punto probablemente veamos algún error en la consola, debido a que la aplicación no ha sido configurada en absoluto. Para su configuración se utilizará \nameref{tech:foreman} (Véase \ref{tech:foreman}).
+Sin embargo, en este punto probablemente veamos algún error en la consola, debido a que la aplicación no ha sido configurada en absoluto.
+Para su configuración local se utilizará \nameref{tech:foreman} (Véase \ref{tech:foreman}), mientras que para el despliegue final utilizaremos Heroku.
 
 \subsection{Configuración con Foreman}
+\label{sec:deploy-foreman}
 
 En primer lugar deberemos descargar e instalar \texttt{foreman} (\url{https://github.com/ddollar/foreman}). Dependiendo de la plataforma el proceso puede variar, por lo que no entraremos en detalles.
 
