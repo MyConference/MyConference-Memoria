@@ -53,6 +53,7 @@ También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB\_URI},
 La base de datos en sí no necesita más configuración. Una vez la API sepa qué host, usuario y contraseña debe utilizar, la base de datos está completamente configurada.
 
 \subsection{Configuración de Mandrill}
+\label{sec:api-conf-mandrill}
 
 Para permitir el envío de correos electrónicos, MyConference utiliza Mandrill (Véase \ref{tech:mandrill}), un servicio de envío de correo electrónico en la nube.
 
@@ -81,6 +82,7 @@ A continuación se muestra un código básico que se puede usar en esta plantilla.
 \end{lstlisting}
 
 \subsection{Configuración General}
+\label{sec:api-conf-general}
 
 Además de la configuración anterior, existen otras variables que debemos configurar correctamente para que la API funcione correctamente:
 
@@ -99,8 +101,61 @@ Tras realizar toda la configuración, hay que realizar un paso más: Crear las ent
   $ unset MONGO_URI MONGOLAB_URI
 \end{lstlisting}
 
+Debemos apuntar estos datos puesto que serán necesarios para configurar las aplicaciones Web, Android e iOS
+
 Con esto, la API está lista para funcionar.
 
 \subsection{Heroku}
 \label{sec:deploy-api-heroku}
 
+El desarrollo original de MyConference ha sido probado y puesto en marcha en Heroku (Véase \ref{tech:heroku}) desde el primer día, y todo el sistema de configuración se integra a la perfección con Heroku.
+
+Para desplegar la API en heroku, el primer paso es registrarse y crear una aplicación. Tras esto pasamos a configurar algunos add-ons necesarios:
+
+\begin{description}
+  \item[MongoLab] es el proveedor de MongoDB elegido.
+
+  Puesto que MongoLab no requiere ninguna configuración, bastará con añadir a la aplicación una instancia \textit{Sandbox} gratuita.
+
+  Se ha de tener en cuenta que el código actualmente está preparado para leer la variable de configuración \texttt{MONGOLAB\_URI} que establece MongoLab automáticamente, por lo que si se utilizara otro servicio habría que modificar dicho código o establecer la variable \texttt{MONGO\_URI} manualmente.
+
+  \item[Mandrill by MailChimp] es el servicio elegido para el envío de correo electrónico
+
+  Debemos añadir a la aplicación una instancia (puede ser \textit{Starter}, gratuita) de Mandrill. Al hacerlo se añadirán a la aplicación las variables \texttt{MANDRILL\_USERNAME} y \texttt{MANDRILL\_APIKEY}.
+
+  Para que este add-on se integre correctamente, se debe realizar la configuración de Mandrill tal como se describe en el punto \ref{sec:api-conf-mandrill}.
+
+\end{description}
+
+A continuación faltará realizar la configuración descrita en el punto \ref{sec:api-conf-general}.
+
+Heroku tiene su propia forma de realizar la configuración en lugar de utilizar un fichero \texttt{.env}.
+En primer lugar debemos instalar la utilidad de Heroku para línea de comandos, tal como se explica en \url{https://devcenter.heroku.com/articles/heroku-command}. Una vez hecho esto, procederemos a realizar la configuración.
+
+Para establecer variables de configuración utilizaremos el siguiente comando:
+
+\begin{lstlisting}[language=bash]
+  $ heroku config:set VAR1="valor 1" VAR2="valor 2"
+\end{lstlisting}
+
+En este caso, debemos ejecutar un comando similar a este:
+
+\begin{lstlisting}[language=bash]
+  $ heroku config:set NODE_ENV=production HOST=api.myconference.com WEB_URL=http://myconference.com
+\end{lstlisting}
+
+Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicación. Para ello, usando \nameref{tech:git}, desde la raíz de nuestro proyecto, ejecutaremos:
+
+\begin{lstlisting}[language=bash]
+  $ git push heroku master
+\end{lstlisting}
+
+Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconf-api-dev.git}).
+
+Una vez termine el despliegue de la aplicación, falta configurar los datos iniciales de la aplicación, mediante el siguiente comando:
+
+\begin{lstlisting}[language=bash]
+  $ heroku run 'node scripts/get_or_create_apps.js'
+\end{lstlisting}
+
+De nuevo obtendremos datos que debemos apuntar, puesto que serán necasios para el resto de aplicaciones.
