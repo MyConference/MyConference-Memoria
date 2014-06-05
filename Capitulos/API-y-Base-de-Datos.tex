@@ -75,7 +75,7 @@ Los testigos de autorización existen para realizar accesos mediante servicios ex
 
 \subsection{Servicios Disponibles}
 
-A continuación se describen todos los servicios de la API disponibles, conel siguiente formato:
+A continuación se describen todos los servicios de la API disponibles, con el siguiente formato:
 
 \paragraph{\texttt{VERBO /ruta/al/servicio}} ~\\
 
@@ -85,19 +85,25 @@ Si hacen falta argumentos, enviados siempre en el cuerpo en formato JSON, se esp
   \item \texttt{argumento}: Descripción del argumento 
 \end{itemize}
 
+Salvo que se indique lo contrario, todas las llamadas requieren del envío de un testigo de acceso válido.
+
+Se mostrará a su vez una descripción del servicio, así como de los posibles errores que se pudieran dar en cada uno.
+
 \subsubsection{Autentificación y Registro}
 
-\paragraph{\texttt{POST /auth/signup}} ~\\
+\begin{samepage}
+  \paragraph{Registro (\texttt{POST /auth/signup})}
 
-\begin{itemize}
-  \item \texttt{application_id}: ID de aplicación desde la que se realiza la petición.
-  \item \texttt{device_id}: ID del dispositivo desde el que se realiza la petición. 
-  \item \texttt{user_data}: Un objeto JSON con los campos:
   \begin{itemize}
-    \item \texttt{email}: Correo electrónico del usuario a registrar.
-    \item \texttt{password}: Contraseña del usuario a registrar.
+    \item \texttt{application\_id}: ID de aplicación desde la que se realiza la petición.
+    \item \texttt{device\_id}: ID del dispositivo desde el que se realiza la petición. 
+    \item \texttt{user\_data}: Un objeto JSON con los campos:
+    \begin{itemize}
+      \item \texttt{email}: Correo electrónico del usuario a registrar.
+      \item \texttt{password}: Contraseña del usuario a registrar.
+    \end{itemize}
   \end{itemize}
-\end{itemize}
+\end{samepage}
 
 \begin{figure}[h]
   \begin{center}
