@@ -43,7 +43,7 @@ Una vez establecidas las variables, debemos configurar Transloadit.
 Para ello necesitamos crear la plantilla que usaremos para la carga de imágenes.
 Simplemente crearemos una nueva plantilla e introduciremos lo siguiente:
 
-\begin{lstlisting}[language=json,frame=single]
+\begin{lstlisting}[frame=single]
 {
   "steps": {
     "resize_xxhdpi": {
@@ -58,8 +58,9 @@ Simplemente crearemos una nueva plantilla e introduciremos lo siguiente:
       "host": "ftp.example.org",
       "user": "myconference-user",
       "password": "myconference-password",
-      "path": "/transloadit/speakers/${file.id}.${file.ext}",
-      "url_template": "http://example.org/path/to/transloadit/speakers/${file.id}.${file.ext}"
+      "path": "/${file.id}.${file.ext}",
+      "url_template":
+        "http://example.org/path/to/${file.id}.${file.ext}"
     }
   }
 }
@@ -70,3 +71,57 @@ Los datos han de ser ajustados para utilizar una cuenta de FTP existente, así co
 Una vez tengamos la platilla creada, añadiremos el ID generado a la variable de configuración \texttt{TRANSLOADIT\_TEMPLATE\_SPEAKERS}.
 
 
+\subsection{Configuración General}
+\label{sec:web-conf-transloadit}
+
+Además de la configuración anterior, existen otras variables que debemos configurar para que la web funcione correctamente:
+
+\begin{itemize}
+  \item \texttt{NODE\_ENV}: Debe contener \texttt{production} en entornos de producción y \texttt{development} en desarrollo.
+  \item \texttt{API\_URL}: Debe contener la URL completa a la API de MyConference, por ejemplo \texttt{http://api.myconference.com}. Nótese que no debe aparecer el separador final de ruta (\texttt{/}) pero sí el prefijo de esquema (\texttt{http://}).
+  \item \texttt{APPLICATION}: Debe contener el ID de aplicación asociado a la web, obtenido previamente al configurar la API en el paso de creación de aplicaciones.
+\end{itemize}
+
+Con esto, la web está completamente lista para funcionar.
+
+
+
+\subsection{Heroku}
+\label{sec:deploy-web-heroku}
+
+El desarrollo original de MyConference ha sido probado y puesto en marcha en Heroku (Véase \ref{tech:heroku}) desde el primer día, y todo el sistema de configuración se integra a la perfección con Heroku.
+
+Para desplegar la web en Heroku, el primer paso es registrarse y crear una aplicación. Tras esto pasamos a configurar algunos add-ons necesarios:
+
+\begin{description}
+  \item[MongoLab] es el proveedor de MongoDB elegido.
+
+  Puesto que MongoLab no requiere ninguna configuración, bastará con añadir a la aplicación una instancia \textit{Sandbox} gratuita.
+
+  Se ha de tener en cuenta que el código actualmente está preparado para leer la variable de configuración \texttt{MONGOLAB\_URI} que establece MongoLab automáticamente, por lo que si se utilizara otro servicio habría que modificar dicho código o establecer la variable \texttt{MONGO\_URI} manualmente.
+
+  \item[Transloadit] es el servicio elegido para la gestión de subidas de imágenes.
+
+  Debemos añadir a la aplicación una instancia de Transloadit. Al hacerlo se añadirán a la aplicación las variables \texttt{TRANSLOADIT\_AUTH\_KEY}, \texttt{TRANSLOADIT\_SECRET\_KEY} y \texttt{TRANSLOADIT\_URL}.
+
+  Para que este add-on se integre correctamente, se debe realizar la configuración de Transloadit tal como se describe en el punto \ref{sec:web-conf-transloadit}, incluyendo la variable de configuración \texttt{TRANSLOADIT\_TEMPLATE\_SPEAKERS}.
+
+\end{description}
+
+A continuación faltará realizar la configuración descrita en el punto \ref{sec:web-conf-general}.
+
+Para ello utilizaremos la herramienta de línea de comandos de Heroku, descrita en el punto \ref{sec:api-conf-heroku}.
+
+En este caso, debemos ejecutar un comando similar a este:
+
+\begin{lstlisting}[language=bash]
+  $ heroku config:set NODE_ENV=production APPLICATION=webapplicationid API_URL=http://api.myconference.com
+\end{lstlisting}
+
+Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicación. Para ello, usando \nameref{tech:git}, desde la raíz de nuestro proyecto, ejecutaremos:
+
+\begin{lstlisting}[language=bash]
+  $ git push heroku master
+\end{lstlisting}
+
+Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconference-web.git}, por ejemplo).

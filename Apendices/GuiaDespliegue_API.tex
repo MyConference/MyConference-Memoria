@@ -89,7 +89,7 @@ A continuación se muestra un código básico que se puede usar en esta plantilla.
 \subsection{Configuración General}
 \label{sec:api-conf-general}
 
-Además de la configuración anterior, existen otras variables que debemos configurar correctamente para que la API funcione correctamente:
+Además de la configuración anterior, existen otras variables que debemos configurar para que la API funcione correctamente:
 
 \begin{itemize}
   \item \texttt{HOST}: El nombre de dominio (host) completo de la API, por ejemplo \texttt{api.myconference.com}. Nótese que no deben aparecer separadores de ruta (\texttt{/}) ni prefijos de esquema (\texttt{http://}).
@@ -116,7 +116,7 @@ Con esto, la API está lista para funcionar.
 
 El desarrollo original de MyConference ha sido probado y puesto en marcha en Heroku (Véase \ref{tech:heroku}) desde el primer día, y todo el sistema de configuración se integra a la perfección con Heroku.
 
-Para desplegar la API en heroku, el primer paso es registrarse y crear una aplicación. Tras esto pasamos a configurar algunos add-ons necesarios:
+Para desplegar la API en Heroku, el primer paso es registrarse y crear una aplicación. Tras esto pasamos a configurar algunos add-ons necesarios:
 
 \begin{description}
   \item[MongoLab] es el proveedor de MongoDB elegido.
@@ -125,7 +125,7 @@ Para desplegar la API en heroku, el primer paso es registrarse y crear una aplic
 
   Se ha de tener en cuenta que el código actualmente está preparado para leer la variable de configuración \texttt{MONGOLAB\_URI} que establece MongoLab automáticamente, por lo que si se utilizara otro servicio habría que modificar dicho código o establecer la variable \texttt{MONGO\_URI} manualmente.
 
-  \item[Mandrill by MailChimp] es el servicio elegido para el envío de correo electrónico
+  \item[Mandrill by MailChimp] es el servicio elegido para el envío de correo electrónico.
 
   Debemos añadir a la aplicación una instancia (puede ser \textit{Starter}, gratuita) de Mandrill. Al hacerlo se añadirán a la aplicación las variables \texttt{MANDRILL\_USERNAME} y \texttt{MANDRILL\_APIKEY}.
 
@@ -156,7 +156,7 @@ Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicaci
   $ git push heroku master
 \end{lstlisting}
 
-Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconf-api-dev.git}).
+Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconference-api.git}, por ejemplo).
 
 Una vez termine el despliegue de la aplicación, falta configurar los datos iniciales de la aplicación, mediante el siguiente comando:
 
