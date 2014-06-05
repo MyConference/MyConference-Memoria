@@ -14,3 +14,59 @@ Tras esto pasaremos a la configuración con Foreman y, posteriormente, Heroku.
 
 Para una breve introducción al uso de Foreman, véase la sección \ref{sec:deploy-foreman} \nameref{sec:deploy-foreman}.
 
+
+\subsection{Configuración de MongoDB}
+
+Para que la web funcione correctamente, necesita conectividad con una base de datos MongoDB.
+A diferencia de la base de datos de la API, esta base de datos se utiliza úncamente para persistir información de la sesión de usuario, nunca para almacenar datos de MyConference.
+
+Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \texttt{mongodb://root:root@example.org/myconference}.
+También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB\_URI}, como se explicará en el punto \ref{sec:deploy-web-heroku}.
+
+La base de datos en sí no necesita más configuración. Una vez la web sepa qué host, usuario y contraseña debe utilizar, la base de datos está completamente configurada.
+
+
+\subsection{Configuración de Transloadit}
+
+Para que el sistema de subida de archivos funcione correctamente, la web necesita conectividad con una cuenta de Transloadit (Véase \ref{tech:transloadit}).
+
+Transloadit utiliza las siguientes variables de configuración:
+
+\begin{itemize}
+  \item \texttt{TRANSLOADIT\_AUTH\_KEY}: Clave de autorización de la cuenta de Transloadit.
+  \item \texttt{TRANSLOADIT\_SECRET\_KEY}: Clave secreta de la cuenta de Transloadit.
+  \item \texttt{TRANSLOADIT\_URL}: URL de la API de Transloadit (\url{https://api2.transloadit.com}).
+  \item \texttt{TRANSLOADIT\_TEMPLATE\_SPEAKERS}: Identificador de la plantilla usada para la carga de imágenes de \textit{keynote speakers}, creada más adelante.
+\end{itemize}
+
+Una vez establecidas las variables, debemos configurar Transloadit.
+Para ello necesitamos crear la plantilla que usaremos para la carga de imágenes.
+Simplemente crearemos una nueva plantilla e introduciremos lo siguiente:
+
+\begin{lstlisting}[language=json,frame=single]
+{
+  "steps": {
+    "resize_xxhdpi": {
+      "robot": "/image/resize",
+      "use": ":original",
+      "width": 240,
+      "height": 300
+    },
+    "export": {
+      "robot": "/ftp/store",
+      "use": "resize_xxhdpi",
+      "host": "ftp.example.org",
+      "user": "myconference-user",
+      "password": "myconference-password",
+      "path": "/transloadit/speakers/${file.id}.${file.ext}",
+      "url_template": "http://example.org/path/to/transloadit/speakers/${file.id}.${file.ext}"
+    }
+  }
+}
+\end{lstlisting}
+
+Los datos han de ser ajustados para utilizar una cuenta de FTP existente, así como para que la URL permita una descarga directa de la imagen.
+
+Una vez tengamos la platilla creada, añadiremos el ID generado a la variable de configuración \texttt{TRANSLOADIT\_TEMPLATE\_SPEAKERS}.
+
+
