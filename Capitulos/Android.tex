@@ -193,8 +193,6 @@ A la hora de mostrar los datos, las clases predefinidas de Android pueden llegar
 
 Además, hay 2 clases para la gestión de las descripciones de los ponentes principales, para que el \textit{look\&feel} sea mejor. Se encargan de colocar el texto alrededor de una imagen y que no quede todo descentrado.
 
-(CAPTURA)
-
 Asimismo, hay una clase para almacenar constantes y así tenerlas en un sitio común, y otra clase para datos estáticos, como son los iconos del menú lateral.
 
 \figura{Vectorial/Android/accountManager}{width=\textwidth}{fig:accountManager}%
@@ -225,6 +223,7 @@ Siguiendo el ejemplo disponible en la página de desarrolladores de Android cream
 	\item Anuncios
 	\item Ponentes principales
 	\item Comité organizador
+    \item Agenda
 \end{itemize}
 
 \subsection{Campos comunes de las tablas}
@@ -239,27 +238,99 @@ Las tablas también comparten una segunda columna denominada \texttt{conf\_uuid},
 
 Se compone de 3 campos: el nombre del congreso, una descripción que luego se mostrará en la sección \textit{About} de la app, y el campo uuid mencionado anteriormente. Los 3 campos son de tipo \texttt{TEXT}.
 
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & title & description & date \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
+
 \paragraph{Documentos}
 
 Esta tabla está pensada para posibles \texttt{.pdf} o \texttt{.doc} que se suban de manera informativa. Contiene los campos título, descripción, el tipo que tiene el archivo y datos, que es el archivo en si. Todos los campos son de tipo \texttt{TEXT}.
+
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & title & description & type & data \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
 
 \paragraph{Lugares}
 
 Se guarda el nombre y una breve descripción de tipo \texttt{TEXT}. La descripción suele ser la dirección completa de la ubicación. También se almacena como dato de tipo \texttt{REAL} la latitud y la longitud, que nos sirven para posicionar los marcadores en el mapa de Google Maps.
 
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & name & lat & lng & details \\
+        \hline
+        INTEGER & TEXT & TEXT & REAL & REAL & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
+
 \paragraph{Anuncios}
 
 Los anuncios son pequeños textos dónde se resume algún evento o novedad importante. Para ello se almacena un título, un cuerpo del anuncio y la fecha en que se publica el anuncio. A la hora de mostrarlos se ordenan por fecha del más reciente al más antiguo. Todos los campos son de tipo \texttt{TEXT}.
+
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & title & body & date \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
 
 \paragraph{Ponentes principales}
 
 Como requieren más información que otros ponentes o que los organizadores, se almacenan en una tabla aparte. Sus campos son: el nombre, el cargo que desempeña en su vida profesional, el lugar del que proviene, una descripción de su actividad, una foto y, opcionalmente, uno o varios links a páginas personales. Todos los campos son de tipo \texttt{TEXT}.
 
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & name & charge & origin & description & picture\_url & links \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
+
 \paragraph{Comité organizador}
 
 Esta tabla es la más poblada ya que hay mucha gente detrás de la organización de un congreso. Se almacena su nombre, la ciudad o país de donde proviene, una breve descripción si la hay y el grupo al que pertenece dentro del comité, que se utiliza como cabecera a la hora de mostrarlos dentro de la app.
 
-(DIAGRAMAS)
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & name & origin & details & groups \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\paragraph{Agenda}
+
+En ella se almacena el programa del congreso, donde cada conferencia tiene un título, una descripción y su fecha (día y hora).
+
+\begin{center}
+    \begin{tabular}{|c | c | c | c | c| }
+        \hline
+        \_id & conf\_uuid & title & description & date \\
+        \hline
+        INTEGER & TEXT & TEXT & TEXT & TEXT \\
+        \hline
+    \end{tabular}
+\end{center}
 
 \newpage
 
