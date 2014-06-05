@@ -1,30 +1,30 @@
 \chapter{API y Base de Datos}
 \label{chap:api}
 
-\section{API Web}
-
 La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
 
-El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API.
+El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API, identificándose a sí mismas como aplicaciones de la plataforma e identificando al usuario a través de sus credenciales (e-mail, contraseña).
+
+\section{Uso}
 
 \subsection{Acceso}
 
 El acceso a los datos, así como su modificación, se realiza mediante peticiones HTTP.
 
-Todos los datos se envían y reciben en formato JSON. Cualquier otro formato pedido (mediante la cabecera \texttt{Accept}) o enviado (mediante \texttt{Content-Type}) será rechazado por el servidor.
+Todos los datos se envían y reciben en formato JSON. Cualquier otro formato pedido (mediante la cabecera \texttt{Accept}) o enviado (mediante \texttt{Content-Type}) será rechazado por el servidor. Esto simplifica el código de la API, puesto que JSON es un formato de representación nativo de JavaScript, el lenguaje en el que está implementada.
 
-Para acceder a los datos es necesario disponer de un testigo de acceso, cuya obtención veremos más adelante. Para enviar este testigo usaremos la cabecera HTTP \texttt{Authorization}, con el valor \texttt{Token~\textit{token-string}} (donde \textit{token-string} es el valor del token del que disponemos).
+Para acceder a los datos es necesario disponer de un testigo de acceso, cuya obtención veremos más adelante en la sección \ref{sec:api-auth}. Para enviar este testigo usaremos la cabecera HTTP \texttt{Authorization}, con el valor \texttt{Token~\textit{token-string}} (donde \textit{token-string} es el valor del testigo del que disponemos).
 
 Los datos de la aplicación están divididos en \textit{entidades}, que representan colecciones de datos similares. Para cada entidad disponemos, en general, de las siguientes acciones:
 
 \begin{itemize}
-  \item Ver en detalle un elemento, mediante una petición \texttt{GET /entidad/id}. Se obtiene una lista con los atributos del elemento.
-  \item Crear un nuevo elemento de un tipo, mediante una petición \texttt{POST /entidad}. Se debe enviar los atributos iniciales del elemento.
-  \item Modificar un elemento existente, mediante una petición \texttt{PUT /entidad/id}. Se deben enviar los nuevos atributos del objeto.
+  \item Ver en detalle un elemento, mediante una petición \texttt{GET /entidad/id}. Se obtiene una lista con los atributos del elemento y los elementos relacionados.
+  \item Crear un nuevo elemento de un tipo, mediante una petición \texttt{POST /entidad}. Se deben enviar los atributos iniciales del elemento.
+  %\item Modificar un elemento existente, mediante una petición \texttt{PUT /entidad/id}. Se deben enviar los nuevos atributos del objeto.
   \item Eliminar un elemento existente, mediante una petición \texttt{DELETE /entidad/id}. Se obtiene una confirmación.
 \end{itemize}
 
-Las entidades pueden proporcionar otras acciones en determinadas circunstancias, como se describe en el apartado10\nameref{sect:api-docs}.
+Las entidades pueden proporcionar otras acciones en determinadas circunstancias, como se describe en el apartado \nameref{sect:api-docs}.
 
 De la misma manera, todas las peticiones utilizan los códigos HTTP estándar, entre ellos:
 
@@ -36,8 +36,8 @@ De la misma manera, todas las peticiones utilizan los códigos HTTP estándar, ent
 \end{itemize}
 
 
-
-\subsubsection{Autenticación}
+\subsection{Autenticación}
+\label{sec:api-auth}
 
 El sistema de autenticación funciona siguiendo un esquema similar al de los estándares OAuth y OpenID.
 
@@ -60,7 +60,7 @@ Existen múltiples tipos de credenciales de acceso, detallados más adelante. Si t
   \item Se devuelven ambos testigos, sus fechas de caducidad y el identificador del usuario identificado.
 \end{itemize}
 
-El \textit{testigo de actualización} devuelto tiene como función generar un nuevo testigo de acceso en caso de que este caduque. Los testigos de acceso tienen un tiempo de uso de caducidad de unos pocos días, mientras que los testigos de actualización duran semanad. Esto minimiza la posibilidad de uso de untestigo de acceso interceptado por una tercera parte.
+El \textit{testigo de actualización} devuelto tiene como función generar un nuevo testigo de acceso en caso de que este caduque. Los testigos de acceso tienen un tiempo de uso de unos pocos días, mientras que los testigos de actualización duran semanas. Esto minimiza la posibilidad de uso de un testigo de acceso interceptado por una tercera parte.
 
 Para que un intento de autenticación tenga éxito, las credenciales usadas deben coincidir con algunas credenciales almacenadas en la base de datos. Los siguientes son los tipos de credenciales que se definen:
 
@@ -70,7 +70,54 @@ Para que un intento de autenticación tenga éxito, las credenciales usadas deben 
   \item \textbf{Testigo de Autorización}: Se utiliza un testigo de autorización obtenido mediante otros medios para realizar la autenticación. La aplicación y el dispositivo con los que se generó el testigo usado deben coincidir con los datos de la petición.
 \end{itemize}
 
-Los testigos de autorización existen para realizar accesos mediante servicios externos (no implementados en la aplicación). 
+Los testigos de autorización existen para realizar accesos mediante servicios externos, actualmente no implementados. 
+
+
+\subsection{Servicios Disponibles}
+
+A continuación se describen todos los servicios de la API disponibles, conel siguiente formato:
+
+\paragraph{\texttt{VERBO /ruta/al/servicio}} ~\\
+
+Si hacen falta argumentos, enviados siempre en el cuerpo en formato JSON, se especificaránen forma de lista:
+
+\begin{itemize}
+  \item \texttt{argumento}: Descripción del argumento 
+\end{itemize}
+
+\subsubsection{Autentificación y Registro}
+
+\paragraph{\texttt{POST /auth/signup}} ~\\
+
+\begin{itemize}
+  \item \texttt{application_id}: ID de aplicación desde la que se realiza la petición.
+  \item \texttt{device_id}: ID del dispositivo desde el que se realiza la petición. 
+  \item \texttt{user_data}: Un objeto JSON con los campos:
+  \begin{itemize}
+    \item \texttt{email}: Correo electrónico del usuario a registrar.
+    \item \texttt{password}: Contraseña del usuario a registrar.
+  \end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagRegister}
+    \caption{Diagrama del Proceso de Registro}
+  \end{center}
+\end{figure}
+
+
+\paragraph{\texttt{POST /auth}} ~\\
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagAuth}
+    \caption{Diagrama del Proceso de Autentificación}
+  \end{center}
+\end{figure}
+
+
+\section{Implementación}
 
 \subsection{Base de Datos}
 
