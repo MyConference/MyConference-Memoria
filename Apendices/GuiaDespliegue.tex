@@ -1,9 +1,9 @@
 \chapter{Guía de Despliegue}
 
-Para poder continuar con el desarrllo o desplegar el proyecto en su forma actual, hace falta realizar una serie de pasos en cada una de las piezas que forman MyConference.
+Para poder continuar con el desarrollo o desplegar el proyecto en su forma actual, hace falta realizar una serie de pasos en cada una de las piezas que forman MyConference.
 
 Tanto para la API como para la Web es necesario disponer de un servidor web capaz de ejecutar aplicaciones escritas para Node.js (Véase \ref{tech:nodejs}), e idealmente ambas usarán diferentes servidores.
-Una de las opciones más sencillas es utilizar alguna \textit{Plataforma como Servicio}, como por ejemploHeroku (Véase \ref{tech:heroku}), pero tabién es posible configurarlo para funcionar en un servidor privado.
+Una de las opciones más sencillas es utilizar alguna \textit{Plataforma como Servicio}, como por ejemplo Heroku (Véase \ref{tech:heroku}), pero también es posible configurarlo para funcionar en un servidor privado.
 Para ambas aplicaciones es necesario disponer de una base de datos MongoDB (Véase \ref{tech:mongodb}).
 Aunque las colecciones usadas son disjutas y por tanto técnicamente es posible usar una única base de datos, es conveniente por motivos de seguridas utilizar dos bases de datos independientes, una para la Web y otra para la API.
 
