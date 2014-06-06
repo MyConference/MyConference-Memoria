@@ -72,13 +72,17 @@ Para que un intento de autenticación tenga éxito, las credenciales usadas deben 
 
 Los testigos de autorización existen para realizar accesos mediante servicios externos, actualmente no implementados. 
 
+% =========================================================================== %
+
 \subsection{Servicios Disponibles}
+\label{sect:api-docs}
 
 A continuación se describen todos los servicios de la API disponibles, con el siguiente formato:
 
 \paragraph{\texttt{VERBO /ruta/al/servicio}} ~\\
 
-Si hacen falta argumentos, enviados siempre en el cuerpo en formato JSON, se especificaránen forma de lista:
+En caso de hacer falta algún parámetro en la URL, se mostrará rodeado con corchetes angulares, \texttt{<así>}.
+Si hacen falta parámetros en el cuerpo (en formato JSON), se especificarán en forma de lista:
 
 \begin{itemize}
   \item \texttt{argumento}: Descripción del argumento 
@@ -160,12 +164,16 @@ El resultado de una llamada válida a este servicio será un objeto JSON con los s
   \item \texttt{access\_expires}: Fecha de caducidad del testigo de acceso (en formato ISO).
   \item \texttt{refresh\_token}: Nuevo token de actualización para la aplicación.
   \item \texttt{refresh\_expires}: Fecha de caducidad del testigo de actualización (en formato ISO).
-  \item \texttt{user\_id}: Identificador de usuario con el que acabamos de iniciar sesión.
+  \item \texttt{user}: Información del usuario con el que acabamos de iniciar sesión, como los campos:
+  \begin{itemize}
+    \item \texttt{id}: Identificador del usuario.
+    \item \texttt{url}: Ruta completa a la que realizar una llamada para obtener toda la información del usuario.
+  \end{itemize}
 \end{itemize}
 
 % =========================================================================== %
 
-\paragraph{Desautorización (\texttt{POST /auth/logout})}
+\paragraph{Desautorización (\texttt{POST /auth/logout})} ~\\
 
 Este servicio no necesita datos extra. Tras realizar esta llamada, el testigo de acceso y su testigo de actualización asociado serán deshabilitados, desautorizando al usuario de todo acceso con dichos testigos.
 
@@ -173,7 +181,45 @@ Este servicio está pensado para utilizarse por las aplicaciones para implementar
 
 % =========================================================================== %
 
+\subsubsection{Usuarios y Congresos}
+
+\paragraph{Datos de usuario (\texttt{POST /users/<user-id>})} ~\\
+
+Devolverá la información del usuario indicado en \texttt{user-id} como un objeto JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del usuario.
+  \item \texttt{url}: Ruta completa del usuario en la API.
+  \item \texttt{conferences}: Un array JSON con objetos JSON con los siguientes campos.
+  \begin{itemize}
+    \item \texttt{id}: Identificador del congreso.
+    \item \texttt{url}: Ruta completa del congreso en la API.
+    \item \texttt{role}: Rol del usuario en el congreso (\texttt{owner}, \texttt{assistant})
+  \end{itemize}
+\end{itemize}
+
+% =========================================================================== %
+
+\paragraph{Congresos del usuario (\texttt{POST /users/<user-id>/conferences})} ~\\
+
+Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como una lista de objetos JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del congreso.
+  \item \texttt{url}: Ruta completa del congreso en la API.
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+  \item \texttt{role}: Rol del usuario en el congreso (\texttt{owner}, \texttt{assistant})
+\end{itemize}
+
+% =========================================================================== %
+
+
+
+\newpage
 \section{Implementación}
+
+\textit{Sección sin completar}
 
 \subsection{Base de Datos}
 
@@ -181,17 +227,13 @@ La base de datos (MongoDB) está estructurada en torno a la entidad \textit{Congr
 
 \subsubsection{Entidades Fundamentales}
 
-\textit{Futuro gráfico entidad-relación con toda la "jerarquía" de entidades}
+%\textit{Futuro gráfico entidad-relación con toda la "jerarquía" de entidades}
 
 \subsubsection{Entidades de Apoyo}
 
-\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
+%\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
 
 Existen otras entidades en la base de datos que aportan funcionalidad pero no representan datos de negocio.
 
 La entidad \texttt{LoginMethod} representa un método de acceso a la aplicación. Actualmente sólo contiene métodos de tipo \texttt{password}, utilizados para el acceso mediante e-mail y contraseña. Los accesos mediante servicios externos (Google, Facebook, Twitter) se incluirían en esta colección, utilizando distintos tipos 
-
-
-\subsection{Documentación Técnica}
-\label{sect:api-docs}
 
