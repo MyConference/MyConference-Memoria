@@ -183,7 +183,7 @@ Este servicio está pensado para utilizarse por las aplicaciones para implementar
 
 \subsubsection{Usuarios y Congresos}
 
-\paragraph{Datos de usuario (\texttt{POST /users/<user-id>})} ~\\
+\paragraph{Datos de usuario (\texttt{GET /users/<user-id>})} ~\\
 
 Devolverá la información del usuario indicado en \texttt{user-id} como un objeto JSON con los siguientes campos:
 
@@ -200,7 +200,7 @@ Devolverá la información del usuario indicado en \texttt{user-id} como un objeto
 
 % =========================================================================== %
 
-\paragraph{Congresos del usuario (\texttt{POST /users/<user-id>/conferences})} ~\\
+\paragraph{Congresos del usuario (\texttt{GET /users/<user-id>/conferences})} ~\\
 
 Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como una lista de objetos JSON con los siguientes campos:
 
@@ -214,7 +214,38 @@ Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como un
 
 % =========================================================================== %
 
+\paragraph{Información de Congreso (\texttt{GET /conferences/<conference-id>})} ~\\
 
+Devolverá la información del congreso indicado en \texttt{conference-id} como un objeto JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del congreso.
+  \item \texttt{url}: Ruta completa del congreso en la API.
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+  \item \texttt{documents}: Array JSON con los documentos (enlaces) del congreso.
+  \item \texttt{venues}: Array JSON con los lugares del congreso.
+  \item \texttt{announcements}: Array JSON con los anuncios del congreso.
+  \item \texttt{organizers}: Array JSON con los organizadores del congreso.
+  \item \texttt{speakers}: Array JSON con los ponentes del congreso.
+  \item \texttt{agendaEvents}: Array JSON con los eventos del programa del congreso.
+  \item \texttt{usuarios}: Array JSON con los usuarios asistentes al congreso.
+\end{itemize}
+
+El contenido exacto de los objetos de cada uno de los arrays se especificará más adelante.
+
+% =========================================================================== %
+
+\paragraph{Creación de Congresos (\texttt{POST /conferences})} ~\\
+
+\begin{itemize}
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+\end{itemize}
+
+Crea un nuevo congreso y añade al usuario identificado como único propietario del mismo.
+
+% =========================================================================== %
 
 \newpage
 \section{Implementación}
