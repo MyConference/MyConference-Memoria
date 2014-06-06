@@ -255,6 +255,57 @@ Para que esta llamada tenga efecto, el usuario debe der propietario del congreso
 
 % =========================================================================== %
 
+\subsubsection{Entidades del Congreso}
+
+Los congresos tienen una serie de entidades directamente dependientes de estos (documentos, ponentes, organizadores, etc.) que se manejan igual unos con respecto a otros. Por este motivo, describiremos primero las entidades y sus campos por separado y, posteriormente, las acciones que podemos realizar sobre ellas.
+
+Todas las entidades tienen los siguientes campos en común:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del objeto.
+  \item \texttt{url}: Ruta completa del objeto en la API.
+  \item \texttt{conference}: Información del congreso al que pertenece este objeto.
+  Dependiendo de si el objeto forma parte de una lista o se ha obtenido individualmente, habrá más o menos campos, pero podemos contar con los campos \texttt{id} y \texttt{url} del congreso.
+\end{itemize}
+
+Las entidades disponibles y sus campos son las siguientes, indicadas con el nombre de la entidad en plural, tal como se escribiría en la ruta del servicio.
+
+\begin{description}
+  \item[\texttt{documents}] Enlaces a documentos del congreso, como carteles, \textit{call for papers}, webs oficiales...
+  \item[\texttt{venues}] Lugares importantes del congreso, como el recinto en el que se celebra.
+  \item[\texttt{announcements}] Novedades del congreso, siempre ordenadas en orden cronológico inverso (del más reciente al más antiguo).
+  \item[\texttt{organizers}] Miembros del comité organizador del congreso.
+  \item[\texttt{speakers}] Ponentes del congreso.
+  \item[\texttt{agenda-events}] Programa del congreso, en forma de \textit{eventos}.
+\end{description}
+
+La forma de listar todos los elementos de una entidad para una conferencia es obtener la información de dicha conferencia. No existen servicios de listado por entidades.
+
+% =========================================================================== %
+
+\paragraph{Información de Entidades (\texttt{GET /<entity>/<id>})} ~\\
+
+Obtiene toda la información del elemento \texttt{id} de la entidad \texttt{entity}.
+El resultado es un objeto JSON con los campos descritos para la entidad.
+
+% =========================================================================== %
+
+\paragraph{Creación de Entidades (\texttt{POST /<entity>})} ~\\
+
+Crea un nuevo elemento de la entidad \texttt{entity}.
+Además de los campos descritos para la entidad con la información del objeto, se ha de incluir un campo \texttt{conference} con el identificador del congreso al que pertenecerá.
+El usuario ha de ser propietario de este congreso para poder añadir un elemento en él.
+
+% =========================================================================== %
+
+\paragraph{Eliminación de Entidades (\texttt{DELETE /<entity>/<id>})} ~\\
+
+Elimina el elemento \texttt{id} de la entidad \texttt{entity}.
+Para que este servicio funcione correctamente, el usuario debe ser propietario del congreso al que pertenece el objeto.
+
+% =========================================================================== %
+
+
 \newpage
 \section{Implementación}
 
