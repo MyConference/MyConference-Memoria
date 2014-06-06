@@ -270,15 +270,51 @@ Todas las entidades tienen los siguientes campos en común:
 
 Las entidades disponibles y sus campos son las siguientes, indicadas con el nombre de la entidad en plural, tal como se escribiría en la ruta del servicio.
 
-\textit{TODO: Faltan los campos de las entidades}
-
 \begin{description}
-  \item[\texttt{documents}] Enlaces a documentos del congreso, como carteles, \textit{call for papers}, webs oficiales...
-  \item[\texttt{venues}] Lugares importantes del congreso, como el recinto en el que se celebra.
-  \item[\texttt{announcements}] Novedades del congreso, siempre ordenadas en orden cronológico inverso (del más reciente al más antiguo).
-  \item[\texttt{organizers}] Miembros del comité organizador del congreso.
-  \item[\texttt{speakers}] Ponentes del congreso.
   \item[\texttt{agenda-events}] Programa del congreso, en forma de \textit{eventos}.
+  \begin{description}
+    \item[\texttt{title}] Título del evento.
+    \item[\texttt{description}] Descripción del evento.
+    \item[\texttt{date}] Fecha y hora del evento, en formato ISO.
+  \end{description}
+
+  \item[\texttt{announcements}] Novedades del congreso, siempre ordenadas en orden cronológico inverso (del más reciente al más antiguo).
+  \begin{description}
+    \item[\texttt{title}] Título del anuncio.
+    \item[\texttt{body}] cuerpo del anuncio.
+    \item[\texttt{date}] Fecha y hora del anuncio, en formato ISO.
+  \end{description}
+
+  \item[\texttt{documents}] Enlaces a documentos del congreso, como carteles, \textit{call for papers}, webs oficiales...
+  \begin{description}
+    \item[\texttt{title}] Título del documento.
+    \item[\texttt{description}] Descripción del documento.
+    \item[\texttt{type}] Tipo de documento. Sólo se admite \typett{link}.
+    \item[\texttt{data}] URL del documento.
+  \end{description}
+
+  \item[\texttt{organizers}] Miembros del comité organizador del congreso.
+  \begin{description}
+    \item[\texttt{name}] Nombre del organizador.
+    \item[\texttt{origin}] Procedencia del organizador.
+    \item[\texttt{details}] Detalles del organizador.
+    \item[\texttt{group}] Grupo o categoría en la que incluir al organizador.
+  \end{description}
+  
+  \item[\texttt{speakers}] Ponentes del congreso.
+  \begin{description}
+    \item[\texttt{name}] Nombre del ponente.
+    \item[\texttt{charge}] Cargo del ponente.
+    \item[\texttt{description}] Detalles del ponente.
+    \item[\texttt{picture_url}] URL de la foto del ponente.
+  \end{description}
+  
+  \item[\texttt{venues}] Lugares importantes del congreso, como el recinto en el que se celebra.
+  \begin{description}
+    \item[\texttt{name}] Nombre del lugar.
+    \item[\texttt{details}] Detalles del lugar.
+    \item[\texttt{location}] Objeto JSON con dos campos, \texttt{lat} y \texttt{lng}, indicando la latitud y longitud del lugar.
+  \end{description}
 \end{description}
 
 La forma de listar todos los elementos de una entidad para una conferencia es obtener la información de dicha conferencia. No existen servicios de listado por entidades.
