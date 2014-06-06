@@ -345,7 +345,30 @@ Para que este servicio funcione correctamente, el usuario debe ser propietario d
 
 \subsubsection{Códigos de Invitación}
 
-\textit{TODO: Pendiente de completar}
+Para poder añadir a otros usuarios a un congreso, hay que invitarlos mediante correo electrónico.
+Para ello se dan los siguientes servicios en la API
+
+% =========================================================================== %
+
+\paragraph{Invitar a un Usuario (\texttt{POST /invite-codes})}
+
+\begin{itemize}
+  \item \texttt{recipient\_email}: Correo electrónico al que enviar la invitación.
+  No tiene por qué estar registrado en MyConference ni ser el mismo que el del usuario que lo acepta.
+  \item \texttt{recipient\_name}: Nombre completo del usuario al que invitar.
+  \item \texttt{conference}: Identificador del congreso al que invitar al usuario.
+  El usuario actual ha de ser propietario de este congreso.
+\end{itemize}
+
+Envía un correo electrónico a la dirección indicada con un enlace a la web y un código para introducir en dicho enlace.
+
+
+% =========================================================================== %
+
+\paragraph{Utilizar un Código de Invitación (\texttt{POST /invite-codes/<code>/redeem})}
+
+Esta llamada no necesita ningún parámetro.
+Al finalizar esta llamada el usuario se añadirá a la lista de asistentes del congreso al que pertenece el código de invitación.
 
 % =========================================================================== %
 
