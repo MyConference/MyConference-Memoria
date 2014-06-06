@@ -165,6 +165,14 @@ El resultado de una llamada válida a este servicio será un objeto JSON con los s
 
 % =========================================================================== %
 
+\paragraph{Desautorización (\texttt{POST /auth/logout})}
+
+Este servicio no necesita datos extra. Tras realizar esta llamada, el testigo de acceso y su testigo de actualización asociado serán deshabilitados, desautorizando al usuario de todo acceso con dichos testigos.
+
+Este servicio está pensado para utilizarse por las aplicaciones para implementar el ``cierre de sesión'' característico de cualquier aplicación o servicio web de una forma segura que no engañe al usuario, que realmente desautorice el acceso en lugar de simplemente olvidarlo y dejarlo caducar.
+
+% =========================================================================== %
+
 \section{Implementación}
 
 \subsection{Base de Datos}
