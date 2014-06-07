@@ -1,4 +1,56 @@
 \chapter{Web}
+\label{chap:web}
+
+La Web es la encargada de la gestión de los congresos de MyConference. Desde la aplicación Web se crean los nuevos congresos y se añade toda la información correspondiente a estos. Aunque también se pueden visualizar los datos creados desde la Web, su función principal es la creación y borrado de datos de los congresos.
+
+\section{Uso}
+\label{sec:web-use}
+
+La Web está basada sobre \textit{Express}, framework de desarrollo de aplicaciones web de \nameref{tech:nodejs}.
+
+Como se ha dicho antes, la función principal de la Web es la creación y el borrado de datos, además de la visualización de estos datos. Para poder realizar estas operaciones es necesario establecer conexiones con la API mediante llamadas HTTP.
+
+\section{Estructura}
+\label{sec:web-structure}
+
+La aplicación Web se divide en tres partes: archivos de configuración, rutas y diseño.
+
+\subsection{Archivos de configuración}
+
+Los \textit{archivos de configuración} de la aplicación web se encargan de:
+\begin{itemize}
+    \item Configurar el módulo \textit{winston} para usar logs en la aplicación.
+    \item Configurar las sesiones de la aplicación.
+    \item Configurar el módulo \textit{node-sass} para que compile los archivos de \nameref{tech:sass} a CSS.
+    \item Establecer como archivos estáticos los archivos de la carpeta \textit{public}.
+    \item Establecer \nameref{tech:jade} como motor para las vistas.
+    \item Comprobar si los tokens de refresco han caducado.
+    \item Enlazar las rutas de la aplicación, explicadas en la sección \ref{subsec:web-routes}
+    \item Configurar el puerto en el que escucha la aplicación.
+    \item Configurar el entorno de desarrollo, que puede ser producción o desarrollo.
+    \item Configurar la base de datos MongoDB en función del entorno de desarrollo.
+    \item Establecer la URL de la API en función del entorno de desarrollo.
+    \item Configurar el módulo \textit{restify}.
+\end{itemize}
+
+\subsection{Rutas}
+\label{subsec:web-routes}
+
+La carpeta \textit{routes} es la que contiene todos los archivos con las llamadas HTTP a la API. Las llamadas están organizadas en diferentes archivos según los datos que se requieran. Todos los archivos están enlazados desde los archivos de configuración.
+
+\subsection{Diseño}
+
+Todos los elementos de diseño se guardan en la carpeta \textit{public}. En esta carpeta se encuentran los archivos de CSS y JavaScript que requiere la aplicación.
+
+El estilo de la aplicación es muy básico y viene dado en su gran mayoría por librerías externas.
+
+\begin{itemize}
+    \item \nameref{tech:bootstrap}: prácticamente todo el estilo de la página se ha podido hacer de manera fácil y rápida gracias a este framework, obteniendo un resultado sencillo y vistoso añadiendo unas pocas líneas de código.
+    \item \nameref{tech:googlemaps}: usada para el mapa que permite visualizar los lugares añadidos para un congreso.
+\end{itemize}
+
+Fuera de la carpeta \textit{public} está la carpeta \textit{Sass}, que contiene todos los archivos .scss que usamos en la aplicación. Esta carpeta está fuera de la carpeta \textit{public}
+ya que realmente la aplicación no usa estos archivos para el diseño, solo los compila y los traduce a archivos CSS que se guardan dentro de la carpeta \textit{public}. Estos archivos CSS son los que se usan realmente en la aplicación.
 
 \section{Casos de uso}
 
