@@ -375,7 +375,18 @@ Al finalizar esta llamada el usuario se añadirá a la lista de asistentes del con
 \newpage
 \section{Implementación}
 
-\textit{TODO: Sección sin completar}
+La API está implementada en su totalidad utilizando Node.js (Véase \ref{tech:nodejs}) con una serie de bibliotecas que facilitan la implementación en general o en ciertas áreas en particular.
+
+\subsection{Servidor Web}
+
+Puesto que se trata de una API completamente web y Node.js es un simple entorno de ejecución JavaScript, el servidor web está programado directamente en la aplicación.
+Afortunadamente, Node.js cuenta con una biblioteca estándar que incluye soporte para servidores HTTP, y en su repositorio de paquetes hay un gran número de bibliotecas para facilitar el desarrollo.
+
+Para escribir APIs web, concretamente, existe \texttt{restify}, un pequeño framework pensado para este tipo de servidores.
+Mediante esta librería, dividimos toda la implementación en \textit{rutas}, pequeñas definiciones de funciones que responderán a una petición a una ruta HTTP concreta.
+
+A su vez, estas funciones, en su mayoría, realizarán una o varias llamadas a la base de datos.
+Para trabajar con ella se utilizan una serie de \textit{modelos} implementados mediante \texttt{mongoose}, una biblioteca para dar forma a las colecciones de MongoDB como modelos y poder trabajar directamente con estos modelos.
 
 \subsection{Base de Datos}
 
@@ -385,11 +396,61 @@ La base de datos (MongoDB) está estructurada en torno a la entidad \textit{Congr
 
 %\textit{Futuro gráfico entidad-relación con toda la "jerarquía" de entidades}
 
+No se describirán los campos concretos de estas entidades, puesto que son idénticos a los descritos en la sección \ref{sect:api-docs}.
+
+\begin{description}
+
+  \item[\texttt{Conference}]
+  El centro de MyConference, representa un congreso.
+
+  \item[\texttt{User}]
+  Representa un usuario registrado en MyConference.
+  Nótese que esta entidad no posee información sobre el inicio de sesión del usuario.
+
+  \item[\texttt{AgendaEvent}]
+  Represetna un evento dentro del programa de un congreso.
+
+  \item[\texttt{Announcement}]
+  Representa un anuncio (novedad) dentro de un congreso.
+
+  \item[\texttt{Document}]
+  Representa un enlace a un documento del congreso.
+
+  \item[\texttt{Organizer}]
+  Representa un miembro del comité organizador.
+
+  \item[\texttt{Speaker}]
+  Representa un ponente del congreso.
+
+  \item[\texttt{Venue}]
+  Representa un lugar del congreso.
+
+\end{description}
+
 \subsubsection{Entidades de Apoyo}
 
 %\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
 
 Existen otras entidades en la base de datos que aportan funcionalidad pero no representan datos de negocio.
+Estas aportan a la aplicación información sobre autentificación, principalmente.
 
-La entidad \texttt{LoginMethod} representa un método de acceso a la aplicación. Actualmente sólo contiene métodos de tipo \texttt{password}, utilizados para el acceso mediante e-mail y contraseña. Los accesos mediante servicios externos (Google, Facebook, Twitter) se incluirían en esta colección, utilizando distintos tipos 
+\begin{description}
 
+  \item[\texttt{LoginMethod}]
+  Representa un método de identificación de un usuario.
+  El único tipo de identificación disponible es \texttt{password}, que utilizará un correo electrónico y una contraseña para la identificación.
+
+  \item[\texttt{Application}]
+  Representa una aplicación oficial de MyConference.
+  El ID de la aplicación se podrá utilizar para registrar nuevos usuarios o autentificar usuarios existentes.
+
+  \item[\texttt{AccessToken}]
+  Representa un testigo de acceso a la API, que deberá usarse para acceder a los datos.
+
+  \item[\texttt{RefreshToken}]
+  Representa un testigo de actualización, que podrá usarse para obtener un nuevo testigo de acceso sin volver a identificar al usuario.
+
+  \item[\texttt{InviteCode}]
+  Representa un código de invitación enviado a un usuario para unirse a un congreso.
+
+\end{description}
