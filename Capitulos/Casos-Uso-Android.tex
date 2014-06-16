@@ -1,0 +1,481 @@
+\chapter{Casos de uso de la aplicación móvil}
+
+\section{Caso de uso: registrar usuario}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Coger los datos de email y contraseña de un formulario e introducirlos en la base de datos.
+    \item \textbf{Actores}
+
+        Usuario sin registrar.
+    \item \textbf{Precondición}
+
+        El usuario se ha descargado la app a su dispositivo.
+    \item \textbf{Postcondición si éxito}
+
+        El usuario  queda registrado en la base de datos.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error con los campos que no cumplen los requisitos para que el usuario los modifique. Si el error es interno se pide al usuario que vuelva a introducir los credenciales.
+    \item \textbf{Entradas}
+
+        Los datos del formulario son: email, contraseña y repetir contraseña.
+        Todos los campos son obligatorios.
+    \item \textbf{Salidas}
+
+        Entrada en la app o error.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Validar los campos según los requisitos: debe ser un email válido y la contraseña debe tener un mínimo de 8 caracteres.
+            \item Si hay campos sin rellenar, S-1.
+            \item Si la contraseña es demasiado corta, S-2.
+            \item Si los campos de contraseña y repetir contraseña no coinciden, S-3.
+            \item Si el email ya existe en la base de datos, S-4.
+            \item Se loguea al usuario y se entra en la app.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. Se muestra un mensaje de error para que el usuario introduzca los datos faltantes.
+
+        S-2. Se muestra un mensaje de error para que el usuario introduzca una constraseña más larga.
+
+        S-3. Se muestra mensaje de error de que no coinciden y se borran los campos para que se vuelvan a introducir.
+
+        S-4. Se indica al usuario que el email ya existe y que introduzca otro.
+\end{enumerate}
+
+\section{Caso de uso: loguear usuario}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Identificar al usuario en la app a partir de un email y una contraseña.
+    \item \textbf{Actores}
+
+        Usuario registrado en la app.
+    \item \textbf{Precondición}
+
+        El usuario se ha descargado la app y se ha registrado a través de la misma o desde la página web.
+    \item \textbf{Postcondición si éxito}
+
+        Se identifica al usuario y entra en la app.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error para que el usuario vuelva a introducir sus credenciales.
+    \item \textbf{Entradas}
+
+        Los datos del formulario son: email y contraseña.
+    \item \textbf{Salidas}
+
+        Entrada en la app o error.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Validar los campos según los requisitos: debe ser un email válido y la contraseña debe tener un mínimo de 8 caracteres.
+            \item Si hay campos sin rellenar, S-1.
+            \item Si la contraseña es demasiado corta, S-2.
+            \item Si el email ya existe en la base de datos, S-3.
+            \item Se loguea al usuario y se entra en la app.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. Se muestra un mensaje de error para que el usuario introduzca los datos faltantes.
+
+        S-2. Se muestra un mensaje de error para que el usuario introduzca una constraseña más larga.
+
+        S-3. Se indica al usuario que el email ya existe y que introduzca otro.
+\end{enumerate}
+
+\section{Caso de uso: mostrar novedades}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar al usuario una lista con las últimas novedades sobre el congreso.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con las novedades, ordenadas por fecha de la más reciente a la más antigua.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje informando de que no existen novedades.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Lista de novedades.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar el documento Call for Papers}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Abrir un pdf con la información de los temas a tratar en el congreso o mostrar una lista.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Ninguna.
+    \item \textbf{Postcondición si éxito}
+
+        Se abre el visor de documentos pdf del dispositivo y muestra la información, o se muestra una lista con esta información.
+    \item \textbf{Postcondición si fallo}
+
+        Mensaje de error al no disponer el usuario de una aplicación para visualizar documentos pdf.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Información de los Call for Papers.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Si está en un archivo pdf, se abre la aplicación para visualizarlo. Si error, S-1.
+            \item Si no, se hace una llamada a la base de datos. Si error, S-2.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. Mensaje de error al no disponer de una aplicación para pdfs.
+
+        S-2. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar la lista del comité organizador}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar una lista agrupada con los miembros del comité organizador.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con los miembros del comité, agrupada según el grupo al que pertenezca cada miembro. Se incluye su nombre y su procedencia.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje informando de que no existen miembros.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Lista de miembros.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar la lista de los ponentes principales}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar una lista con los ponentes principales del congreso.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con los ponentes, incluyendo su foto, el nombre y el cargo de cada uno.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje informando de que no existen miembros.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        La lista de ponentes principales.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+            \item Si no se ha incluído foto, no se muestra.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar un mapa con los lugares donde se celebra el congreso}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar un marcador en la ubicación donde se celebrarán ponencias.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra un mapa de \textit{Google Maps} con un marcador por cada ubicación, y también una lista con dichas ubicaciones, que se puede seleccionar y abrir una aplicación externa.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje informando de que no existen ubicaciones para mostrar y el mapa vacío.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        El mapa con las ubicaciones y una lista.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Si no se muestra el mapa, S-2.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+        S-2. Ha ocurrido un problema externo a nuestra app (falta de OpenGL en el dispositivo, no dispone de conexión a internet...). No se muestra ningún mensaje de error y aparece el mapa gris.
+\end{enumerate}
+
+\section{Caso de uso: mostrar información sobre la ciudad donde se celebra el congreso}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar un texto y/o imágenes sobre la ciudad donde se celebra el congreso.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra el texto con o sin imágenes sobre la ciudad, explicando brevemente sus detalles o costumbres de interés general.
+    \item \textbf{Postcondición si fallo}
+
+        No se muestra nada.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        El texto informativo.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra el texto.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra nada.
+\end{enumerate}
+
+\section{Caso de uso: mostrar el programa del congreso}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar una lista con los horarios de las diferentes conferencias.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista de las conferencias, incluyendo el horario, el nombre de la conferencia y una descripción si se incluye. La lista está ordenada con cabeceras de cada día y por hora.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de que no se ha introducido ningún programa.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        La lista con los horarios de las ponencias.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar una lista de enlaces}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar una lista con enlaces a páginas web referentes al congreso.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con los diferentes enlaces y un icono que los identifica.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de que no hay enlaces disponibles.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        La lista de enlaces.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos. Si error, S-1.
+            \item Se muestra la lista.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1. No se muestra mensaje de error explícito y no se muestra la lista.
+\end{enumerate}
+
+\section{Caso de uso: mostrar información sobre el congreso}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar el título del congreso y una breve descripción sobre el mismo.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Se han recibido bien los datos desde la API y se han guardado en la base de datos interna.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra el título del congreso y un texto con información sobre el evento y los temas que se tratarán en él.
+    \item \textbf{Postcondición si fallo}
+
+        Ninguna.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        El texto informativo.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la base de datos.
+            \item Se muestra el texto.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        Ninguna.
+\end{enumerate}
+
+\section{Caso de uso: actualizar la información}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Hacer una llamada a la API para obtener todos los datos de la base de datos global.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        Existe conexión a internet.
+    \item \textbf{Postcondición si éxito}
+
+        Se descargan todos los datos de la base de datos y se guardan en la base de datos interna del dispositivo.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de información de que ha ocurrido un error y que vuelva a intentar actualizar pasado un momento.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Información nueva en la app.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario pincha sobre el botón de actualizar que se muestra en la \texttt{ActionBar}.
+            \item Se descargan los datos a partir de una llamada a la API. Si error, S-1.
+            \item Se guardan los datos en la base de datos interna. Si error, S-2.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        S-1, S-2. Se muestra un mensaje de que ha ocurrido un error.
+\end{enumerate}
+
+\section{Caso de uso: desloguear al usuario}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Desconectar la cuenta del usuario de la app y salir.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        El usuario está logueado en la app.
+    \item \textbf{Postcondición si éxito}
+
+        Se desconecta del servicio al usuario y se finaliza la app. Al volver a abrir la app deberá introducir sus credenciales.
+    \item \textbf{Postcondición si fallo}
+
+        Ninguna.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Salida de la app.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario picha sobre el menú de la \texttt{ActionBar} y después en "Logout".
+            \item Se finaliza la ejecución de la app.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        Ninguna.
+\end{enumerate}
