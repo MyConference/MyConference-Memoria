@@ -20,7 +20,7 @@
     },
     {
       "name": "Make & Open (Mac)",
-      "shell_cmd": "make && open -a preview Memoria.pdf",
+      "shell_cmd": "make && open /Applications/Adobe\\ Reader.app/ Memoria.pdf",
       "working_dir": "$project_path"
     }
   ]
