@@ -137,6 +137,14 @@ Aparte de las librerías propias de Android, hemos utilizado las siguientes libre
     \item También se ha utilizado \textit{Google Play Services} para poder usar la aplicación de Google Maps dentro de nuestra app.
 \end{itemize}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]%
+                {Imagenes/Vectorial/Android/actionBarSherlock}
+\caption{\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}}
+\label{fig:actionBarSherlock}
+\end{figure}
+
 \subsubsection{ActionBarSherlock}
 
 Con la llegada de la versión de Android 3.0 (Honeycomb) se introdujo un nuevo elemento a la interfaz de usuario de las apps: la \textit{Action Bar}. Este elemento proporciona al usuario su localización dentro de la aplicación, así como acceso a las acciones de usuario y modos de navegación. Como nuestra app ha sido diseñada para ser compatible con versiones desde la 2.3 ha sido necesario añadir una librería para poder implementarla. Hemos escogido la librería \texttt{ActionBarSherlock} por ser una de las más extendidas y, por tanto, mayor documentación y resolución de problemas por parte de la comunidad de desarrolladores. Otra opción hubiese sido desarrollar nuestra app sin este elemento, pero queríamos que se pareciese lo máximo posible al diseño de una app para las últimas versiones, que es lo que el usuario quiere. No una interfaz anticuada y obsoleta.
@@ -157,12 +165,11 @@ A partir de ese momento, cualquier actividad que se creara extendía de \texttt{M
 Para acceder a la \textit{Action Bar} solo era necesario llamar al método \texttt{getSupportActionBar()}, como si se utilizara la que viene con la librería de soporte, ya que \texttt{ActionBarSherlock} sobreescribe ese método y nos devuelve la suya. El resto de código utilizado ha sido habilitar el botón de "home", situado en la esquina izquierda de la barra, utilizando la función \texttt{setHomeButtonEnabled(true)}; y llamar a la función \texttt{setDisplayHomeAsUpEnabled(true)} para poder mostrar el icono de abertura y cierre del menú lateral. También hemos utilizado la función \texttt{setTitle(String title)} para poder cambiar el título al de la sección actual en la que nos encontráramos.
 
 \begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.8\textwidth]%
-                {Imagenes/Vectorial/Android/actionBarSherlock}
-\caption{\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}}
-\label{fig:actionBarSherlock}
-\end{center}
+\centering
+\includegraphics[width=0.5\textwidth,height=11cm]%
+                {Imagenes/Vectorial/Android/amazingListView}
+\caption[Agenda de un congreso con \texttt{AmazingListView}]{Pantalla de la aplicación que muestra la agenda de un congreso}
+\label{fig:amazingListView}
 \end{figure}
 
 \subsubsection{AmazingListView}
@@ -181,8 +188,13 @@ A la hora de incluir esta librería en nuestro proyecto hemos tenido que crear va
 
 En la figura ~\ref{fig:amazingListView} se puede ver el aspecto con el que la aplicación presenta la agenda de un congreso. Esta forma de mostrar una lista la hemos podido conseguir utilizando \texttt{AmazingListView}.
 
-\figuraEx{Vectorial/Android/amazingListView}{width=0.5\textwidth,height=11cm}{fig:amazingListView}%
-    {Pantalla de la aplicación que muestra la agenda de un congreso.}{Agenda de un congreso con \texttt{AmazingListView}.}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth,height=11cm]%
+                {Imagenes/Vectorial/Android/googleMaps}
+\caption[Pantalla de la aplicación con los lugares relevantes de un congreso.]{Pantalla de la sección de lugares utilizando \textit{Google Maps}}
+\label{fig:googleMaps}
+\end{figure}
 
 \subsubsection{Google Maps APIv2}
 
@@ -200,9 +212,6 @@ En la clase creada para añadir el mapa hace falta un objeto del tipo \texttt{Goo
 Lo primero que tuvimos que hacer para la configuración del mapa fue añadir un marcador por cada lugar existente en la base de datos. Cuando un usuario pincha sobre el marcador, aparece una ventana de información con el nombre del lugar y si se pincha en esa ventana, lanzamos un \texttt{Intent} para abrir la aplicación de Google Maps instalada en el dispositivo con ese lugar pinchado como origen. Si el usuario no tuviese instalada la aplicación simplemente se muestra un mensaje de error en forma de \texttt{Toast} comentando que no ha sido posible abrir el mapa.
 
 Y el siguiente paso era centrar el mapa en la ciudad donde se vaya a celebrar el congreso, para así ver todos los marcadores juntos. La API de Google Maps es bastante completa y está bien documentada, así que se pueden conseguir buenos efectos de transición llamando a dos o tres funciones. En nuestro caso creamos un objeto de tipo \texttt{CameraPosition} para fijar el lugar donde se tenía que situar la cámara y el zoom que se tenía que aplicar sobre la región, y llamar a la función \texttt{animateCamera()} que se encarga de una transición suave y agradable a la vista.
-
-\figuraEx{Vectorial/Android/googleMaps}{width=0.5\textwidth,height=11cm}{fig:googleMaps}%
-    {Pantalla de la aplicación con los lugares relevantes de un congreso.}{Pantalla de la sección de lugares utilizando \textit{Google Maps}}
 
 \section{Base de datos interna}
 \label{sec:basedatosinterna}
