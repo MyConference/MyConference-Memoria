@@ -1,0 +1,1090 @@
+\chapter{Servicio Web y Base de Datos}
+\label{chap:webservice}
+
+La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
+
+El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API, identificándose a sí mismas como aplicaciones de la plataforma e identificando al usuario a través de sus credenciales (e-mail, contraseña).
+
+\section{API}
+
+%TODO: Introducción
+
+La API está implementada en su totalidad utilizando Node.js (Véase \ref{tech:nodejs}) con una serie de bibliotecas que facilitan la implementación en general o en ciertas áreas en particular.
+
+\subsection{Servidor Web}
+
+Puesto que se trata de una API completamente web y Node.js es un simple entorno de ejecución JavaScript, el servidor web está programado directamente en la aplicación.
+Afortunadamente, Node.js cuenta con una biblioteca estándar que incluye soporte para servidores HTTP, y en su repositorio de paquetes hay un gran número de bibliotecas para facilitar el desarrollo.
+
+Para escribir APIs web, concretamente, existe \texttt{restify}, un pequeño framework pensado para este tipo de servidores.
+Mediante esta librería, dividimos toda la implementación en \textit{rutas}, pequeñas definiciones de funciones que responderán a una petición a una ruta HTTP concreta.
+
+A su vez, estas funciones, en su mayoría, realizarán una o varias llamadas a la base de datos.
+Para trabajar con ella se utilizan una serie de \textit{modelos} implementados mediante \texttt{mongoose}, una biblioteca para dar forma a las colecciones de MongoDB como modelos y poder trabajar directamente con estos modelos.
+
+\subsection{Acceso}
+
+El acceso a los datos, así como su modificación, se realiza mediante peticiones HTTP.
+
+Todos los datos se envían y reciben en formato JSON. Cualquier otro formato pedido (mediante la cabecera \texttt{Accept}) o enviado (mediante \texttt{Content-Type}) será rechazado por el servidor. Esto simplifica el código de la API, puesto que JSON es un formato de representación nativo de JavaScript, el lenguaje en el que está implementada.
+
+Para acceder a los datos es necesario disponer de un testigo de acceso, cuya obtención veremos más adelante en la sección \ref{sec:api-auth}. Para enviar este testigo usaremos la cabecera HTTP \texttt{Authorization}, con el valor \texttt{Token~\textit{token-string}} (donde \textit{token-string} es el valor del testigo del que disponemos).
+
+Los datos de la aplicación están divididos en \textit{entidades}, que representan colecciones de datos similares. Para cada entidad disponemos, en general, de las siguientes acciones:
+
+\begin{itemize}
+  \item Ver en detalle un elemento, mediante una petición \texttt{GET /entidad/id}. Se obtiene una lista con los atributos del elemento y los elementos relacionados.
+  \item Crear un nuevo elemento de un tipo, mediante una petición \texttt{POST /entidad}. Se deben enviar los atributos iniciales del elemento.
+  %\item Modificar un elemento existente, mediante una petición \texttt{PUT /entidad/id}. Se deben enviar los nuevos atributos del objeto.
+  \item Eliminar un elemento existente, mediante una petición \texttt{DELETE /entidad/id}. Se obtiene una confirmación.
+\end{itemize}
+
+Las entidades pueden proporcionar otras acciones en determinadas circunstancias, como se describe en el apartado \nameref{sect:api-docs}.
+
+De la misma manera, todas las peticiones utilizan los códigos HTTP estándar, entre ellos:
+
+\begin{itemize}
+  \item \texttt{401~Unauthorized} para errores de autenticación.
+  \item \texttt{403~Forbidden} para operaciones para las que el usuario no tiene permiso.
+  \item \texttt{404~Not~Found} para elementos no existentes.
+  \item \texttt{500~Internal~Server~Error} para problemas internos de la API.
+\end{itemize}
+
+
+\subsection{Autenticación}
+\label{sec:api-auth}
+
+El sistema de autenticación funciona siguiendo un esquema similar al de los estándares OAuth y OpenID.
+
+Todos los servicios que ofrece la API de MyConference están protegidos. Para acceder a ellos es necesario obtener un \textit{testigo de acceso}, que irá unido a un usuario y se enviará en cada petición en una cabecera HTTP.
+
+Para obtener un testigo de acceso se debe realizar una petición a una ruta específica (\texttt{/auth}) de la API, indicando lo siguiente:
+
+\begin{itemize}
+  \item Qué aplicación se está usando para realizar la petición (Identificada mediante un UUID).
+  \item Qué dispositivo está realizando la petición (Cadena de texto arbitraria, permite diferenciar diferentes sesiones del mismo usuario mediante la misma aplicación).
+  \item Las credenciales de acceso a la aplicación.
+\end{itemize}
+
+Existen múltiples tipos de credenciales de acceso, detallados más adelante. Si todos los datos son correctos, ocurrirá lo siguiente:
+
+\begin{itemize}
+  \item Se crea un nuevo testigo de acceso asociado al usuario cuyas credenciales coinciden.
+  \item Se crea un nuevo testigo de actualización asociado al nuevo testigo de acceso.
+  \item Se invalidan todos los testigos de acceso y de actualización anteriores que fueran generados usando la misma aplicación y el mismo dispositivo.
+  \item Se devuelven ambos testigos, sus fechas de caducidad y el identificador del usuario identificado.
+\end{itemize}
+
+El \textit{testigo de actualización} devuelto tiene como función generar un nuevo testigo de acceso en caso de que este caduque. Los testigos de acceso tienen un tiempo de uso de unos pocos días, mientras que los testigos de actualización duran semanas. Esto minimiza la posibilidad de uso de un testigo de acceso interceptado por una tercera parte.
+
+Para que un intento de autenticación tenga éxito, las credenciales usadas deben coincidir con algunas credenciales almacenadas en la base de datos. Los siguientes son los tipos de credenciales que se definen:
+
+\begin{itemize}
+  \item \textbf{Usuario y contraseña}: Utilizamos un nombre de usuario (correo electrónico) y contraseña registrados previamente para realizar la autenticación.
+  \item \textbf{Testigo de Actualización}: Se utiliza un testigo de actualización para realizar la autenticación. La aplicación y el dispositivo con los que se generó el testigo usado deben coincidir con los datos de la petición.
+  \item \textbf{Testigo de Autorización}: Se utiliza un testigo de autorización obtenido mediante otros medios para realizar la autenticación. La aplicación y el dispositivo con los que se generó el testigo usado deben coincidir con los datos de la petición.
+\end{itemize}
+
+Los testigos de autorización existen para realizar accesos mediante servicios externos, actualmente no implementados. 
+
+% =========================================================================== %
+
+\subsection{Servicios Disponibles}
+\label{sect:api-docs}
+
+A continuación se describen todos los servicios de la API disponibles, con el siguiente formato:
+
+\paragraph{\texttt{VERBO /ruta/al/servicio}} ~\\
+
+En caso de hacer falta algún parámetro en la URL, se mostrará rodeado con corchetes angulares, \texttt{<así>}.
+Si hacen falta parámetros en el cuerpo (en formato JSON), se especificarán en forma de lista:
+
+\begin{itemize}
+  \item \texttt{argumento}: Descripción del argumento 
+\end{itemize}
+
+Salvo que se indique lo contrario, todas las llamadas requieren del envío de un testigo de acceso válido.
+
+Se mostrará a su vez una descripción del servicio, así como de los posibles errores que se pudieran dar en cada uno.
+
+% =========================================================================== %
+
+\subsubsection{Autentificación y Registro}
+
+% =========================================================================== %
+
+\paragraph{Registro (\texttt{POST /auth/signup})}
+
+\begin{itemize}
+  \item \texttt{application\_id}: ID de aplicación desde la que se realiza la petición.
+  \item \texttt{device\_id}: ID del dispositivo desde el que se realiza la petición. 
+  \item \texttt{user\_data}: Un objeto JSON con los campos:
+  \begin{itemize}
+    \item \texttt{email}: Correo electrónico del usuario a registrar.
+    \item \texttt{password}: Contraseña del usuario a registrar.
+  \end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagRegister}
+    \caption{Diagrama del Proceso de Registro}
+  \end{center}
+\end{figure}
+
+El registro no necesita testigo de acceso, puesto que es un proceso previo a la obtención de éste.
+Los datos de usuario provistos en el cuerpo de la petición se integrarán en el sistema y se creará un nuevo usuario que podrá posteriormente identificarse con ellos.
+
+El correo electrónico ha de ser válido y la contraseña ha de tener al menos 8 caracteres.
+No existen más restricciones en la contraseña, ni en contenido ni en longitud.
+
+% =========================================================================== %
+
+\newpage
+\paragraph{Autentificación (\texttt{POST /auth})}
+
+\begin{itemize}
+  \item \texttt{application\_id}: ID de aplicación desde la que se realiza la petición.
+  \item \texttt{device\_id}: ID del dispositivo desde el que se realiza la petición. 
+  \item \texttt{credentials}: Un objeto JSON con los campos:
+  \begin{itemize}
+    \item \texttt{type}: Tipo de credenciales a utilizar.
+    El resto de campos en este objeto dependerán exclusivamente del tipo de credenciales que se estén usando.
+    Este campo admite credenciales de tipo \texttt{password} y \texttt{refresh}.
+
+    \item \texttt{email}: (si \texttt{type} es \texttt{password}) E-mail del usuario a identificar.
+    \item \texttt{password}: (si \texttt{type} es \texttt{password}) Contraseña del usuario a identificar.
+
+    \item \texttt{refresh\_token}: (si \texttt{type} es \texttt{refresh}) Testigo de actualización de un usuario ya identificado previamente.
+    
+  \end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagAuth}
+    \caption{Diagrama del Proceso de Autentificación}
+  \end{center}
+\end{figure}
+
+Esta llamada no necesita testigo de acceso, puesto que es precisamente con ella como podemos conseguir uno.
+
+El campo \texttt{device\_id} es libre y puede contener cualquier cosa, pero está presente para posibilitar que un mismo usuario abra múltiples sesiones en la misma aplicación, por ejemplo, en varios PCs o dispositivos Android. Este valor debería ser tan único como fuera posible, por lo que, aunque no es un requisito, se recomienda usar un UUID o algún esquema similar. Además, si estamos realizando una llamada con credenciales de tipo \texttt{refresh}, este campo ha de coincidir con el de la llamada que generó dicho testigo de actualización originalmente.
+
+El resultado de una llamada válida a este servicio será un objeto JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{access\_token}: Nuevo token de acceso para la aplicación.
+  \item \texttt{access\_expires}: Fecha de caducidad del testigo de acceso (en formato ISO).
+  \item \texttt{refresh\_token}: Nuevo token de actualización para la aplicación.
+  \item \texttt{refresh\_expires}: Fecha de caducidad del testigo de actualización (en formato ISO).
+  \item \texttt{user}: Información del usuario con el que acabamos de iniciar sesión, como los campos:
+  \begin{itemize}
+    \item \texttt{id}: Identificador del usuario.
+    \item \texttt{url}: Ruta completa a la que realizar una llamada para obtener toda la información del usuario.
+  \end{itemize}
+\end{itemize}
+
+% =========================================================================== %
+
+\paragraph{Desautorización (\texttt{POST /auth/logout})} ~\\
+
+Este servicio no necesita datos extra. Tras realizar esta llamada, el testigo de acceso y su testigo de actualización asociado serán deshabilitados, desautorizando al usuario de todo acceso con dichos testigos.
+
+Este servicio está pensado para utilizarse por las aplicaciones para implementar el ``cierre de sesión'' característico de cualquier aplicación o servicio web de una forma segura que no engañe al usuario, que realmente desautorice el acceso en lugar de simplemente olvidarlo y dejarlo caducar.
+
+% =========================================================================== %
+
+\subsubsection{Usuarios y Congresos}
+
+\paragraph{Datos de usuario (\texttt{GET /users/<user-id>})} ~\\
+
+Devolverá la información del usuario indicado en \texttt{user-id} como un objeto JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del usuario.
+  \item \texttt{url}: Ruta completa del usuario en la API.
+  \item \texttt{conferences}: Un array JSON con objetos JSON con los siguientes campos.
+  \begin{itemize}
+    \item \texttt{id}: Identificador del congreso.
+    \item \texttt{url}: Ruta completa del congreso en la API.
+    \item \texttt{role}: Rol del usuario en el congreso (\texttt{owner}, \texttt{assistant})
+  \end{itemize}
+\end{itemize}
+
+% =========================================================================== %
+
+\paragraph{Congresos del usuario (\texttt{GET /users/<user-id>/conferences})} ~\\
+
+Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como una lista de objetos JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del congreso.
+  \item \texttt{url}: Ruta completa del congreso en la API.
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+  \item \texttt{role}: Rol del usuario en el congreso (\texttt{owner}, \texttt{assistant})
+\end{itemize}
+
+% =========================================================================== %
+
+\paragraph{Información de Congreso (\texttt{GET /conferences/<conference-id>})} ~\\
+
+Devolverá la información del congreso indicado en \texttt{conference-id} como un objeto JSON con los siguientes campos:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del congreso.
+  \item \texttt{url}: Ruta completa del congreso en la API.
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+  \item \texttt{documents}: Array JSON con los documentos (enlaces) del congreso.
+  \item \texttt{venues}: Array JSON con los lugares del congreso.
+  \item \texttt{announcements}: Array JSON con los anuncios del congreso.
+  \item \texttt{organizers}: Array JSON con los organizadores del congreso.
+  \item \texttt{speakers}: Array JSON con los ponentes del congreso.
+  \item \texttt{agendaEvents}: Array JSON con los eventos del programa del congreso.
+  \item \texttt{usuarios}: Array JSON con los usuarios asistentes al congreso.
+\end{itemize}
+
+El contenido exacto de los objetos de cada uno de los arrays se especificará más adelante.
+
+% =========================================================================== %
+
+\paragraph{Creación de Congresos (\texttt{POST /conferences})} ~\\
+
+\begin{itemize}
+  \item \texttt{name}: Nombre del congreso.
+  \item \texttt{description}: Descripción completa del congreso.
+\end{itemize}
+
+Crea un nuevo congreso y añade al usuario identificado como único propietario del mismo.
+
+% =========================================================================== %
+
+\paragraph{Eliminación de Congresos (\texttt{DELETE /conferences/<conference-id>})} ~\\
+
+Elimina completamente el congreso indicado en \texttt{conference-id} y todos los datos relacionados con él, de forma irreversible.
+
+Para que esta llamada tenga efecto, el usuario debe der propietario del congreso.
+
+% =========================================================================== %
+
+\subsubsection{Entidades del Congreso}
+
+Los congresos tienen una serie de entidades directamente dependientes de estos (documentos, ponentes, organizadores, etc.) que se manejan igual unos con respecto a otros. Por este motivo, describiremos primero las entidades y sus campos por separado y, posteriormente, las acciones que podemos realizar sobre ellas.
+
+Todas las entidades tienen los siguientes campos en común:
+
+\begin{itemize}
+  \item \texttt{id}: Identificador del objeto.
+  \item \texttt{url}: Ruta completa del objeto en la API.
+  \item \texttt{conference}: Información del congreso al que pertenece este objeto.
+  Dependiendo de si el objeto forma parte de una lista o se ha obtenido individualmente, habrá más o menos campos, pero podemos contar con los campos \texttt{id} y \texttt{url} del congreso.
+\end{itemize}
+
+Las entidades disponibles y sus campos son las siguientes, indicadas con el nombre de la entidad en plural, tal como se escribiría en la ruta del servicio.
+
+\begin{description}
+  \item[\texttt{agenda-events}] Programa del congreso, en forma de \textit{eventos}.
+  \begin{description}
+    \item[\texttt{title}] Título del evento.
+    \item[\texttt{description}] Descripción del evento.
+    \item[\texttt{date}] Fecha y hora del evento, en formato ISO.
+  \end{description}
+
+  \item[\texttt{announcements}] Novedades del congreso, siempre ordenadas en orden cronológico inverso (del más reciente al más antiguo).
+  \begin{description}
+    \item[\texttt{title}] Título del anuncio.
+    \item[\texttt{body}] cuerpo del anuncio.
+    \item[\texttt{date}] Fecha y hora del anuncio, en formato ISO.
+  \end{description}
+
+  \item[\texttt{documents}] Enlaces a documentos del congreso, como carteles, \textit{call for papers}, webs oficiales...
+  \begin{description}
+    \item[\texttt{title}] Título del documento.
+    \item[\texttt{description}] Descripción del documento.
+    \item[\texttt{type}] Tipo de documento. Sólo se admite \texttt{link}.
+    \item[\texttt{data}] URL del documento.
+  \end{description}
+
+  \item[\texttt{organizers}] Miembros del comité organizador del congreso.
+  \begin{description}
+    \item[\texttt{name}] Nombre del organizador.
+    \item[\texttt{origin}] Procedencia del organizador.
+    \item[\texttt{details}] Detalles del organizador.
+    \item[\texttt{group}] Grupo o categoría en la que incluir al organizador.
+  \end{description}
+  
+  \item[\texttt{speakers}] Ponentes del congreso.
+  \begin{description}
+    \item[\texttt{name}] Nombre del ponente.
+    \item[\texttt{charge}] Cargo del ponente.
+    \item[\texttt{description}] Detalles del ponente.
+    \item[\texttt{picture\_url}] URL de la foto del ponente.
+  \end{description}
+  
+  \item[\texttt{venues}] Lugares importantes del congreso, como el recinto en el que se celebra.
+  \begin{description}
+    \item[\texttt{name}] Nombre del lugar.
+    \item[\texttt{details}] Detalles del lugar.
+    \item[\texttt{location}] Objeto JSON con dos campos, \texttt{lat} y \texttt{lng}, indicando la latitud y longitud del lugar.
+  \end{description}
+\end{description}
+
+La forma de listar todos los elementos de una entidad para una conferencia es obtener la información de dicha conferencia. No existen servicios de listado por entidades.
+
+% =========================================================================== %
+
+\paragraph{Información de Entidades (\texttt{GET /<entity>/<id>})} ~\\
+
+Obtiene toda la información del elemento \texttt{id} de la entidad \texttt{entity}.
+El resultado es un objeto JSON con los campos descritos para la entidad.
+
+% =========================================================================== %
+
+\paragraph{Creación de Entidades (\texttt{POST /<entity>})} ~\\
+
+Crea un nuevo elemento de la entidad \texttt{entity}.
+Además de los campos descritos para la entidad con la información del objeto, se ha de incluir un campo \texttt{conference} con el identificador del congreso al que pertenecerá.
+El usuario ha de ser propietario de este congreso para poder añadir un elemento en él.
+
+% =========================================================================== %
+
+\paragraph{Eliminación de Entidades (\texttt{DELETE /<entity>/<id>})} ~\\
+
+Elimina el elemento \texttt{id} de la entidad \texttt{entity}.
+Para que este servicio funcione correctamente, el usuario debe ser propietario del congreso al que pertenece el objeto.
+
+% =========================================================================== %
+
+\subsubsection{Códigos de Invitación}
+
+Para poder añadir a otros usuarios a un congreso, hay que invitarlos mediante correo electrónico.
+Para ello se dan los siguientes servicios en la API
+
+% =========================================================================== %
+
+\paragraph{Invitar a un Usuario (\texttt{POST /invite-codes})}
+
+\begin{itemize}
+  \item \texttt{recipient\_email}: Correo electrónico al que enviar la invitación.
+  No tiene por qué estar registrado en MyConference ni ser el mismo que el del usuario que lo acepta.
+  \item \texttt{recipient\_name}: Nombre completo del usuario al que invitar.
+  \item \texttt{conference}: Identificador del congreso al que invitar al usuario.
+  El usuario actual ha de ser propietario de este congreso.
+\end{itemize}
+
+Envía un correo electrónico a la dirección indicada con un enlace a la web y un código para introducir en dicho enlace.
+
+
+% =========================================================================== %
+
+\paragraph{Utilizar un Código de Invitación (\texttt{POST /invite-codes/<code>/redeem})}
+
+Esta llamada no necesita ningún parámetro.
+Al finalizar esta llamada el usuario se añadirá a la lista de asistentes del congreso al que pertenece el código de invitación.
+
+% =========================================================================== %
+
+\section{Base de Datos}
+
+La base de datos (MongoDB) está estructurada en torno a la entidad \textit{Congreso} (\texttt{Conference}). Esta es la entidad fundamental del sistema, y la única junto con los usuarios y exceptuando otras entidades auxiliares que no depende de ninguna otra entidad, es decir, que puede existir por su propio pie.
+
+\subsection{Entidades Fundamentales}
+
+%\textit{Futuro gráfico entidad-relación con toda la "jerarquía" de entidades}
+
+No se describirán los campos concretos de estas entidades, puesto que son idénticos a los descritos en la sección \ref{sect:api-docs}.
+
+\begin{description}
+
+  \item[\texttt{Conference}]
+  El centro de MyConference, representa un congreso.
+
+  \item[\texttt{User}]
+  Representa un usuario registrado en MyConference.
+  Nótese que esta entidad no posee información sobre el inicio de sesión del usuario.
+
+  \item[\texttt{AgendaEvent}]
+  Represetna un evento dentro del programa de un congreso.
+
+  \item[\texttt{Announcement}]
+  Representa un anuncio (novedad) dentro de un congreso.
+
+  \item[\texttt{Document}]
+  Representa un enlace a un documento del congreso.
+
+  \item[\texttt{Organizer}]
+  Representa un miembro del comité organizador.
+
+  \item[\texttt{Speaker}]
+  Representa un ponente del congreso.
+
+  \item[\texttt{Venue}]
+  Representa un lugar del congreso.
+
+\end{description}
+
+\subsection{Entidades de Apoyo}
+
+%\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
+
+Existen otras entidades en la base de datos que aportan funcionalidad pero no representan datos de negocio.
+Estas aportan a la aplicación información sobre autentificación, principalmente.
+
+\begin{description}
+
+  \item[\texttt{LoginMethod}]
+  Representa un método de identificación de un usuario.
+  El único tipo de identificación disponible es \texttt{password}, que utilizará un correo electrónico y una contraseña para la identificación.
+
+  \item[\texttt{Application}]
+  Representa una aplicación oficial de MyConference.
+  El ID de la aplicación se podrá utilizar para registrar nuevos usuarios o autentificar usuarios existentes.
+
+  \item[\texttt{AccessToken}]
+  Representa un testigo de acceso a la API, que deberá usarse para acceder a los datos.
+
+  \item[\texttt{RefreshToken}]
+  Representa un testigo de actualización, que podrá usarse para obtener un nuevo testigo de acceso sin volver a identificar al usuario.
+
+  \item[\texttt{InviteCode}]
+  Representa un código de invitación enviado a un usuario para unirse a un congreso.
+
+\end{description}
+
+\section{Web}
+\label{chap:web}
+
+La Web es la encargada de la gestión de los congresos de MyConference. Desde la aplicación Web se crean los nuevos congresos y se añade toda la información correspondiente a estos. Aunque también se pueden visualizar los datos creados desde la Web, su función principal es la creación y borrado de datos de los congresos.
+
+\subsection{Uso}
+\label{sec:web-use}
+
+La Web está basada sobre \textit{Express}, framework de desarrollo de aplicaciones web de \nameref{tech:nodejs}.
+
+Como se ha dicho antes, la función principal de la Web es la creación y el borrado de datos, además de la visualización de estos datos. Para poder realizar estas operaciones es necesario establecer conexiones con la API mediante llamadas HTTP.
+
+\subsection{Estructura}
+\label{sec:web-structure}
+
+La aplicación Web se divide en tres partes: archivos de configuración, rutas y diseño.
+
+\subsubsection{Archivos de configuración}
+
+Los \textit{archivos de configuración} de la aplicación web se encargan de:
+\begin{itemize}
+    \item Configurar el módulo \textit{winston} para usar logs en la aplicación.
+    \item Configurar las sesiones de la aplicación.
+    \item Configurar el módulo \textit{node-sass} para que compile los archivos de \nameref{tech:sass} a CSS.
+    \item Establecer como archivos estáticos los archivos de la carpeta \textit{public}.
+    \item Establecer \nameref{tech:jade} como motor para las vistas.
+    \item Comprobar si los tokens de refresco han caducado.
+    \item Enlazar las rutas de la aplicación, explicadas en la sección \ref{subsec:web-routes}
+    \item Configurar el puerto en el que escucha la aplicación.
+    \item Configurar el entorno de desarrollo, que puede ser producción o desarrollo.
+    \item Configurar la base de datos MongoDB en función del entorno de desarrollo.
+    \item Establecer la URL de la API en función del entorno de desarrollo.
+    \item Configurar el módulo \textit{restify}.
+\end{itemize}
+
+\subsubsection{Rutas}
+\label{subsec:web-routes}
+
+La carpeta \textit{routes} es la que contiene todos los archivos con las llamadas HTTP a la API. Las llamadas están organizadas en diferentes archivos según los datos que se requieran. Todos los archivos están enlazados desde los archivos de configuración.
+
+\subsubsection{Diseño}
+
+Todos los elementos de diseño se guardan en la carpeta \textit{public}. En esta carpeta se encuentran los archivos de CSS y JavaScript que requiere la aplicación.
+
+El estilo de la aplicación es muy básico y viene dado en su gran mayoría por librerías externas.
+
+\begin{itemize}
+    \item \nameref{tech:bootstrap}: prácticamente todo el estilo de la página se ha podido hacer de manera fácil y rápida gracias a este framework, obteniendo un resultado sencillo y vistoso añadiendo unas pocas líneas de código.
+    \item \nameref{tech:googlemaps}: usada para el mapa que permite visualizar los lugares añadidos para un congreso.
+\end{itemize}
+
+Fuera de la carpeta \textit{public} está la carpeta \textit{Sass}, que contiene todos los archivos .scss que usamos en la aplicación. Esta carpeta está fuera de la carpeta \textit{public}
+ya que realmente la aplicación no usa estos archivos para el diseño, solo los compila y los traduce a archivos CSS que se guardan dentro de la carpeta \textit{public}. Estos archivos CSS son los que se usan realmente en la aplicación.
+
+\subsection{Casos de uso}
+
+\subsubsection{Caso de uso: registro de usuario}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Registrar al usuario en la aplicación.
+    \item \textbf{Actores}
+
+        Usuario sin registrar.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y está en página de registro.
+    \item \textbf{Postcondición si éxito}
+
+        El usuario  queda registrado.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando el fallo que ha ocurrido.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos obligatorios:
+      \begin{itemize}
+        \item E-mail.
+        \item Contraseña.
+        \item Repetir contraseña.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        Acceso a la aplicación o mensaje de error en caso de fallo.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Comprobar que no haya ningún campo vacío. Si hay algún campo vacío, S-1.
+          \item Comprobar que sea un e-mail válido. Si no es un e-mail válido, S-2.
+          \item Comprobar que la contraseña tenga 8 caracteres mínimo. Si la contraseña es demasiado corta, S-3.
+          \item Comprobar que los campos contraseña y repetir contraseña sean iguales. Si no coinciden, S-4.
+          \item Comprobar que el e-mail no ha sido registrado previamente en la aplicación. Si ha sido registrado previamente, S-5.
+          \item El usuario es registrado en la aplicación y se inicia sesión automáticamente.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error indicando los campos faltantes.
+          \item S-2. Se muestra un mensaje de error indicando que el e-mail no tiene un formato válido.
+          \item S-3. Se muestra un mensaje de error indicando que la contraseña es demasiado corta.
+          \item S-4. Se muestra un mensaje de error indicando que los campos contraseña y repetir contraseña tienen que coincidir.
+          \item S-5. Se muestra un mensaje de error indicando que el e-mail ya está registrado.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: inicio de sesión}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Identificar al usuario mediante sus credenciales para el acceso a la aplicación.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+      El usuario ha accedido a la web y se ha registrado previamente.
+    \item \textbf{Postcondición si éxito}
+
+        Se identifica al usuario y accede a sus datos en la aplicación.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra mensaje de error indicando el fallo que ha ocurrido.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos obligatorios:
+      \begin{itemize}
+        \item E-mail.
+        \item Contraseña.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        Acceso a la sesión del usuario o mensaje de error en caso de fallo.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Comprobar que no haya ningún campo vacío. Si hay algún campo vacío, S-1.
+          \item Comprobar que sea un e-mail válido. Si no es un e-mail válido, S-2.
+          \item Comprobar que la contraseña tenga 8 caracteres mínimo. Si la contraseña es demasiado corta, S-3.
+          \item Comprobar que el e-mail está registrado en la aplicación. Si no ha sido registrado previamente, S-4.
+          \item El usuario inicia sesión.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        \begin{itemize}
+          \item S-1. Se muestra un mensaje de error indicando los campos faltantes.
+          \item S-2. Se muestra un mensaje de error indicando que el e-mail no tiene un formato válido.
+          \item S-3. Se muestra un mensaje de error indicando que la contraseña es demasiado corta.
+          \item S-4. Se muestra un mensaje de error indicando que el e-mail no está registrado en la aplicación.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: mostrar los datos del usuario}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Mostrar al usuario sus datos mediante llamadas a la API. Estos datos pueden ser:
+        \begin{itemize}
+          \item Lista de congresos, tanto los creados por el propio usuario como a los que ha sido invitado a asistir.
+          \item Lista de los usuarios invitados al congreso.
+          \item Lista de los anuncios del congreso.
+          \item Lista de los documentos del congreso.
+          \item Lista de lugares del congreso.
+          \item Lista de los organizadores del congreso.
+          \item Lista de los ponentes del congreso.
+          \item Lista de los eventos de la agenda del congreso.
+        \end{itemize}
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha iniciado sesión con su cuenta y se han recibido correctamente los datos de la API.
+    \item \textbf{Postcondición si éxito}
+
+        Se muestra una lista con los datos según la sección en la que esté el usuario.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra mensaje de error indicando que no se han recibido correctamente los datos.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Lista con los datos correspondientes.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item Se hace una llamada a la API pidiendo los datos correspondientes. Si no se puede realizar la llamada error, S-1.
+            \item Se muestra la lista con los datos.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+      \begin{itemize}
+          \item S-1. Se muestra mensaje de error indicando que no se han recibido correctamente los datos.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de congresos}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo congreso.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo congreso.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el congreso.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Nombre del congreso.
+      \item Descripción del congreso.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo congreso.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el congreso.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: invitación de usuarios}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Invitar a usuarios al congreso para que puedan visualizar sus datos.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se manda al otro usuario un correo con la invitación.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido mandar la invitación.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Nombre del usuario al que se quiere invitar.
+      \item E-mail del usuario al que se quiere invitar.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        Correo con un código de activación.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se manda la invitación.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: activación de congresos}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Activar el congreso al que el usuario ha sido invitado.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se añade la información del congreso a la cuenta del usuario.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido activar el congreso.
+    \item \textbf{Entradas}
+
+      Código de activación.
+    \item \textbf{Salidas}
+
+        Datos del congreso.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Abrir el enlace que se proporciona en el correo.
+          \item Introducir el código de activación en el enlace abierto previamente.
+          \item Se valida el código de activación. Si falla, S-1.
+          \item Se añade la información del congreso en la cuenta del usuario.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que el código de activación no es válido.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de anuncios}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo anuncio.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo anuncio.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el anuncio.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Título del anuncio.
+      \item Cuerpo del anuncio.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo anuncio.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el anuncio.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de lugares}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo lugar.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo lugar.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el lugar.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Nombre del lugar.
+      \item Detalles del lugar.
+      \item Coordenadas geográficas o dirección del lugar.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo lugar.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el lugar.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de organizadores}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo organizador.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo organizador.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el organizador.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Nombre del organizador.
+      \item Procedencia del organizador.
+      \item Detalles del organizador.
+      \item Grupo del organizador.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo organizador.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el organizador.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de ponentes}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo ponente.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo ponente.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el ponente.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Nombre del ponente.
+      \item Procedencia del ponente.
+      \item Cargo del ponente.
+      \item Descripción del ponente.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo ponente.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el ponente.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: creación de eventos de la agenda}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Crear un nuevo evento en la agenda.
+    \item \textbf{Actores}
+
+        Usuario registrado en la aplicación.
+    \item \textbf{Precondición}
+
+        El usuario ha accedido a la web y ha iniciado sesión.
+    \item \textbf{Postcondición si éxito}
+
+        Se crea un nuevo evento en la agenda.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra un mensaje de error indicando que no se ha podido crear el evento.
+    \item \textbf{Entradas}
+
+      Formulario con los siguientes campos:
+      \begin{itemize}
+        \item Título del evento.
+      \item Descripción del evento.
+      \item Día, mes y año del evento.
+      \item Hora y minutos del evento.
+      \end{itemize}
+    \item \textbf{Salidas}
+
+        El nuevo evento.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+          \item Rellenar los campos del formulario.
+          \item Comprobar que los campos tienen el formato correcto. Si algún campo no tiene el formato correcto, S-1.
+          \item Se crea el evento de la agenda.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+      \begin{itemize}
+          \item S-1. Se muestra un mensaje de error informando que algún campo tiene un formato incorrecto.
+        \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: borrado de datos}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        El usuario elimina datos de su cuenta. Los datos que puede borrar son:
+        \begin{itemize}
+          \item Congresos.
+          \item Anuncios.
+          \item Documentos.
+          \item Lugares.
+          \item Organizadores.
+          \item Ponentes.
+          \item Eventos de la agenda.
+        \end{itemize}
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        El usuario es el propietario de los datos que se quieren borrar.
+    \item \textbf{Postcondición si éxito}
+
+        Se eliminan los datos.
+    \item \textbf{Postcondición si fallo}
+
+        Se muestra mensaje de error informando del fallo.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Se elimina el dato.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario pulsa sobre el botón \textbf{Delete} en el dato que quiere eliminar. Si no se ha podido eliminar, S-1.
+            \item Se elimina el dato.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+    \begin{enumerate}
+            \item S-1. se muestra mensaje de error informando del fallo.
+        \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Caso de uso: cerrar sesión}
+
+\begin{enumerate}
+    \item \textbf{Objetivo}
+
+        Cerrar la sesión actual del usuario y volver a la página inicial de la web.
+    \item \textbf{Actores}
+
+        Usuario registrado.
+    \item \textbf{Precondición}
+
+        El usuario ha iniciado sesión en la aplicación.
+    \item \textbf{Postcondición si éxito}
+
+        Se cierra la sesión actual del usuario.
+    \item \textbf{Postcondición si fallo}
+
+        Ninguna.
+    \item \textbf{Entradas}
+
+        Ninguna.
+    \item \textbf{Salidas}
+
+        Cierre de la sesión actual del usuario.
+    \item \textbf{Secuencia normal}
+
+        \begin{enumerate}
+            \item El usuario pulsa sobre el botón \textbf{Log out} en la barra de navegación.
+            \item Se cierra la sesión.
+        \end{enumerate}
+    \item \textbf{Secuencia alternativa}
+
+        Ninguna.
+\end{enumerate}
