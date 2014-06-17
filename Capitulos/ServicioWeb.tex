@@ -1,13 +1,16 @@
 \chapter{Servicio Web y Base de Datos}
 \label{chap:webservice}
 
-La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
-
-El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API, identificándose a sí mismas como aplicaciones de la plataforma e identificando al usuario a través de sus credenciales (e-mail, contraseña).
+En este capítulo describiremos los servicios web disponibles en MyConference.
+En un primer lugar hablaremos del centro neurálgico de MyConference, la API, encargada de la gestión y supervisión de los datos.
+Posteriormente hablaremos del formulario web que permite a los usuarios introducir datos en el sistema.
+Por último, hablaremos de la base de datos que almacena toda la información de MyConference.
 
 \section{API}
 
-%TODO: Introducción
+La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
+
+El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API, identificándose a sí mismas como aplicaciones de la plataforma e identificando al usuario a través de sus credenciales (e-mail, contraseña).
 
 La API está implementada en su totalidad utilizando Node.js (Véase \ref{tech:nodejs}) con una serie de bibliotecas que facilitan la implementación en general o en ciertas áreas en particular.
 
