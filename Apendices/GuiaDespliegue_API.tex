@@ -1,7 +1,7 @@
 \section{API}
 \label{sec:deploy-api}
 
-La API, descrita en el capítulo \ref{chap:webservice}, es la columna vertebral de MyConference, y por tanto será la primera parte del proyecto que se instalará y configurará.
+La API, descrita en el capítulo \ref{chap:webservice}, es la columna vertebral de MyConference, y por tanto será la primera parte del sistema que se instalará y configurará.
 
 En primer lugar es necesario tener instalado \nameref{tech:nodejs}, versión \texttt{0.12} o superior.
 A continuación debemos, usando un terminal y desde la carpeta raíz del proyecto, ejecutar:
@@ -23,9 +23,12 @@ Para su configuración local se utilizará \nameref{tech:foreman} (Véase \ref{tech
 \subsection{Configuración con Foreman}
 \label{sec:deploy-foreman}
 
-En primer lugar deberemos descargar e instalar \texttt{foreman} (\url{https://github.com/ddollar/foreman}). Dependiendo de la plataforma el proceso puede variar, por lo que no entraremos en detalles.
+En primer lugar deberemos descargar e instalar \texttt{foreman}.
+Dependiendo de la plataforma el proceso puede variar, por lo que no entraremos en detalles.
 
-Tras la instalación, se necesitan dos ficheros: \texttt{Procfile} y \texttt{.env}. El fichero \texttt{Procfile} define los prcesos que se ejecutarán con la aplicación, y ya está creado. El fichero \texttt{.env} contiene las variables de configuración en forma de variables de entorno cn la siguiente sintaxis:
+Tras la instalación, se necesitan dos ficheros: \texttt{Procfile} y \texttt{.env}.
+El fichero \texttt{Procfile} define los prcesos que se ejecutarán con la aplicación, y ya está creado.
+El fichero \texttt{.env} contiene las variables de configuración en forma de variables de entorno con la siguiente sintaxis:
 
 \begin{lstlisting}[language=bash]
   VAR1=valor 1
@@ -147,7 +150,10 @@ Para establecer variables de configuración utilizaremos el siguiente comando:
 En este caso, debemos ejecutar un comando similar a este:
 
 \begin{lstlisting}[language=bash]
-  $ heroku config:set NODE_ENV=production HOST=api.myconference.com WEB_URL=http://myconference.com
+  $ heroku config:set \
+        NODE_ENV=production \
+        HOST=api.myconference.com \
+        WEB_URL=http://myconference.com
 \end{lstlisting}
 
 Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicación. Para ello, usando \nameref{tech:git}, desde la raíz de nuestro proyecto, ejecutaremos:
