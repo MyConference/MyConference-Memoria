@@ -54,9 +54,9 @@ De la misma manera, todas las peticiones utilizan los códigos HTTP estándar, ent
 \subsection{Autenticación}
 \label{sec:api-auth}
 
+Todos los servicios que ofrece la API de MyConference están protegidos.
 El sistema de autenticación funciona siguiendo un esquema similar al de los estándares OAuth y OpenID.
-
-Todos los servicios que ofrece la API de MyConference están protegidos. Para acceder a ellos es necesario obtener un \textit{testigo de acceso}, que irá unido a un usuario y se enviará en cada petición en una cabecera HTTP.
+Para acceder a los servicios que ofrece la API de MyConference es necesario obtener un \textit{testigo de acceso}, que irá unido a un usuario y se enviará en cada petición en una cabecera HTTP.
 
 Para obtener un testigo de acceso se debe realizar una petición a una ruta específica (\texttt{/auth}) de la API, indicando lo siguiente:
 
@@ -94,7 +94,7 @@ Los testigos de autorización existen para realizar accesos mediante servicios ex
 
 A continuación se describen todos los servicios de la API disponibles, con el siguiente formato:
 
-\paragraph{\texttt{VERBO /ruta/al/servicio}} ~\\
+\paragraph{Título del Servicio (\texttt{VERBO /ruta/al/servicio})} ~\\
 
 En caso de hacer falta algún parámetro en la URL, se mostrará rodeado con corchetes angulares, \texttt{<así>}.
 Si hacen falta parámetros en el cuerpo (en formato JSON), se especificarán en forma de lista:
@@ -104,12 +104,13 @@ Si hacen falta parámetros en el cuerpo (en formato JSON), se especificarán en fo
 \end{itemize}
 
 Salvo que se indique lo contrario, todas las llamadas requieren del envío de un testigo de acceso válido.
+Para ello se utilizará la cabecera HTTP \texttt{Authorization} con el valor \texttt{Token \textit{abcdef}}, donde \textit{abcdef} es el testigo de acceso.
 
 Se mostrará a su vez una descripción del servicio, así como de los posibles errores que se pudieran dar en cada uno.
 
 % =========================================================================== %
 
-\subsubsection{Autentificación y Registro}
+\subsubsection{Autenticación y Registro}
 
 % =========================================================================== %
 
@@ -125,10 +126,13 @@ Se mostrará a su vez una descripción del servicio, así como de los posibles erro
   \end{itemize}
 \end{itemize}
 
+La figura \ref{fig:regist-seq} muestra el proceso de registro sin errores.
+
 \begin{figure}[h]
   \begin{center}
     \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagRegister}
     \caption{Diagrama del Proceso de Registro}
+    \label{fig:regist-seq}
   \end{center}
 \end{figure}
 
@@ -141,7 +145,7 @@ No existen más restricciones en la contraseña, ni en contenido ni en longitud.
 % =========================================================================== %
 
 \newpage
-\paragraph{Autentificación (\texttt{POST /auth})}
+\paragraph{Autenticación (\texttt{POST /auth})}
 
 \begin{itemize}
   \item \texttt{application\_id}: ID de aplicación desde la que se realiza la petición.
@@ -160,10 +164,13 @@ No existen más restricciones en la contraseña, ni en contenido ni en longitud.
   \end{itemize}
 \end{itemize}
 
+La figura \ref{fig:auth-seq} muestra el proceso de autenticación sin errores.
+
 \begin{figure}[h]
   \begin{center}
     \includegraphics[width=.8\textwidth]{Imagenes/Bitmap/API/SeqDiagAuth}
-    \caption{Diagrama del Proceso de Autentificación}
+    \caption{Diagrama del Proceso de Autenticación}
+    \label{fig:auth-seq}
   \end{center}
 \end{figure}
 
@@ -430,7 +437,7 @@ No se describirán los campos concretos de estas entidades, puesto que son idénti
 %\textit{Futuro gráfico entidad-relación con las entidades de apoyo (tokens, loginmethods)}
 
 Existen otras entidades en la base de datos que aportan funcionalidad pero no representan datos de negocio.
-Estas aportan a la aplicación información sobre autentificación, principalmente.
+Estas aportan a la aplicación información sobre autenticación, principalmente.
 
 \begin{description}
 
@@ -440,7 +447,7 @@ Estas aportan a la aplicación información sobre autentificación, principalmente.
 
   \item[\texttt{Application}]
   Representa una aplicación oficial de MyConference.
-  El ID de la aplicación se podrá utilizar para registrar nuevos usuarios o autentificar usuarios existentes.
+  El ID de la aplicación se podrá utilizar para registrar nuevos usuarios o autenticar usuarios existentes.
 
   \item[\texttt{AccessToken}]
   Representa un testigo de acceso a la API, que deberá usarse para acceder a los datos.
