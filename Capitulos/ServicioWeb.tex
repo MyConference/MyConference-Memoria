@@ -92,9 +92,11 @@ Los testigos de autorización existen para realizar accesos mediante servicios ex
 \subsection{Servicios Disponibles}
 \label{sect:api-docs}
 
+\begin{samepage}
 A continuación se describen todos los servicios de la API disponibles, con el siguiente formato:
 
 \paragraph{Título del Servicio (\texttt{VERBO /ruta/al/servicio})} ~\\
+\end{samepage}
 
 En caso de hacer falta algún parámetro en la URL, se mostrará rodeado con corchetes angulares, \texttt{<así>}.
 Si hacen falta parámetros en el cuerpo (en formato JSON), se especificarán en forma de lista:
@@ -206,7 +208,7 @@ Este servicio está pensado para utilizarse por las aplicaciones para implementar
 
 \paragraph{Datos de usuario (\texttt{GET /users/<user-id>})} ~\\
 
-Devolverá la información del usuario indicado en \texttt{user-id} como un objeto JSON con los siguientes campos:
+Devuelve la información del usuario indicado en \texttt{user-id} como un objeto JSON con los siguientes campos:
 
 \begin{itemize}
   \item \texttt{id}: Identificador del usuario.
@@ -223,7 +225,7 @@ Devolverá la información del usuario indicado en \texttt{user-id} como un objeto
 
 \paragraph{Congresos del usuario (\texttt{GET /users/<user-id>/conferences})} ~\\
 
-Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como una lista de objetos JSON con los siguientes campos:
+Devuelve la lista de congresos del usuario indicado en \texttt{user-id} como una lista de objetos JSON con los siguientes campos:
 
 \begin{itemize}
   \item \texttt{id}: Identificador del congreso.
@@ -237,7 +239,7 @@ Devolverá la lista de congresos del usuario indicado en \texttt{user-id} como un
 
 \paragraph{Información de Congreso (\texttt{GET /conferences/<conference-id>})} ~\\
 
-Devolverá la información del congreso indicado en \texttt{conference-id} como un objeto JSON con los siguientes campos:
+Devuelve la información del congreso indicado en \texttt{conference-id} como un objeto JSON con los siguientes campos:
 
 \begin{itemize}
   \item \texttt{id}: Identificador del congreso.
@@ -289,7 +291,7 @@ Todas las entidades tienen los siguientes campos en común:
   Dependiendo de si el objeto forma parte de una lista o se ha obtenido individualmente, habrá más o menos campos, pero podemos contar con los campos \texttt{id} y \texttt{url} del congreso.
 \end{itemize}
 
-Las entidades disponibles y sus campos son las siguientes, indicadas con el nombre de la entidad en plural, tal como se escribiría en la ruta del servicio.
+Las entidades disponibles y sus campos son las siguientes (El nombre de la entidad en plural, tal como se escribiría en la ruta del servicio):
 
 \begin{description}
   \item[\texttt{agenda-events}] Programa del congreso, en forma de \textit{eventos}.
@@ -381,7 +383,7 @@ Para ello se dan los siguientes servicios en la API
   El usuario actual ha de ser propietario de este congreso.
 \end{itemize}
 
-Envía un correo electrónico a la dirección indicada con un enlace a la web y un código para introducir en dicho enlace.
+Envía un correo electrónico con un enlace a la web y un código para introducir en dicho enlace a la dirección indicada.
 
 
 % =========================================================================== %
