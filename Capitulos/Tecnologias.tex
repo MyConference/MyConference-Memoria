@@ -1,4 +1,5 @@
 \chapter{Tecnologías Utilizadas}
+\label{chap:tecnologies}
 
 \section{Alojamiento del Servicio Web}
 
@@ -213,15 +214,77 @@ El diseño web adaptable (Responsive Web Design) consigue adaptar cualquier aplic
 \label{tech:mongodb}
 
 \section{Control de Versiones}
+\label{tech:version-control}
+
+Escribir código es un proceso que produce errores constantemente y trabajar en grupo de forma independiente pero en los mismos ficheros es un proceso complejo si utilizamos herramientas sencillas (copiar-pegar, mover archivos), y puede dar lugar a muchos quebraderos de cabeza. Todos estos problemas se pueden resolver utilizando software de control de versiones. Las características básicas del control de versiones son:
+
+\begin{itemize}
+  \item Registro completo de cambios en el código, permitiendo revertir el historial o un cambio concreto.
+  \item Separación de \textit{ramas}, permitiendo mantener múltiples niveles de estabilidad (versión estable, versión en desarrollo, versión experimental, etc.) en el mismo repositorio.
+  \item Operaciones de integración entre varias ramas de código (múltiples programadores, múltiples versiones), de forma automática o manual.
+\end{itemize}
+
+Históricamente se ha utilizado software de control de versiones \textit{centralizado},
+en el que un servidor central almacena todo el código y las revisiones de este mientras
+los programadores obtienen una copia local únicamente de la última revisión de la rama
+en la que trabajan. Los cambios en el código, una vez empaquetados en \textit{commits},
+se envían directamente al servidor.
+
+Hoy en día, sin embargo, la tendencia es a migrar a software de control de versiones
+\textit{distribuído}, en el que no hay un servidor centralizado (aunque se suele
+utilizar un repositorio ``principal'' que juega el mismo rol). En su lugar, los
+diferentes programadores conservan en su máquina una copia completa de todo el
+historial de versiones de cada una de las ramas con las que trabajan.
+Este tipo de sistemas suelen tener una gestión de mezclas entre ramas mucho más
+potente, lo que permite que los cambios se integren generalmente sin problemas en
+las copias del resto de programadores o del repositorio central.
+
+Para MyConference, siguiendo con esta tendencia, hemos elegido Git, un sistema
+de control de versiones distribuído ampliamente ulizado por proyectos tanto
+libres como propietarios, junto con el servicio de \textit{hosting} de repositorios
+GitHub.
 
 \subsection{Git}
 \label{tech:git}
 
+\begin{center}
+\imagen{Bitmap/Tecnologias/git}{width=0.3\textwidth}
+\end{center}
+
+Git es un sistema de control de versiones distribuído diseñado para funcionar
+con proyectos tanto grandes como pequeños.
+
+Se creó en el año 2005 como alternativa al sistema propietario \textit{BitLocker} que se utilizaba para mantener el kernel Linux.
+Su desarrollo inicial lo realizó Linus Torvalds, responsable del kernel, en apenas unas semanas.
+Posteriormente ha crecido en tamaño y funcionalidad hasta la reciente liberación de la versión 2.0.0,
+pero sigue siendo un sistema con un buen rendimiento que no se degrada con el tamaño o la complejidad del historial de versiones o del código.
+
 \subsection{GitHub}
+
+\begin{center}
+\imagen{Bitmap/Tecnologias/github}{width=0.5\textwidth}
+\end{center}
+
+GitHub es un servicio de almacenamiento de repositorios Git que añade funcionalidad como
+un sistema de \textit{issues}, wikis, gráficas y otras características complementarias al
+control de versiones en sí.
 
 \section{Herramientas de Desarrollo}
 
+Para crear MyConference se han utilizado multitud de tecnologías, pero todas ellas necesitan de unas herramientas básicas como editores o kits de desarrollo.
+A continuación se detallan los más importantes.
+
 \subsection{Sublime Text}
+
+\begin{center}
+\imagen{Bitmap/Tecnologias/sublime-text}{width=0.8in}
+\end{center}
+
+Sublime Text es un editor de texto multiplataforma orientado principalmente a la programación.
+Se trata de un editor rápido, potente y con multitud de \textit{plug-ins} que permiten añadir
+casi cualquier funcionalidad imaginable.
+
+Para MyConference se ha utilizado la versión 3, todavía en desarrollo pero muy estable.
 
 \subsection{Eclipse}
 \label{tech:eclipse}
@@ -230,9 +293,9 @@ El diseño web adaptable (Responsive Web Design) consigue adaptar cualquier aplic
 \imagen{Vectorial/Android/eclipse}{width=0.5\textwidth}
 \end{center}
 
-\textit{Eclipse} es un \textit{entorno de desarrollo integrado} (del inglés IDE) utilizado para desarrollar aplicaciones. \url{http://www.eclipse.org/}
+\textit{Eclipse} es un \textit{entorno de desarrollo integrado} (IDE, por sus siglas en inglés) utilizado para desarrollar aplicaciones. \url{http://www.eclipse.org/}
 
-Como características principales, dispone de un editor de texto con resaltado de sintaxis y autocompletado, la compilación es en tiempo real, incluye pruebas unitarias con JUnit, control de versiones con CVS, integración con Ant, asistentes para crear nuevos proyectos, clases, test... y refactorización. Asímismo, se le puede instalar gran cantidad de \textit{plugins} para hacerlo aún más completo.
+Como características principales, dispone de un editor de texto con resaltado de sintaxis y autocompletado, la compilación es en tiempo real, incluye pruebas unitarias con JUnit, control de versiones, integración con Ant, asistentes para crear nuevos proyectos, clases, test... y refactorización. Asímismo, se le puede instalar gran cantidad de \textit{plug-ins} para hacerlo aún más completo.
 
 Para nuestro proyecto hemos utilizado la versión 3.6 denominada \textit{Helios}.
 
