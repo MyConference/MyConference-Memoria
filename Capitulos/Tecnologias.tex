@@ -3,7 +3,17 @@
 
 \section{Alojamiento del Servicio Web}
 
-%Introducción
+MyConference hace uso de dos aplicaciones web para funcionar.
+Estas aplicaciones, de las que hablaremos posteriormente, están preparadas para
+trabajar en entornos de \textit{Plataforma como servicio} (\textit{PaaS} , Platform as a Service),
+que permite al desarrollador desplegar aplicaciones en la nube de manera sencilla y
+rápida sin tener que administrar la máquina en la que se instala.
+Suele identificarse como una evolución del \textit{Software como servicio}
+(\textit{SaaS}, Software as a Service), pero mientras que \textit{SaaS} permite
+la ejecución de una aplicación concreta, \textit{PaaS} permite al programador
+escribir aplicaciones para un tipo de plataforma concreto.
+
+Para MyConference, el \textit{PaaS} elegido ha sido Heroku, puesto que el despliegue así como la configuración de las aplicaciones es muy sencillo y flexible.
 
 \subsection{Heroku}
 \label{tech:heroku}
@@ -12,9 +22,7 @@
 \imagen{Bitmap/Tecnologias/heroku}{width=0.5\textwidth}
 \end{center}
 
-\textit{Heroku} es una plataforma como servicio que soporta distintos lenguajes de programación. \cite{Heroku}
-
-\textit{Plataforma como servicio} (PaaS - Platform as a Service) permite al desarrollador desplegar aplicaciones en la nube (Cloud Computing) de manera sencilla y rápida sin tener que administrar el hardware, es decir, sin tener que instalar software adicional en la máquina. Suele identificarse como una evolución del Software como servicio (SaaS - Software as a Service), aunque la diferencia está en que SaaS es un modelo que permite la distribución del software mientras que PaaS distribuye el software y todo lo necesario para su ejecución. Una de las ventajas del PaaS es el mejor aprovechamiento de las máquinas al estar centradas en un servicio en concreto. La desventaja está en que los servicios que proporcionan pueden quedarse escasos en algunas ocasiones. Otro ejemplo es Google App Engine.
+\textit{Heroku} \cite{Heroku} es una plataforma como servicio que soporta distintos lenguajes de programación.
 
 \textit{Heroku} inicialmente solo soportaba la ejecución de aplicaciones web desarrolladas en Ruby, pero posteriormente se extendió el soporte a Java, Node.js, Scala, Clojure, Python y PHP.
 
@@ -22,7 +30,7 @@ Una de las grandes ventajas de \textit{Heroku} es poder obtener un Dyno (unidad 
 
 \textit{Heroku} dispone de una gran cantidad de extensiones (add-ons) que añaden funcionalidad extra a las aplicaciones. Por ejemplo, la extensión MongoLab permite el uso de bases de datos hechas con MongoDB.
 
-Para el desarrollo de MyConference hemos usado dos Dynos gratuitos de Heroku, uno para la ejecución de la API y otro para la Web. De esta manera hemos obtenido de manera gratuita un servicio en el que poder desarrollar la aplicación y poder testearla de manera sencilla y rápida.
+Para el desarrollo de MyConference hemos usado dos Dynos gratuitos de Heroku: uno para la ejecución de la API y otro para la Web. De esta manera hemos obtenido de manera gratuita un servicio en el que poder desarrollar la aplicación y poder testearla de manera sencilla y rápida.
 
 \section{Desplegado del Servicio Web}
 
@@ -33,7 +41,7 @@ Para el desarrollo de MyConference hemos usado dos Dynos gratuitos de Heroku, un
 \imagen{Bitmap/Tecnologias/nodejs}{width=0.4\textwidth}
 \end{center}
 
-\textit{Node.js} es un entorno de programación basado en JavaScript. Es la tecnología usada para el desarrollo tanto de la API como de la Web. \cite{NodeJS}
+\textit{Node.js} \cite{NodeJS} es un entorno de programación basado en JavaScript. Es la tecnología usada para el desarrollo tanto de la API como de la Web. 
 
 Dispone de una gran cantidad de módulos que añaden funcionalidad al entorno. Algunos ejemplos de estos módulos son: 
 \begin{itemize}
@@ -49,47 +57,38 @@ Estos módulos se pueden instalar de manera rápida con npm, gestor oficial de paq
   $ npm install package-name
 \end{lstlisting}
 
-A continuación se explican los módulos de Node.js que se han usado.
+
+\subsection{Módulos NodeJS}
 
 \subsubsection{Express}
 \label{tech:express}
 
-\textit{Express} es un framework para poder realizar aplicaciones Web de manera sencilla y rápida. 
+\textit{Express} es un microframework web para Node.js fácilmente extendible y sencillo de usar.
+
+Es el motor principal de la web
 
 \subsubsection{Restify}
 
 \label{tech:restify}
 
-\textit{Restify} es un framework hecho específicamente para construir correctamente servicios web REST.
+\textit{Restify} es un microframework inspirado en Express, con una sintaxis y un uso prácticamente idéntico, pensado y diseñado para servicios REST en lugar de para webs tradicionales.
+Además incluye un cliente para realizar peticiones a servicos REST, escritos o no con Restify.
+
+El el motor principal de la API de MyConference en su versión para servidor y una parte muy importante de la web en la versión cliente.
+
+\subsubsection{Mongoose}
+\label{tech:mongoose}
+
+\textit{Mongoose} es un \textit{Object-Document Mapper}, una librería diseñada para
+hacer de puente entre una base de datos MongoDB y un lenguaje orientado a objetos, JavaScript en este caso.
+Nos permite trabajar con \textit{modelos}, objetos que representan las diferentes colecciones de MongoDB
+y darles estructura y comportamiento, facilitando el desarrollo de aplicaciones que utilicen este tipo de base de datos.
+
 
 \subsubsection{Winston}
 \label{tech:winston}
 
-\textit{Winston} está diseñado para ser una simple y universal librería para guardar los logs de una aplicación. Permite separar los logs en diferentes niveles, de esta manera se puede elegir qué hacer con cada nivel, por ejemplo, guardarlos en base de datos, guardarlos en archivos locales o simplemente mostrarlos por consola.
-
-\subsubsection{Path}
-
-\textit{Path} contiene utilidades para mantener y transformar las direcciones de los ficheros.
-
-\subsubsection{Node-sass}
-
-\textit{Node-sass} permite la compilación de los archivos \nameref{tech:sass} a archivos CSS de manera automática.
-
-\subsubsection{Connect-flash}
-
-\textit{Flash} es un área especial de la sesión de usuario usada para el almacenamiento de mensajes. Los mensajes se escriben para flash y se borran cuando se han mostrado al usuario. \textit{Connect-flash} es un framework que permite el manejo de estos mensajes flash de manera sencilla.
-
-\subsubsection{Node-uuid}
-
-\textit{Node-uuid} permite la creación de UUIDs de manera rápida y simple.
-
-\subsubsection{Connect-mongo}
-
-\textit{Connect-mongo} es un framework usado para el almacenamiento de sesiones de usuario en una aplicación Web.
-
-\subsubsection{Sprintf}
-
-\textit{Sprintf} permite hacer print en JavaScript.
+\textit{Winston} está diseñado para ser una librería simple y universal para guardar los logs de una aplicación. Permite separar los logs en diferentes niveles, de esta manera se puede elegir qué hacer con cada nivel, por ejemplo, guardarlos en base de datos, guardarlos en archivos locales o simplemente mostrarlos por consola.
 
 \subsection{Jade}
 \label{tech:jade}
@@ -98,67 +97,7 @@ A continuación se explican los módulos de Node.js que se han usado.
 \imagen{Bitmap/Tecnologias/jade}{width=0.3\textwidth}
 \end{center}
 
-\textit{Jade} es un motor de plantillas de alto rendimiento implementado en JavaScript para Node.js. Tiene una sintaxis limpia, sensible a los espacios en blanco para escribir código HTML. \url{http://jade-lang.com/}
-
-La instalación de \textit{Jade} se hace mediante npm, el gestor de paquetes de Node.js: 
-
-\begin{lstlisting}[language=bash]
-  $ npm install jade
-\end{lstlisting}
-
-\begin{center}
-\begin{tabular}{| l |}
-\hline
-HTML \\ \hline
-\begin{lstlisting}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Jade</title>
-    <script type="text/javascript">
-      if (foo) {
-        bar(1 + 5)
-      }
-    </script>
-  </head>
-  <body>
-    <h1>Jade - node template engine</h1>
-    <div id="container" class="col">
-      <p>You are amazing</p>
-      <p>Jade is a terse and simple
-         templating language with a
-         strong focus on performance
-         and powerful features.</p>
-    </div>
-  </body>
-</html>
-\end{lstlisting} \\ \hline
-\hline
-Jade \\ \hline
-\begin{lstlisting}
-doctype html
-html(lang="en")
-  head
-    title= pageTitle
-    script(type='text/javascript').
-      if (foo) {
-         bar(1 + 5)
-      }
-  body
-    h1 Jade - node template engine
-    #container.col
-      if youAreUsingJade
-        p You are amazing
-      else
-        p Get on it!
-      p.
-        Jade is a terse and simple
-        templating language with a
-        strong focus on performance
-        and powerful features.
-\end{lstlisting} \\ \hline 
-\end{tabular}
-\end{center}
+\textit{Jade} \cite{Jade} es un motor de plantillas de alto rendimiento implementado en JavaScript para Node.js. Tiene una sintaxis limpia, sensible a los espacios en blanco para escribir código HTML. 
 
 \subsection{SASS/SCSS}
 \label{tech:sass}
@@ -167,29 +106,30 @@ html(lang="en")
 \imagen{Bitmap/Tecnologias/sass}{width=0.3\textwidth}
 \end{center}
 
-\textit{Sass} (Syntactically Awesome Stylesheets) es un lenguaje de hojas de estilos, una extensión de CSS al que añade mucha funcionalidad, como por ejemplo el uso de variables, reglas anidadas, mixins e imports inline. \url{http://sass-lang.com/}
+\textit{Sass} \cite{Sass} (Syntactically Awesome Stylesheets) es un lenguaje de hojas de estilos, una extensión de CSS al que añade mucha funcionalidad, como por ejemplo el uso de variables, reglas anidadas, mixins e imports inline.
 
 Los archivos \textit{Sass} suelen llevar la extensión .scss, pero también se puede utilizar la extensión .sass, aunque es menos común.
 
-Para la utilización de estos ficheros, primero hay que compilarlos a archivos de CSS, no se pueden usar directamente los archivos .scss.
+Para poder utilizar de estos ficheros, primero hay que compilarlos a archivos de CSS, no se pueden usar directamente los archivos \texttt{.scss}.
 
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=0.5\textwidth]%
-                {Imagenes/Bitmap/Tecnologias/sass-compile}
-\caption{Compilación de \textbf{Sass}.}
-\end{center}
-\end{figure}
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[width=0.5\textwidth]%
+%                {Imagenes/Bitmap/Tecnologias/sass-compile}
+%\caption{Compilación de \textbf{Sass}.}
+%\end{center}
+%\end{figure}
 
 \begin{figure}[h]
 \begin{center}
 \includegraphics[width=0.5\textwidth]%
                 {Imagenes/Bitmap/Tecnologias/sass-to-css}
-\caption{Ejemplo de código escrito en \textbf{Sass} traducido a \textbf{Css}.}
+\caption{Ejemplo de código escrito en \textbf{Sass} traducido a \textbf{CSS}.}
 \end{center}
 \end{figure}
 
 Una alternativa conocida a \textit{Sass} es Less.
+
 
 \subsection{Bootstrap}
 \label{tech:bootstrap}
@@ -198,7 +138,7 @@ Una alternativa conocida a \textit{Sass} es Less.
 \imagen{Bitmap/Tecnologias/bootstrap}{width=0.5\textwidth}
 \end{center}
 
-\textit{Bootstrap} es uno de los frameworks front-end más populares para el desarrollo de aplicaciones web adaptables. \url{http://getbootstrap.com/}
+\textit{Bootstrap} \cite{Bootstrap} es uno de los frameworks front-end más populares para el desarrollo de aplicaciones web adaptables.
 
 El diseño web adaptable (Responsive Web Design) consigue adaptar cualquier aplicación web a cualquier tipo de pantalla.
 
@@ -293,7 +233,7 @@ Para MyConference se ha utilizado la versión 3, todavía en desarrollo pero muy e
 \imagen{Vectorial/Android/eclipse}{width=0.5\textwidth}
 \end{center}
 
-\textit{Eclipse} es un \textit{entorno de desarrollo integrado} (IDE, por sus siglas en inglés) utilizado para desarrollar aplicaciones. \url{http://www.eclipse.org/}
+\textit{Eclipse} \cite{Eclipse} es un \textit{entorno de desarrollo integrado} (IDE, por sus siglas en inglés) utilizado para desarrollar aplicaciones.
 
 Como características principales, dispone de un editor de texto con resaltado de sintaxis y autocompletado, la compilación es en tiempo real, incluye pruebas unitarias con JUnit, control de versiones, integración con Ant, asistentes para crear nuevos proyectos, clases, test... y refactorización. Asímismo, se le puede instalar gran cantidad de \textit{plug-ins} para hacerlo aún más completo.
 
