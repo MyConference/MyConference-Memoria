@@ -15,6 +15,26 @@ La idea inicial era desarrollar la aplicación móvil tanto para sistemas Android 
 
 Actualmente, la aplicación iOS solo tiene desarrollada la base del proyecto para que pueda funcionar. Esta base incluye la configuración del proyecto (versiones del sistema que admite, dispositivos en los que se puede ejecutar la aplicación, etc), funcionalidad que permite registrar o iniciar sesión en la aplicación y un diseño básico de la interfaz para que se adapte correctamente a todos los tipos de dispositivo que admite la aplicación.
 
+\begin{figure}[ht!]
+    \centering
+     %%----primera subfigura----
+     \subfloat[Pantalla Principal]{
+          \label{fig:ios-main}         %% Etiqueta para la primera subfigura
+          \includegraphics[width=0.3\textwidth]{./Imagenes/Bitmap/iOS/ios-main.png}}
+     %\hspace{0.1\linewidth}
+     %%----segunda subfigura----
+     \subfloat[Registro]{
+          \label{fig:ios-signup}         %% Etiqueta para la segunda subfigura
+          \includegraphics[width=0.3\textwidth]{./Imagenes/Bitmap/iOS/ios-signup.png}}
+     %%----tercera subfigura----
+     \subfloat[Identificación]{
+          \label{fig:ios-login}         %% Etiqueta para la tercera subfigura
+          \includegraphics[width=0.3\textwidth]{./Imagenes/Bitmap/iOS/ios-login.png}}
+     %\hspace{0.1\linewidth}
+   \caption{Capturas de pantalla de la aplicación iOS}
+   \label{fig:ios-screenshots}                %% Etiqueta para la figura entera
+\end{figure}
+
 A continuación se detallan las partes de la aplicación que faltan por implementar:
 
 \begin{itemize}
@@ -26,34 +46,18 @@ A continuación se detallan las partes de la aplicación que faltan por implementa
 	\item Diseñar una base de datos interna que almacene los datos que se recogen de la API para mejorar el rendimiento de la aplicación.
 \end{itemize}
 
-Las figura \ref{fig:ios-screenshots} muestra capturas de la aplicación iOS.
-
-\begin{figure}[ht!]
-   	\centering
-	   %%----primera subfigura----
-	   \subfloat[]{
-	        \label{fig:ios-main}         %% Etiqueta para la primera subfigura
-	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-main.png}}\\[20pt]
-	   \hspace{0.1\linewidth}
-	   %%----segunda subfigura----
-	   \subfloat[]{
-	        \label{fig:ios-signup}         %% Etiqueta para la segunda subfigura
-	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-signup.png}}
-	   %%----tercera subfigura----
-	   \subfloat[]{
-	        \label{fig:ios-login}         %% Etiqueta para la tercera subfigura
-	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-login.png}}
-	   \hspace{0.1\linewidth}
-   \caption{Capturas de pantalla de la aplicación iOS}
-   \label{fig:ios-screenshots}                %% Etiqueta para la figura entera
-\end{figure}
+La figura \ref{fig:ios-screenshots} muestra capturas de la aplicación iOS.
 
 \subsection{Requisitos}
 
-El software utilizado para el desarrollo de la aplicación iOS es Xcode, un entorno de desarrollo utilizado para implementar aplicaciones tanto para iOS como para MacOS. Se puede descargar directamente desde el App Store y solo requiere tener creada una cuenta en iTunes para tener un Apple ID con el que registrar la descarga. 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.3\textwidth]{./Imagenes/Bitmap/iOS/xcode-logo.png}
+  \caption{Logo de Xcode}
+  \label{fig:xcode-logo}
+\end{figure}
 
-\figura{Bitmap/iOS/xcode-logo}{width=0.3\textwidth}{fig:xcode-logo}%
-    {Logo de Xcode.}
+El software utilizado para el desarrollo de la aplicación iOS es Xcode, un entorno de desarrollo utilizado para implementar aplicaciones tanto para iOS como para MacOS. Se puede descargar directamente desde el App Store y solo requiere tener creada una cuenta en iTunes para tener un Apple ID con el que registrar la descarga. 
 
 Xcode incluye todos los SDKs nativos de iOS necesarios para poder desarrollar la aplicación. También incluye simuladores para poder probar la aplicación si no se dispone de un iPhone o un iPad. Hay simuladores para todos los tipos de iPhone y de iPad incluyendo todas las versiones disponibles del sistema iOS para cada tipo de dispositivo.
 
