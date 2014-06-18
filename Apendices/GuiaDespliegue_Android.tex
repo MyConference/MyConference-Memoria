@@ -2,8 +2,19 @@
 
 La app de MyConference, descrita en el capítulo \ref{chap:android}, es la encargada de mostrar todos los datos introducidos a partir de la web.
 
-Para su desarrollo solo hace falta descargarse el proyecto del repositorio alojado en Git: \url{https://github.com/MyConference/MyConference-Android}.
+%Para su desarrollo solo hace falta descargarse el proyecto del repositorio alojado en Git: \url{https://github.com/MyConference/MyConference-Android}.
 
-El IDE utilizado para este proyecto ha sido Eclipse. Basta con importar el proyecto al \textit{workspace} y automáticamente lo compilará. Dentro del repositorio ya se incluyen las librerias necesarias para su ejecución, así que no hace falta nada más.
+El IDE utilizado para este proyecto ha sido Eclipse. Basta con importar el proyecto al \textit{workspace} y automáticamente lo compilará. Dentro del repositorio ya se incluyen las librerías necesarias para su ejecución.
 
 Para testear la app es necesario un teléfono Android con versión 2.3 o superior, ya que el emulador disponible con el SDK no puede ejecutar nada relacionado con Google Maps.
+
+La aplicación hace uso de algunos valores que pueden cambiar dependiendo de cómo se haya desplegado la API en la sección \ref{sec:deploy-api}.
+Por ello debemos modificar apropiadamente los valores de los siguientes campos en la clase \texttt{es.ucm.myconference.util.Constants}:
+
+\begin{description}
+  \item[\texttt{APP\_ID}]: Identificador de la aplicación android obtenido en el despliegue de la API.
+  \item[\texttt{}]: URL base para el acceso a la API (por ejemplo, \texttt{http://api.myconference.com}).
+\end{description}
+
+Una vez realizados estos cambios, la aplicación debe compilarse en modo producción. Para ello, hacemos click derecho en el proyecto y, dentro de la opción de menú específica para Android, elegimos \textit{Exportar APK firmado}.
+Se pedirá un certificado para firmar la aplicación. Este certificado es fundamental y debe ser siempre el mismo para que Google Play nos permita actualizar la aplicación. 
