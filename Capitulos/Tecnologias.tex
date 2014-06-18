@@ -159,8 +159,28 @@ Transloadit \cite{Transloadit} se trata de un servicio de transformación y proce
 
 \section{Base de Datos}
 
+Como cualquier aplicación que maneje una gran cantidad de datos, MyConference hace uso de bases de datos para el almacenado, procesado y posteríor recuperación de los datos.
+
+Debido a la inicial incertidumbre acerca de cómo representaríamos los datos y de la prevista flezibilidad en la representación de éstos, optamos por utilizar una base de datos documental, en concreto MongoDB, para almacenar los datos del sistema. La aplicación móvil, por su lado, hace uso de una réplica local de los datos mediante SQLite.
+
 \subsection{MongoDB}
 \label{tech:mongodb}
+
+MongoDB \cite{MongoDB} es una base de datos documental, la más popular entre las \textit{NoSQL} (bases de datos que no utilizan SQL como lenguaje de consulta y que generalmente utilizan otro tipo de estructuras).
+
+Se trata de una base de datos organizada en colecciones.
+Cada colección contiene documentos, pequeños objetos representados mediante \textit{BSON}, un formato binario basado en la estructura de JSON.
+Estos documentos no poseen estructura, sino que pueden contener cualquier tipo de campos y datos.
+Esto hace que sea una base de datos ideal para proyectos con datos poco estructurados, con estructuras flexibles o con una velocidad de cambio grande.
+
+
+\subsection{SQLite}
+\label{tech:sqlite}
+
+SQLite \cite{SQLite} es una librería que implementa una base de datos autocontenida en un único fichero y que no requiere configuración ni servidores.
+Se trata de un tipo de base de datos ideal para ser usado de almacenamiento interno de datos o configuraciones para aplicaciones tanto móviles como de escritorio, y son muchos los projectos de software libre que la utilizan para este fin.
+
+
 
 \section{Control de Versiones}
 \label{tech:version-control}
