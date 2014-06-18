@@ -26,22 +26,32 @@ A continuación se detallan las partes de la aplicación que faltan por implementa
 	\item Diseñar una base de datos interna que almacene los datos que se recogen de la API para mejorar el rendimiento de la aplicación.
 \end{itemize}
 
-Las figuras \ref{fig:ios-main}, \ref{fig:ios-signup} y \ref{fig:ios-login} muestran capturas de la aplicación iOS.
+Las figura \ref{fig:ios-screenshots} muestra capturas de la aplicación iOS.
 
-\figura{Bitmap/iOS/ios-main}{width=0.5\textwidth}{fig:ios-main}%
-    {Pantalla principal de la aplicación iOS.}
-
-\figura{Bitmap/iOS/ios-signup}{width=0.5\textwidth}{fig:ios-signup}%
-    {Pantalla de registro de la aplicación iOS.}
-
-\figura{Bitmap/iOS/ios-login}{width=0.5\textwidth}{fig:ios-login}%
-    {Pantalla de inicio de sesión de la aplicación.}
+\begin{figure}[ht!]
+   	\centering
+	   \subfloat[]{
+	        \label{fig:ios-main}
+	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-main.png}}\\[20pt]
+	   \hspace{0.1\linewidth}
+	
+	   \subfloat[]{
+	        \label{fig:ios-signup}
+	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-signup.png}}
+	  
+	   \subfloat[]{
+	        \label{fig:ios-login}
+	        \includegraphics[width=0.42\textwidth]{./Imagenes/Bitmap/iOS/ios-login.png}}
+	   \hspace{0.1\linewidth}
+   \caption{Capturas de pantalla de la aplicación iOS}
+   \label{fig:ios-screenshots}
+\end{figure}
 
 \subsection{Requisitos}
 
 El software utilizado para el desarrollo de la aplicación iOS es Xcode, un entorno de desarrollo utilizado para implementar aplicaciones tanto para iOS como para MacOS. Se puede descargar directamente desde el App Store y solo requiere tener creada una cuenta en iTunes para tener un Apple ID con el que registrar la descarga. 
 
-\figura{Bitmap/iOS/xcode-logo}{width=0.5\textwidth}{fig:xcode-logo}%
+\figura{Bitmap/iOS/xcode-logo}{width=0.3\textwidth}{fig:xcode-logo}%
     {Logo de Xcode.}
 
 Xcode incluye todos los SDKs nativos de iOS necesarios para poder desarrollar la aplicación. También incluye simuladores para poder probar la aplicación si no se dispone de un iPhone o un iPad. Hay simuladores para todos los tipos de iPhone y de iPad incluyendo todas las versiones disponibles del sistema iOS para cada tipo de dispositivo.
