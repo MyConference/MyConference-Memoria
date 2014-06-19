@@ -1472,7 +1472,7 @@ FUNCTION {misc}
   format.title output
   new.block
   howpublished "howpublished" bibinfo.check output
-  format.date "year" output.check
+%%  format.date "year" output.check
   new.block
   format.webpage output
   new.block
