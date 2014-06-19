@@ -42,9 +42,7 @@ Google Play también te ayuda a tener mayor visibilidad dentro del mercado. A med
 
 \section{Desarrollo de la Aplicación Móvil}
 
-La app está diseñada para dispositivos con versiones Android 2.3 (Gingerbread) y superiores, hasta la versión actual 4.4 (KitKat). Esto es debido a que la versión 2.3, que salió en el año 2010, a día de hoy representa un 16.2\% de los dispositivos Android totales;
-% (CITA: https://developer.android.com/about/dashboards/index.html?utm_source=ausdroid.net )
- no darles soporte para que puedan utilizar la app hubiese sido un error. Esto ha tenido diversas consecuencias que se especificarán durante el desarrollo de los siguientes apartados.
+La app está diseñada para dispositivos con versiones Android 2.3 (Gingerbread) y superiores, hasta la versión actual 4.4 (KitKat). Esto es debido a que la versión 2.3, que salió en el año 2010, a día de hoy representa un 16.2\% de los dispositivos Android totales \cite{DespliegueAndroid}; no darles soporte para que puedan utilizar la app hubiese sido un error. Esto ha tenido diversas consecuencias que se especificarán durante el desarrollo de los siguientes apartados.
 
 \subsection{Estructura}
 
@@ -90,8 +88,7 @@ Un diagrama de cómo están relacionadas estas clases se puede ver en la figura ~\
 
 Este paquete contiene la lógica más compleja de la aplicación. En él se encuentran las clases para la gestión de cuentas de usuario y la gestión de la base de datos interna del dispositivo.
 
-Para la gestión de la cuenta del usuario hemos utilizado unas clases que nos da Android para su gestión y almacenamiento. Cuando un usuario se registra, no solo lo hace a través de nuestra API y queda almacenado en nuestro servidor y base de datos, sino que también queda sincronizada esa cuenta con el teléfono. Desde la pantalla de Ajustes de su dispositivo, el usuario puede ver su cuenta de \textit{MyConference} y activar/desactivar la sincronización para recibir nuevos datos. Para poder realizar esto hemos tenido que implementar varias clases que se encuentran en este paquete:
-% (CITA: http://udinic.wordpress.com/2013/04/24/write-your-own-android-authenticator/ )
+Para la gestión de la cuenta del usuario hemos utilizado unas clases que nos da Android para su gestión y almacenamiento \cite{AndroidAuth}. Cuando un usuario se registra, no solo lo hace a través de nuestra API y queda almacenado en nuestro servidor y base de datos, sino que también queda sincronizada esa cuenta con el teléfono. Desde la pantalla de Ajustes de su dispositivo, el usuario puede ver su cuenta de \textit{MyConference} y activar/desactivar la sincronización para recibir nuevos datos. Para poder realizar esto hemos tenido que implementar varias clases que se encuentran en este paquete:
 
 \begin{itemize}
     \item \texttt{AccountAuthenticator} - El encargado de añadir una nueva cuenta al sistema y guardar el token de autorización (Auth token).
@@ -129,17 +126,17 @@ Este paquete contiene:
 Aparte de las librerías propias de Android, hemos utilizado las siguientes librerías externas:
 
 \begin{itemize}
-	\item \textit{ActionBarSherlock} para poder conseguir el aspecto de una app actual en versiones anteriores a la 3.0 (Honeycomb).
-    %(CITA: http://actionbarsherlock.com/ )
-    \item \textit{Amazing List View} para conseguir un aspecto bonito y sencillo para el programa de las conferencias.
-    %(CITA: https://code.google.com/p/android-amazing-listview/ )
+	\item \textit{ActionBarSherlock} para poder conseguir el aspecto de una app actual en versiones anteriores a la 3.0 (Honeycomb)
+    \cite{ABS}.
+    \item \textit{Amazing List View} para conseguir un aspecto bonito y sencillo para el programa de las conferencias
+    \cite{AmazingListView}.
     \item También se ha utilizado \textit{Google Play Services} para poder usar la aplicación de Google Maps dentro de nuestra app.
 \end{itemize}
 
-\begin{figure}[h]
+\begin{figure}[ht!]
 \centering
 \includegraphics[width=0.8\textwidth]%
-                {Imagenes/Vectorial/Android/actionBarSherlock}
+                {./Imagenes/Vectorial/Android/actionBarSherlock}
 \caption{\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}}
 \label{fig:actionBarSherlock}
 \end{figure}
@@ -203,8 +200,7 @@ Al principio añadimos una lista de lugares, cada uno con un enlace que abría la 
 
 \paragraph{Uso}
 
-Para poder utilizar los mapas es necesario incluir la librería \textit{Google Play Services} así como disponer de una API Key única para la app. Es una tarea un poco compleja, pero existe un buen tutorial en la página de desarrolladores de Android.
-% (CITA: https://developers.google.com/maps/documentation/android/start#installing_the_google_maps_android_v2_api )
+Para poder utilizar los mapas es necesario incluir la librería \textit{Google Play Services} así como disponer de una API Key única para la app. Es una tarea un poco compleja, pero existe un buen tutorial en la página de desarrolladores de Android \cite{TutorialGoogleMaps}.
 
 En la clase creada para añadir el mapa hace falta un objeto del tipo \texttt{GoogleMap} al que se le asigna un mapa llamando a la función \texttt{getMap()}. A partir de aquí queda únicamente la configuración del mapa.
 
@@ -229,8 +225,7 @@ Para la creación y gestión de bases de datos Android incorpora una librería deno
 
 La base de datos se organiza en tablas. Cada tabla se compone de filas y columnas. Las filas se corresponden con los registros y las columnas son los campos.
 
-Siguiendo el ejemplo disponible en la página de desarrolladores de Android hemos creado una base de datos con las siguientes tablas:
-%(CITA: http://developer.android.com/guide/topics/providers/content-provider-creating.html ) 
+Siguiendo el ejemplo disponible en la página de desarrolladores de Android hemos creado una base de datos con las siguientes tablas \cite{BaseDatosAndroid}:
 \begin{itemize}
 	\item Congresos
 	\item Documentos
@@ -353,8 +348,7 @@ Para gestionar la base de datos existen 2 clases en el paquete \texttt{es.ucm.my
     Asimismo, esta clase se encarga de actualizar la base de datos cuando una nueva versión está disponible.
     \item \texttt{ConfsProvider}, que extiende a ContentProvider. Cuando se accede a la base de datos para una búsqueda o una inserción nueva, ésta es la clase que lo gestiona. \texttt{ContentProvider} se traduce como Proveedor de Contenidos.
 
-    Para poder acceder al contenido de la base de datos es necesario que esté identificado, y eso se hace a través de las URIs. Una URI 
-    %(CITA: http://developer.android.com/reference/android/net/Uri.html )
+    Para poder acceder al contenido de la base de datos es necesario que esté identificado, y eso se hace a través de las URIs. Una URI
     es una cadena de texto que permite identificar un recurso de información. Lo primero que se hace es asignar dos URIs a cada una de las tablas de la base de datos: una para realizar consultas de un solo registro y otra para varios. También se asigna un tipo para cada URI, dependiendo si es individual o colectiva. Y a continuación están los métodos que se encargan de las consultas, inserciones, borrados y actualizaciones de registros.
 
     Los \texttt{ContentProvider} utilizan una clase denominada \texttt{Cursor} para devolver los resultados de las consultas. Son colecciones que se recorren de la misma manera que el patrón \textit{iterator}, y que utilizan los adapters para mostrar los datos.
@@ -372,7 +366,7 @@ En nuestro caso utilizamos este tipo de almacenamiento para guardar el nombre de
 
 Si el usuario sale de la app sin desloguearse, al volver a entrar aparecerá en la pantalla inicial. Si por el contrario pulsa en Logout para salir, al entrar se le solicitarán los credenciales.
 
-Almacenar un booleano indicando si es la primera vez que entra en la app lo utilizamos para mostrar el menú lateral durante un período de tiempo, según la guía de diseño de Android. %(CITA: https://developer.android.com/design/patterns/navigation-drawer.html )
+Almacenar un booleano indicando si es la primera vez que entra en la app lo utilizamos para mostrar el menú lateral durante un período de tiempo, según la guía de diseño de Android. \cite{DisenioAndroid}
 
 \section{Permisos}
 
