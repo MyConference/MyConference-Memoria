@@ -58,28 +58,28 @@ Estos módulos se pueden instalar de manera rápida con npm, gestor oficial de paq
 \end{lstlisting}
 
 
-\subsection{Módulos NodeJS}
+\subsubsection{Módulos Node.js}
 
 \subsubsection{Express}
 \label{tech:express}
 
-\textit{Express} es un microframework web para Node.js fácilmente extendible y sencillo de usar.
+\textit{Express} \cite{Express} es un microframework web para Node.js fácilmente extendible y sencillo de usar.
 
-Es el motor principal de la web
+Es el motor principal de la web.
 
 \subsubsection{Restify}
 
 \label{tech:restify}
 
-\textit{Restify} es un microframework inspirado en Express, con una sintaxis y un uso prácticamente idéntico, pensado y diseñado para servicios REST en lugar de para webs tradicionales.
+\textit{Restify} \cite{Restify} es un microframework inspirado en Express, con una sintaxis y un uso prácticamente idéntico, pensado y diseñado para servicios REST en lugar de para webs tradicionales.
 Además incluye un cliente para realizar peticiones a servicos REST, escritos o no con Restify.
 
-El el motor principal de la API de MyConference en su versión para servidor y una parte muy importante de la web en la versión cliente.
+Es el motor principal de la API de MyConference en su versión para servidor y una parte muy importante de la web en la versión cliente.
 
 \subsubsection{Mongoose}
 \label{tech:mongoose}
 
-\textit{Mongoose} es un \textit{Object-Document Mapper}, una librería diseñada para
+\textit{Mongoose} \cite{Mongoose} es un \textit{Object-Document Mapper}, una librería diseñada para
 hacer de puente entre una base de datos MongoDB y un lenguaje orientado a objetos, JavaScript en este caso.
 Nos permite trabajar con \textit{modelos}, objetos que representan las diferentes colecciones de MongoDB
 y darles estructura y comportamiento, facilitando el desarrollo de aplicaciones que utilicen este tipo de base de datos.
@@ -157,9 +157,9 @@ Transloadit \cite{Transloadit} se trata de un servicio de transformación y proce
 
 \section{Base de Datos}
 
-Como cualquier aplicación que maneje una gran cantidad de datos, MyConference hace uso de bases de datos para el almacenado, procesado y posteríor recuperación de los datos.
+Como cualquier aplicación que maneje una gran cantidad de datos, MyConference hace uso de bases de datos para el almacenado, procesado y posterior recuperación de los datos.
 
-Debido a la inicial incertidumbre acerca de cómo representaríamos los datos y de la prevista flezibilidad en la representación de éstos, optamos por utilizar una base de datos documental, en concreto MongoDB, para almacenar los datos del sistema. La aplicación móvil, por su lado, hace uso de una réplica local de los datos mediante SQLite.
+Debido a la inicial incertidumbre acerca de cómo representaríamos los datos y de la prevista flexibilidad en la representación de éstos, optamos por utilizar una base de datos documental, en concreto MongoDB, para almacenar los datos del sistema. La aplicación móvil, por su lado, hace uso de una réplica local de los datos mediante SQLite.
 
 \subsection{MongoDB}
 \label{tech:mongodb}
@@ -207,7 +207,7 @@ potente, lo que permite que los cambios se integren generalmente sin problemas e
 las copias del resto de programadores o del repositorio central.
 
 Para MyConference, siguiendo con esta tendencia, hemos elegido Git, un sistema
-de control de versiones distribuído ampliamente ulizado por proyectos tanto
+de control de versiones distribuído ampliamente utilizado por proyectos tanto
 libres como propietarios, junto con el servicio de \textit{hosting} de repositorios
 GitHub.
 
@@ -218,7 +218,7 @@ GitHub.
 \imagen{Bitmap/Tecnologias/git}{width=0.3\textwidth}
 \end{center}
 
-Git es un sistema de control de versiones distribuído diseñado para funcionar
+Git \cite{Git} es un sistema de control de versiones distribuído diseñado para funcionar
 con proyectos tanto grandes como pequeños.
 
 Se creó en el año 2005 como alternativa al sistema propietario \textit{BitLocker} que se utilizaba para mantener el kernel Linux.
@@ -232,7 +232,7 @@ pero sigue siendo un sistema con un buen rendimiento que no se degrada con el ta
 \imagen{Bitmap/Tecnologias/github}{width=0.5\textwidth}
 \end{center}
 
-GitHub es un servicio de almacenamiento de repositorios Git que añade funcionalidad como
+GitHub \cite{GitHub} es un servicio de almacenamiento de repositorios Git que añade funcionalidad como
 un sistema de \textit{issues}, wikis, gráficas y otras características complementarias al
 control de versiones en sí.
 
@@ -247,7 +247,7 @@ A continuación se detallan los más importantes.
 \imagen{Bitmap/Tecnologias/sublime-text}{width=0.8in}
 \end{center}
 
-Sublime Text es un editor de texto multiplataforma orientado principalmente a la programación.
+Sublime Text \cite{SublimeText} es un editor de texto multiplataforma orientado principalmente a la programación.
 Se trata de un editor rápido, potente y con multitud de \textit{plug-ins} que permiten añadir
 casi cualquier funcionalidad imaginable.
 
