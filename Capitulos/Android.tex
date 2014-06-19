@@ -90,9 +90,6 @@ Este paquete contiene:
 
 Un diagrama de cómo están relacionadas estas clases se puede ver en la figura ~\ref{fig:relationsPrincipal}. 
 
-\figura{Vectorial/Android/importantClass}{width=\textwidth}{fig:importantClass}%
-    {Diagrama UML de la clase \texttt{NavigationDrawerActivity}.}
-
 \subsubsection{Paquete cuenta del usuario: es.ucm.myconference.accountmanager}
 
 Este paquete contiene la lógica más compleja de la aplicación. En él se encuentran las clases para la gestión de cuentas de usuario y la gestión de la base de datos interna del dispositivo.
@@ -111,9 +108,6 @@ En la figura ~\ref{fig:accountManager} se puede ver un diagrama UML de este paqu
 
 El resto de clases para gestionar la base de datos interna se explican en la sección ~\ref{sec:basedatosinterna}.
 
-\figura{Vectorial/Android/relationsPrincipal}{width=\textwidth}{fig:relationsPrincipal}%
-    {Relación entre las clases del paquete es.ucm.myconference.}
-
 \subsubsection{Paquete miscelánea: es.ucm.myconference.util}
 
 Este paquete contiene:
@@ -121,14 +115,10 @@ Este paquete contiene:
 \begin{itemize}
     \item Clases Adapter: A la hora de mostrar los datos, las clases predefinidas de Android pueden llegar a ser limitadas en cuanto a la relación de qué datos le envío y cómo queremos que los muestre. A veces es necesario heredar de una clase base e implementar sus métodos a nuestro gusto. En este paquete se encuentran esas clases para varias de las secciones, que se denominan \textit{adapters}.
 
-
     \item Para la gestión de las descripciones de los ponentes principales utilizamos 2 clases, para que el \textit{look\&feel} sea mejor. Estas clases se encargan de colocar el texto alrededor de una imagen y que no quede todo descentrado.
 
     \item Una clase para almacenar constantes y así tenerlas en un sitio común, y otra clase para datos estáticos, como son los iconos del menú lateral.
 \end{itemize}
-
-\figuraEx{Vectorial/Android/accountManager}{width=\textwidth}{fig:accountManager}%
-    {Diagrama UML de las clases del paquete es.ucm.myconference.accountmanager.}{UML del paquete es.ucm.myconference.accountmanager}
 
 \subsection{Librerías externas}
 
@@ -143,11 +133,11 @@ Aparte de las librerías propias de Android, hemos utilizado las siguientes libre
 \end{itemize}
 
 \begin{figure}[ht!]
-\centering
-\includegraphics[width=0.8\textwidth]%
-                {./Imagenes/Vectorial/Android/actionBarSherlock}
-\caption{\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}}
-\label{fig:actionBarSherlock}
+    \centering
+    \includegraphics[width=0.8\textwidth]%
+                    {./Imagenes/Vectorial/Android/actionBarSherlock}
+    \caption{\textit{Action Bar} en nuestra app gracias a \texttt{ActionBarSherlock}}
+    \label{fig:actionBarSherlock}
 \end{figure}
 
 \subsubsection{ActionBarSherlock}
@@ -347,7 +337,7 @@ En ella se almacena el programa del congreso, donde cada conferencia tiene un tí
     \end{tabular}
 \end{center}
 
-Para gestionar la base de datos existen 2 clases en el paquete \texttt{es.ucm.myconference.accountmanager}:
+Para gestionar la base de datos existen dos clases dentro del paquete \linebreak\texttt{es.ucm.myconference.accountmanager}:
 
 \begin{itemize}
 	\item \texttt{SqlHelper}, que extiende a SQLiteOpenHelper. Es la clase que se encarga de crear las tablas de la base de datos cuando se instala la app en el dispositivo. Al crear la base de datos se le da un nombre y una versión, que se va incrementando a medida que se van añadiendo nuevas tablas.
@@ -398,3 +388,15 @@ Para nuestra app hacen falta los siguientes permisos:
 También es necesario incluir que se utiliza OpenGL para los mapas en su versión 2. Sin esto en el dispositivo no se visualizarán los mapas.
 
 Todos estos permisos se incluyen en \texttt{AndroidManifest.xml}, archivo obligatorio en toda app de Android  que contiene información de la misma necesaria para el sistema.
+
+\newpage
+
+\figura{Vectorial/Android/relationsPrincipal}{width=\textwidth}{fig:relationsPrincipal}%
+    {Relación entre las clases del paquete es.ucm.myconference.}
+
+
+\figuraEx{Vectorial/Android/accountManager}{width=\textwidth}{fig:accountManager}%
+    {Diagrama UML de las clases del paquete es.ucm.myconference.accountmanager.}{UML del paquete es.ucm.myconference.accountmanager}
+    
+\figura{Vectorial/Android/importantClass}{width=\textwidth}{fig:importantClass}%
+    {Diagrama UML de la clase \texttt{NavigationDrawerActivity}.}
