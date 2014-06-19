@@ -1,18 +1,36 @@
 \chapter{Servicio Web y Base de Datos}
 \label{chap:webservice}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.75\textwidth]{./Imagenes/Bitmap/diagrama-api-web-db}
+  \caption{Diagrama de la arquitectura relevante al Servicio Web}
+  \label{fig:diagram-webserv}
+\end{figure}
+
 En este capítulo describiremos los servicios web disponibles en MyConference.
 En un primer lugar hablaremos del centro neurálgico de MyConference, la API, encargada de la gestión y supervisión de los datos.
 Posteriormente hablaremos de la base de datos que almacena toda la información de MyConference.
 Por último, hablaremos del formulario web que permite a los usuarios introducir datos en el sistema.
 
+La figura \ref{fig:diagram-webserv} muestra la parte relevante del sistema que se explicará en este capítulo, de acuerdo con la arquitectura general de MyConference.
+
 \section{API}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./Imagenes/Bitmap/diagrama-api}
+  \caption{Diagrama de la arquitectura relevante a la API}
+  \label{fig:diagram-api}
+\end{figure}
 
 La API (Application Programing Interface) es un servicio HTTP que regula el acceso a todos los datos de MyConference. Es el único punto de toda la infraestructura que tiene acceso a la base de datos y es la única parte que no tiene una utilidad directa para el usuario.
 
 El resto de aplicaciones de MyConference (Web, Android) son interfaces de usuario que realizan \textit{llamadas} (peticiones HTTP) a la API, identificándose a sí mismas como aplicaciones de la plataforma e identificando al usuario a través de sus credenciales (e-mail, contraseña).
 
 La API está implementada en su totalidad utilizando Node.js (Véase \ref{tech:nodejs}) con una serie de bibliotecas que facilitan la implementación en general o en ciertas áreas en particular.
+
+En la figura \ref{fig:diagram-api} podemos ver cómo está ubicada la API dentro de la arquitectura general del sistema.
 
 \subsection{Servidor Web}
 
@@ -400,7 +418,16 @@ Al finalizar esta llamada el usuario se añadirá a la lista de asistentes del con
 
 \section{Base de Datos}
 
-La base de datos (MongoDB) está estructurada en torno a la entidad \textit{Congreso} (\texttt{Conference}). Esta es la entidad fundamental del sistema, y la única junto con los usuarios y exceptuando otras entidades auxiliares que no depende de ninguna otra entidad, es decir, que puede existir por su propio pie.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./Imagenes/Bitmap/diagrama-db}
+  \caption{Diagrama de la arquitectura relevante a la Base de Datos}
+  \label{fig:diagram-db}
+\end{figure}
+
+La base de datos (MongoDB) está estructurada en colecciones. Cada colección representa una \textit{entidad} de MyConference. Estas entidades se pueden distinguir en \textit{entidades fundamentales}, aquellas que aportan los datos básicos del sistema, y \textit{entidades de apoyo}, aquellas necesarias para el correcto funcionamiento de la aplicación pero que el usuario no percibe.
+
+En la figura \ref{fig:diagram-db} puede verse la base de datos dentro de la arquitectura general de Myconference. En particular, nótese que la base de datos únicamente interactúa con la API. Ningún otro componente del sistema tiene acceso directo a la base de datos por motivos de seguridad.
 
 \subsection{Entidades Fundamentales}
 
@@ -468,11 +495,21 @@ Estas aportan a la aplicación información sobre autenticación, principalmente.
 \section{Web}
 \label{chap:web}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./Imagenes/Bitmap/diagrama-web}
+  \caption{Diagrama de la arquitectura relevante a la Web}
+  \label{fig:diagram-web}
+\end{figure}
+
 La Web es la encargada de la gestión de los congresos de MyConference. Desde la aplicación Web se crean los nuevos congresos y se añade toda la información correspondiente a estos. Aunque también se pueden visualizar los datos creados desde la Web, su función principal es la creación y borrado de datos de los congresos.
+
+La figura \ref{fig:diagram-web} muestra la web dentro de la arquitectura general de MyConference.
 
 La Web está basada en \textit{Express}, framework de desarrollo de aplicaciones web de \nameref{tech:nodejs}.
 
 Como se comentó anteriormente, la función principal de la Web es la creación y el borrado de datos, además de la visualización de estos datos. Para poder realizar estas operaciones es necesario establecer conexiones con la API mediante llamadas HTTP.
+
 
 La aplicación Web se divide en tres partes: archivos de configuración, rutas e interfaz gráfica.
 
