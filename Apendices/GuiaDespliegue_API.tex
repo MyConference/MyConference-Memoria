@@ -53,7 +53,7 @@ Por defecto, Foreman establece la variable de etorno \texttt{PORT} a 5000, e irá
 
 Para que la API funcione correctamente, necesita conectividad con una base de datos MongoDB.
 
-Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \texttt{mongodb://root:root@example.org/myconference}.
+Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI con esquema (protocolo) de tipo \texttt{mongodb:}, como por ejemplo \linebreak\texttt{mongodb://root:root@example.org/myconference}.
 También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB\_URI}, como se explicará en el punto \ref{sec:deploy-api-heroku}.
 
 La base de datos en sí no necesita más configuración. Una vez la API sepa qué host, usuario y contraseña debe utilizar, la base de datos está completamente configurada.
@@ -95,7 +95,7 @@ A continuación se muestra un código básico que se puede usar en esta plantilla.
 Además de la configuración anterior, existen otras variables que debemos configurar para que la API funcione correctamente:
 
 \begin{itemize}
-  \item \texttt{HOST}: El nombre de dominio (host) completo de la API, por ejemplo \texttt{api.myconference.com}. Nótese que no deben aparecer separadores de ruta (\texttt{/}) ni prefijos de esquema (\texttt{http://}).
+  \item \texttt{HOST}: El nombre de dominio (host) completo de la API, como por ejemplo \linebreak\texttt{api.myconference.com}. Nótese que no deben aparecer separadores de ruta (\texttt{/}) ni prefijos de esquema (\texttt{http://}).
   \item \texttt{NODE\_ENV}: Debe contener \texttt{production} en entornos de producción y \texttt{development} en desarrollo.
   \item \texttt{WEB\_URL}: Debe contener la URL completa a la aplicación web de MyConference, por ejemplo \texttt{http://myconference.com}. Nótese que no debe aparecer el separador final de ruta (\texttt{/}) pero sí el prefijo de esquema (\texttt{http://}).
 \end{itemize}
@@ -162,7 +162,7 @@ Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicaci
   $ git push heroku master
 \end{lstlisting}
 
-Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconference-api.git}, por ejemplo).
+Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL del repositorio de nuestra aplicación en Heroku (por ejemplo, \linebreak\texttt{git@heroku.com:myconference-api.git}).
 
 Una vez termine el despliegue de la aplicación, falta configurar los datos iniciales de la aplicación, mediante el siguiente comando:
 

@@ -20,7 +20,7 @@ Para una breve introducción al uso de Foreman, véase la sección \ref{sec:deploy-
 Para que la web funcione correctamente, necesita conectividad con una base de datos MongoDB.
 A diferencia de la base de datos de la API, esta base de datos se utiliza úncamente para persistir información de la sesión de usuario, nunca para almacenar datos de MyConference.
 
-Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI de tipo \texttt{mongodb:}, como por ejemplo \texttt{mongodb://root:root@example.org/myconference}.
+Para configurar qué base de datos utilizar, se deben establecer la variable \texttt{MONGO\_URI} a una URI con esquema (protocolo) de tipo \texttt{mongodb:}, como por ejemplo \linebreak\texttt{mongodb://root:root@example.org/myconference}.
 También se aceptará este valor si se utiliza la variable \texttt{MONGOLAB\_URI}, como se explicará en el punto \ref{sec:deploy-web-heroku}.
 
 La base de datos en sí no necesita más configuración. Una vez la web sepa qué host, usuario y contraseña debe utilizar, la base de datos está completamente configurada.
@@ -102,7 +102,7 @@ Para desplegar la web en Heroku, el primer paso es registrarse y crear una aplic
 
   \item[Transloadit] es el servicio elegido para la gestión de subidas de imágenes.
 
-  Debemos añadir a la aplicación una instancia de Transloadit. Al hacerlo se añadirán a la aplicación las variables \texttt{TRANSLOADIT\_AUTH\_KEY}, \texttt{TRANSLOADIT\_SECRET\_KEY} y \texttt{TRANSLOADIT\_URL}.
+  Debemos añadir a la aplicación una instancia de Transloadit. Al hacerlo se añadirán a la aplicación las variables \texttt{TRANSLOADIT\_URL}, \texttt{TRANSLOADIT\_AUTH\_KEY} y \texttt{TRANSLOADIT\_SECRET\_KEY}.
 
   Para que este add-on se integre correctamente, se debe realizar la configuración de Transloadit tal como se describe en el punto \ref{sec:web-conf-transloadit}, incluyendo la variable de configuración \texttt{TRANSLOADIT\_TEMPLATE\_SPEAKERS}.
 
@@ -115,7 +115,10 @@ Para ello utilizaremos la herramienta de línea de comandos de Heroku, descrita e
 En este caso, debemos ejecutar un comando similar a este:
 
 \begin{lstlisting}[language=bash]
-  $ heroku config:set NODE_ENV=production APPLICATION=webapplicationid API_URL=http://api.myconference.com
+  $ heroku config:set \
+      NODE_ENV=production \
+      APPLICATION=webapplicationid \
+      API_URL=http://api.myconference.com
 \end{lstlisting}
 
 Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicación. Para ello, usando \nameref{tech:git}, desde la raíz de nuestro proyecto, ejecutaremos:
@@ -124,4 +127,4 @@ Una vez tenemos la configuración y los add-ons, es hora de desplegar la aplicaci
   $ git push heroku master
 \end{lstlisting}
 
-Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL de nuestra aplicación en Heroku (\texttt{git@heroku.com:myconference-web.git}, por ejemplo).
+Debemos haber configurado el código para utilizar \texttt{git}, y haber apuntado el \textit{remote} \texttt{heroku} a la URL del repositorio de nuestra aplicación en Heroku (por ejemplo, \linebreak\texttt{git@heroku.com:myconference-web.git}).

@@ -105,7 +105,7 @@ Para la gestión de la cuenta del usuario hemos utilizado unas clases que nos da 
     \item \texttt{AuthenticatorService} - Servicio a través del cual nos comunicamos con el autenticador.
 \end{itemize}
 
-Para crear y gestionar la base de datos interna del dispositivo, que no tiene nada que ver con la base de datos global de MyConference, a la cual se accede a través de la API, hemos incluído varias clases. Por un lado la clase - \texttt{SyncAdapter} - que se encarga de guardar todos los datos que se reciben a través de la API en las distintas tablas de la base de datos interna. De esta forma la app tiene siempre una "copia"  de los datos y no tiene que estar accediendo a la base de datos global cada vez que se quiere mostrar algo. Esto consumiría mucha batería y, lo que es peor, la tarifa de datos del usuario. Solo se sincronizará con la API cuando el usuario pulse el botón de Actualizar.
+Para crear y gestionar la base de datos interna del dispositivo, que no tiene nada que ver con la base de datos global de MyConference, a la cual se accede a través de la API, hemos incluído varias clases. Por un lado la clase - \texttt{SyncAdapter} - que se encarga de guardar todos los datos que se reciben a través de la API en las distintas tablas de la base de datos interna. De esta forma la app tiene siempre una ``copia''  de los datos y no tiene que estar accediendo a la base de datos global cada vez que se quiere mostrar algo. Esto consumiría mucha batería y, lo que es peor, la tarifa de datos del usuario. Solo se sincronizará con la API cuando el usuario pulse el botón de Actualizar.
 
 En la figura ~\ref{fig:accountManager} se puede ver un diagrama UML de este paquete.
 
@@ -161,13 +161,13 @@ En la \textit{Action Bar} incluímos el título de la sección actual por la que se
 Para poder utilizar \texttt{ActionBarSherlock} dentro de nuestra app tuvimos que hacer dos cosas:
 
 \begin{itemize}
-	\item Crear una clase abstracta \texttt{MyConferenceActivity} que extendía a \texttt{SherlockFragmentActivity}.
-	\item Crear una clase \texttt{MyConferenceFragment} que extendía a \texttt{SherlockFragment}.
+	\item Crear una clase abstracta \texttt{MyConferenceActivity} que extendiera a la clase \linebreak\texttt{SherlockFragmentActivity}.
+	\item Crear una clase \texttt{MyConferenceFragment} que extendiera a \texttt{SherlockFragment}.
 \end{itemize}
 
-A partir de ese momento, cualquier actividad que se creara extendía de \texttt{MyConferenceActivity} y cualquier fragmento de \texttt{MyConferenceFragment}. Esto hacía que automáticamente se introdujese la \textit{Action Bar} en la interfaz gráfica.
+A partir de ese momento, cualquier actividad que se creara extendería a la clase \linebreak\texttt{MyConferenceActivity} y cualquier fragmento de \texttt{MyConferenceFragment}. Esto hacía que automáticamente se introdujese la \textit{Action Bar} en la interfaz gráfica.
 
-Para acceder a la \textit{Action Bar} solo era necesario llamar al método \texttt{getSupportActionBar()}, como si se utilizara la que viene con la librería de soporte, ya que \texttt{ActionBarSherlock} sobreescribe ese método y nos devuelve la suya. El resto de código utilizado ha sido habilitar el botón de "home", situado en la esquina izquierda de la barra, utilizando la función \texttt{setHomeButtonEnabled(true)}; y llamar a la función \texttt{setDisplayHomeAsUpEnabled(true)} para poder mostrar el icono de abertura y cierre del menú lateral. También hemos utilizado la función \texttt{setTitle(String title)} para poder cambiar el título al de la sección actual en la que nos encontráramos.
+Para obtener una referencia a la \textit{Action Bar} solo era necesario llamar al método \linebreak\texttt{getSupportActionBar()}, como si se utilizara la que viene con la librería de soporte, ya que \texttt{ActionBarSherlock} sobreescribe ese método y nos devuelve la suya. El resto de código utilizado ha sido habilitar el botón de ``home'', situado en la esquina izquierda de la barra, utilizando la función \texttt{setHomeButtonEnabled(true)}; y realizar una llamada a la función \texttt{setDisplayHomeAsUpEnabled(true)} para poder mostrar el icono de abertura y cierre del menú lateral. También hemos utilizado la función \texttt{setTitle(String title)} para poder cambiar el título al de la sección actual en la que nos encontráramos.
 
 \begin{figure}[h]
 \centering
@@ -188,7 +188,7 @@ A la hora de incluir esta librería en nuestro proyecto hemos tenido que crear va
 \begin{itemize}
 	\item Se crearon 3 archivos XML para la interfaz gráfica. El principal contenía simplemente la definición de un widget de \texttt{AmazingListView} con una lista como elemento. Los otros 2 eran el aspecto visual que tendrían las cabeceras de cada sección de la lista y los elementos de la lista en si. En nuestro caso existe una cabecera por cada día de duración del congreso, y cada elemento de la lista contiene una hora de comienzo, un título y una descripción.
 	\item Se creó un fragmento denominado \texttt{ProgramFragment} que albergaba la lógica básica de unir cada archivo XML y la consecución de los datos a mostrar.
-	\item Se creó un \texttt{AmazingSimpleCursorAdapter} que gestionaba el orden de los elementos, cuáles iban con qué cabeceras y las transiciones entre cabeceras. Esta es la clase más "liosa" porque es la que hay que retocar si algo no se muestra como se esperaba.
+	\item Se creó un \texttt{AmazingSimpleCursorAdapter} que gestionaba el orden de los elementos, cuáles iban con qué cabeceras y las transiciones entre cabeceras. Esta es la clase más ``liosa'' porque es la que hay que retocar si algo no se muestra como se esperaba.
 \end{itemize}
 
 En la figura ~\ref{fig:amazingListView} se puede ver el aspecto con el que la aplicación presenta la agenda de un congreso. Esta forma de mostrar una lista la hemos podido conseguir utilizando \texttt{AmazingListView}.
