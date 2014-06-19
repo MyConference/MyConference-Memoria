@@ -447,20 +447,32 @@ No se describirán los campos concretos de estas entidades, puesto que son idénti
   \item[\texttt{AgendaEvent}]
   Represetna un evento dentro del programa de un congreso.
 
+  Cada evento tiene información acerca de la fecha en la que se celebra y de lo que se hará o de lo que se hablará en él.
+
   \item[\texttt{Announcement}]
   Representa un anuncio (novedad) dentro de un congreso.
+
+  Cada anuncio contiene información acerca del momento en que se anuncia y qué se está anunciando.
 
   \item[\texttt{Document}]
   Representa un enlace a un documento del congreso.
 
+  Cada documento contiene un tipo de documento (únacamente pueden ser tipo \texttt{link}) y la URL a la que referencian, además de una descripción y un título.
+
   \item[\texttt{Organizer}]
   Representa un miembro del comité organizador.
+
+  Cada organizador contiene un nombre, una procedencia y un grupo (comité) al que pertenece.
 
   \item[\texttt{Speaker}]
   Representa un ponente del congreso.
 
+  Cada ponente contiene su nombre, una foto y una descripción.
+
   \item[\texttt{Venue}]
   Representa un lugar del congreso.
+
+  Cada lugar contiene un nombre, una descripción y una dirección (latitud/longitud).
 
 \end{description}
 
